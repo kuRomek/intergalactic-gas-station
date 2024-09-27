@@ -9,14 +9,20 @@ public class Transformable
         Rotation = rotation;
     }
 
+    public event Action Moved;
+    public event Action<string> ExceptionCaught;
+
     public Vector3 Position { get; private set; }
     public Quaternion Rotation { get; private set; }
-
-    public event Action Moved;
 
     public void MoveTo(Vector3 position)
     {
         Position = position;
         Moved?.Invoke();
+    }
+
+    public void WriteException(string exceptionMessage)
+    {
+        ExceptionCaught?.Invoke(exceptionMessage);
     }
 }

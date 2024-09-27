@@ -15,11 +15,18 @@ public class Presenter : MonoBehaviour
     private void OnEnable()
     {
         _model.Moved += OnMoved;
+        _model.ExceptionCaught += WriteExceptionMessage;
     }
 
     private void OnDisable()
     {
         _model.Moved -= OnMoved;
+        _model.ExceptionCaught -= WriteExceptionMessage;
+    }
+
+    private void WriteExceptionMessage(string message)
+    {
+        Debug.Log(message);
     }
 
     public void Init(Transformable model)
