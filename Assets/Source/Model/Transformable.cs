@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Transformable
+public abstract class Transformable
 {
     public Transformable(Vector3 position, Quaternion rotation)
     {

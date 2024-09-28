@@ -14,11 +14,11 @@ public class Root : MonoBehaviour
 
     private void Awake()
     {
-        Station station = new Station(_leftTrajectory.RefuelingPoint.position, _rightTrajectory.RefuelingPoint.position, _topTrajectory.RefuelingPoint.position);
-        _stationPresenter.Init(station);
-
         Grid grid = new Grid(_gridPresenter.transform.position, _gridPresenter.transform.rotation);
         _gridPresenter.Init(grid);
+
+        Station station = new Station(_leftTrajectory.RefuelingPoint.position, _rightTrajectory.RefuelingPoint.position, _topTrajectory.RefuelingPoint.position, grid);
+        _stationPresenter.Init(station);
 
         foreach (PipeTemplatePresenter pipeTemplatePresenter in _pipeTemplatePresenters)
         {

@@ -10,7 +10,13 @@ public class Grid : Transformable
 
     public Grid(Vector3 position, Quaternion rotation) : base(position, rotation) { }
 
+    public event Action PipelineChanged;
+
     public Fuel[,] Cells => _cells;
+    public int[] FuelSourcePoint => new int[2] { 4, 2 };
+    public int[] LeftRefuelingPoint => new int[2] { 2, 0 };
+    public int[] TopRefuelingPoint => new int[2] { 0, 2 };
+    public int[] RightRefuelingPoint => new int[2] { 2, 4 };
 
     public static Vector3 CalculateWorldPosition(int[] gridPosition)
     {
@@ -75,5 +81,6 @@ public class Grid : Transformable
         }
 
         pipeTemplate.FixOnGrid(newTemplatePositionOnGrid);
+        PipelineChanged?.Invoke();
     }
 }

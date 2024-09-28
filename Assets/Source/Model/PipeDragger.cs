@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PipeDragger : Transformable
+public class PipeDragger : Transformable, IActivatable
 {
     private PlayerInputController _input;
     private Grid _grid;

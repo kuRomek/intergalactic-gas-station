@@ -4,6 +4,7 @@ public class Presenter : MonoBehaviour
 {
     private Transformable _model;
     private IUpdatable _updatable = null;
+    private IActivatable _activatable = null;
 
     public Transformable Model => _model;
 
@@ -16,12 +17,16 @@ public class Presenter : MonoBehaviour
     {
         _model.Moved += OnMoved;
         _model.ExceptionCaught += WriteExceptionMessage;
+
+        _activatable?.Enable();
     }
 
     private void OnDisable()
     {
         _model.Moved -= OnMoved;
         _model.ExceptionCaught -= WriteExceptionMessage;
+
+        _activatable?.Disable();
     }
 
     private void WriteExceptionMessage(string message)
@@ -35,6 +40,9 @@ public class Presenter : MonoBehaviour
 
         if (_model is IUpdatable updatable)
             _updatable = updatable;
+
+        if (_model is IActivatable activatable)
+            _activatable = activatable;
 
         enabled = true;
 
