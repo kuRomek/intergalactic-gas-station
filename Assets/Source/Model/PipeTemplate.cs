@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-public class PipeTemplate : Transformable
+public class PipeTemplate : Transformable, IGridMember
 {
     private PipePiece[] _pipePieces;
-
-    public IReadOnlyCollection<PipePiece> PipePieces => _pipePieces;
-    public int[] GridPosition => CenterPiece.GridPosition;
-    public PipePiece CenterPiece { get; private set; }
+    private List<PipeTemplate> _connectedTemplates = new List<PipeTemplate>();
 
     public PipeTemplate(PipePiece[] pipePieces) : base(pipePieces[pipePieces.Length / 2].Position, default)
     {
@@ -15,13 +14,31 @@ public class PipeTemplate : Transformable
         CenterPiece = pipePieces[pipePieces.Length / 2];
     }
 
-    public void FixOnGrid(int[] gridPosition)
-    {
-        int[] shift = { gridPosition[0] - GridPosition[0], gridPosition[1] - GridPosition[1] };
-        
-        MoveTo(Grid.CalculateWorldPosition(gridPosition));
+    public IReadOnlyCollection<PipePiece> PipePieces => _pipePieces;
+    public IReadOnlyList<PipeTemplate> ConnectedTemplates => _connectedTemplates;
+    public PipePiece CenterPiece { get; private set; }
+    public Fuel FuelType => CenterPiece.FuelType;
+    public int[] GridPosition { get; private set; } = null;
 
-        foreach (PipePiece pipe in _pipePieces)
-            pipe.ShiftOnGrid(shift);
+    public void PlaceOnGrid(IGrid grid)
+    {
+        foreach (PipePiece pipePiece in _pipePieces)
+            pipePiece.PlaceOnGrid(grid);
+
+        GridPosition = CenterPiece.GridPosition;
+
+        MoveTo(grid.CalculateWorldPosition(GridPosition));
+
+        foreach (PipePiece pipePiece in _pipePieces)
+            pipePiece.MoveTo(grid.CalculateWorldPosition(pipePiece.GridPosition));
+    }
+
+    public void Connect(PipeTemplate pipeTemplate)
+    {
+        if (pipeTemplate == null)
+            throw new ArgumentNullException(nameof(pipeTemplate));
+
+        if (ConnectedTemplates.Contains(pipeTemplate) == false)
+            _connectedTemplates.Add(pipeTemplate);
     }
 }

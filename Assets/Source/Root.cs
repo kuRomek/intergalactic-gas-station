@@ -28,7 +28,7 @@ public class Root : MonoBehaviour
 
             for (int i = 0; i < pipePieces.Length; i++)
             {
-                pipePiecePresenters[i].Init(new PipePiece(grid.CalculateGridPosition(pipePiecePresenters[i].transform.position)));
+                pipePiecePresenters[i].Init(new PipePiece(pipePiecePresenters[i].transform.position, pipeTemplatePresenter.transform.position));
                 pipePieces[i] = pipePiecePresenters[i].Model;
             }
 
@@ -40,8 +40,12 @@ public class Root : MonoBehaviour
         PipeDragger pipeDragger = new PipeDragger(_inputController, grid);
         _pipeDraggerPresenter.Init(pipeDragger);
 
-        Ship ship = new Ship(_leftTrajectory, new Fuel[] { Fuel.Red });
-        _presenterFactory.CreateShip(ship);
-        _stationPresenter.Model.Arrive(ship);
+        Ship ship1 = new Ship(_leftTrajectory, new Fuel[] { Fuel.Default });
+        _presenterFactory.CreateShip(ship1);
+        _stationPresenter.Model.Arrive(ship1);
+
+        Ship ship2 = new Ship(_topTrajectory, new Fuel[] { Fuel.Default });
+        _presenterFactory.CreateShip(ship2);
+        _stationPresenter.Model.Arrive(ship2);
     }
 }

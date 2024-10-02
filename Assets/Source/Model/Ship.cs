@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -24,12 +25,14 @@ public class Ship : Transformable, IUpdatable
             _tanks[i] = new ShipTank(fuelTypes[i]);
     }
 
+    public event Action<Ship> LeavedStation;
+
     public Vector3 Target { get; private set; }
 
     public void Update(float deltaTime)
     {
         if (Vector3.SqrMagnitude(Target - Position) > DistanceTolerance)
-            MoveTo(Vector3.Lerp(Position, Target, deltaTime));
+            MoveTo(Vector3.Lerp(Position, Target, deltaTime * 5));
         else
             MoveTo(Target);
     }
@@ -46,5 +49,6 @@ public class Ship : Transformable, IUpdatable
     private void LeaveStation()
     {
         Target = _trajectory.Finish.position;
+        LeavedStation?.Invoke(this);
     }
 }

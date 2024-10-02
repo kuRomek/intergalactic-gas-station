@@ -1,18 +1,19 @@
-public class PipePiece : Transformable
+using System;
+using UnityEngine;
+
+public class PipePiece : Transformable, IGridMember
 {
-    public PipePiece(int[] positionOnGrid) : base(Grid.CalculateWorldPosition(positionOnGrid), default) 
+    public PipePiece(Vector3 worldPosition, Vector3 centerPiecePosition) : base(worldPosition, default) 
     {
-        GridPosition = positionOnGrid;
+        LocalPosition = worldPosition - centerPiecePosition;
     }
 
     public Fuel FuelType { get; private set; } = Fuel.Default;
-    public int[] GridPosition { get; private set; } = new int[2];
+    public Vector3 LocalPosition { get; private set; }
+    public int[] GridPosition { get; private set; }
 
-    public void ShiftOnGrid(int[] shift)
+    public void PlaceOnGrid(IGrid grid)
     {
-        GridPosition[0] += shift[0];
-        GridPosition[1] += shift[1];
-
-        MoveTo(Grid.CalculateWorldPosition(GridPosition));
+        GridPosition = grid.CalculateGridPosition(Position);
     }
 }
