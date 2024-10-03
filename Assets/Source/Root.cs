@@ -47,5 +47,9 @@ public class Root : MonoBehaviour
         Ship ship2 = new Ship(_topTrajectory, new Fuel[] { Fuel.Default });
         _presenterFactory.CreateShip(ship2);
         _stationPresenter.Model.Arrive(ship2);
+
+        Ship ship3 = new Ship(_rightTrajectory, new Fuel[] { Fuel.Default });
+        _presenterFactory.CreateShip(ship3);
+        _stationPresenter.Model.Arrive(ship3);
     }
 }

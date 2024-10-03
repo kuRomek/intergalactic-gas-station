@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Grid : Transformable, IGrid
@@ -10,14 +11,11 @@ public class Grid : Transformable, IGrid
 
     public Grid(Vector3 position, Quaternion rotation) : base(position, rotation) { }
 
+    public event Action PipelineChanged;
+
     public IGridMember[,] Cells => _cells;
-    public int[] FuelSourcePoint => new int[2] { 4, 2 };
-    public int[][] RefuelingPoints => new int[3][]
-    {
-        new int[2] { 2, 0 },
-        new int[2] { 0, 2 },
-        new int[2] { 2, 4 } 
-    };
+    public IGridMember[] RefuelingPoints => new IGridMember[3] { _cells[2, 0], _cells[0, 2], _cells[2, 4] };
+    public IGridMember FuelSourcePoint => _cells[4, 2];
 
     public Vector3 CalculateWorldPosition(int[] gridPosition)
     {
@@ -71,8 +69,9 @@ public class Grid : Transformable, IGrid
 
             foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
                 _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = pipeTemplate;
+
         }
-        catch (Exception exception)
+        catch (Exception exception) when (exception is ArgumentException || exception is InvalidOperationException)
         {
             pipeTemplate.MoveTo(templateOriginalPosition);
 
@@ -84,6 +83,47 @@ public class Grid : Transformable, IGrid
 
             pipeTemplate.PlaceOnGrid(this);
             WriteException(exception.Message);
+        }
+
+        ConnectNearbyTemplates(pipeTemplate);
+        PipelineChanged?.Invoke();
+    }
+
+    private void ConnectNearbyTemplates(PipeTemplate pipeTemplate)
+    {
+        int[][] indexOffsets = new int[4][]
+        {
+            new int[2] { 1, 0 },
+            new int[2] { 0, 1 },
+            new int[2] { -1, 0 },
+            new int[2] { 0, -1 }
+        };
+
+        List<PipeTemplate> connectedTemplates = new List<PipeTemplate>();
+
+        connectedTemplates.AddRange(pipeTemplate.ConnectedTemplates);
+
+        foreach (PipeTemplate connectedTemplate in connectedTemplates)
+            pipeTemplate.Disconnect(connectedTemplate);
+
+        foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
+        {
+            foreach (int[] offset in indexOffsets)
+            {
+                IGridMember checkingCell;
+
+                try
+                {
+                    checkingCell = _cells[pipePiece.GridPosition[0] + offset[0], pipePiece.GridPosition[1] + offset[1]];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    continue;
+                }
+
+                if (checkingCell != null && checkingCell != pipeTemplate && checkingCell is PipeTemplate nearbyTemplate)
+                    pipeTemplate.Connect(nearbyTemplate);
+            }
         }
     }
 }

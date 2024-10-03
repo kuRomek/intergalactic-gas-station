@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Station : Transformable, IActivatable
 {
+    private FuelProvider _fuelProvider;
     private Grid _grid;
     private Ship _leftShip = null;
     private Ship _rightShip = null;
@@ -16,6 +18,7 @@ public class Station : Transformable, IActivatable
         _rightRefuelingPoint = rightRefuelPoint;
         _topRefuelingPoint = topRefuelPoint;
         _grid = grid;
+        _fuelProvider = new FuelProvider(_grid);
     }
 
     public void Arrive(Ship ship)
@@ -57,18 +60,40 @@ public class Station : Transformable, IActivatable
             _leftShip = null;
         else if (ship == _topShip)
             _topShip = null;
-        else if (ship != _rightShip)
+        else if (ship == _rightShip)
             _rightShip = null;
     }
 
     public void Enable()
     {
-        
+        _grid.PipelineChanged += OnPipelineChanged;
     }
 
     public void Disable()
     {
-        
+        _grid.PipelineChanged -= OnPipelineChanged;    
+    }
+
+    private void OnPipelineChanged()
+    {
+        foreach (var path in _fuelProvider.TryFindPath())
+        {
+            if (path.Key == 0)
+            {
+                if (_leftShip != null)
+                    RefuelOnLeft(path.Value);
+            }
+            else if(path.Key == 1)
+            {
+                if (_topShip != null)
+                    RefuelOnTop(path.Value);
+            }
+            else if (path.Key == 2) 
+            {
+                if (_rightShip != null)
+                    RefuelOnRight(path.Value);
+            }
+        } 
     }
 
     private void RefuelOnLeft(Fuel fuel)

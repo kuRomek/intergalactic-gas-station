@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class PipeTemplate : Transformable, IGridMember
 {
@@ -39,6 +38,18 @@ public class PipeTemplate : Transformable, IGridMember
             throw new ArgumentNullException(nameof(pipeTemplate));
 
         if (ConnectedTemplates.Contains(pipeTemplate) == false)
+        {
             _connectedTemplates.Add(pipeTemplate);
+            pipeTemplate.Connect(this);
+        }
+    }
+
+    public void Disconnect(PipeTemplate pipeTemplate)
+    {
+        if (pipeTemplate == null)
+            throw new ArgumentNullException(nameof(pipeTemplate));
+
+        if (_connectedTemplates.Remove(pipeTemplate) == true)
+            pipeTemplate.Disconnect(this);
     }
 }
