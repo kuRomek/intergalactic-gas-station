@@ -1,28 +1,38 @@
+using System;
 using System.Collections.Generic;
 
 public class FuelProvider
 {
     private Grid _grid;
+    private Station _station;
+    private TankContainer _tanks;
 
-    public FuelProvider(Grid grid)
+    public FuelProvider(Grid grid, Station station, TankContainer tankContainer)
     {
         _grid = grid;
+        _station = station;
+        _tanks = tankContainer;
     }
 
-    public Dictionary<int, Fuel> TryFindPath()
+    public void TryRefuel()
     {
-        Dictionary<int, Fuel> pathes = new Dictionary<int, Fuel>();
-
         for (int i = 0; i < _grid.RefuelingPoints.Length; i++)
         {
-            if (_grid.RefuelingPoints[i] is PipeTemplate pipeTemplate && pipeTemplate.ConnectedTemplates.Count > 0 && DFSToFuelSource(pipeTemplate, out Fuel fuel))
-               pathes.Add(i, fuel); 
+            try
+            {
+                if (_grid.RefuelingPoints[i] is PipeTemplate pipeTemplate && pipeTemplate.ConnectedTemplates.Count > 0 && DFSToFuelSource(pipeTemplate, _tanks.Peek().FuelType) == true)
+                {
+                    _station.Refuel(i, _tanks.Peek().FuelType);
+                    _tanks.Peek().TakeFuel();
+                    return;
+                }
+            }
+            catch (Exception exception) when (exception is InvalidOperationException || exception is ArgumentException || exception is NullReferenceException)
+            { }
         }
-
-        return pathes;
     }
 
-    private bool DFSToFuelSource(PipeTemplate pipeTemplate, out Fuel fuel)
+    private bool DFSToFuelSource(PipeTemplate pipeTemplate, Fuel fuel)
     {
         List<PipeTemplate> checkedTemplates = new List<PipeTemplate>();
         Stack<PipeTemplate> templatesToCheck = new Stack<PipeTemplate>();

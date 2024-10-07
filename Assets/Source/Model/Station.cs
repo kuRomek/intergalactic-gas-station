@@ -1,113 +1,77 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Station : Transformable, IActivatable
 {
+    private const int ShipCount = 3;
+
     private FuelProvider _fuelProvider;
     private Grid _grid;
-    private Ship _leftShip = null;
-    private Ship _rightShip = null;
-    private Ship _topShip = null;
-    private Vector3 _leftRefuelingPoint;
-    private Vector3 _rightRefuelingPoint;
-    private Vector3 _topRefuelingPoint;
+    private Ship[] _ships = new Ship[ShipCount];
+    private Transform[] _refuelingPoints;
+    private Vector3[] _startPositions;
 
-    public Station(Vector3 leftRefuelPoint, Vector3 rightRefuelPoint, Vector3 topRefuelPoint, Grid grid) : base(default, default)
+    public Station(Transform[] refuelingPoints, Vector3[] startPositions, Grid grid, TankContainer tankContainer) : base(default, default)
     {
-        _leftRefuelingPoint = leftRefuelPoint;
-        _rightRefuelingPoint = rightRefuelPoint;
-        _topRefuelingPoint = topRefuelPoint;
+        _refuelingPoints = refuelingPoints;
+        _startPositions = startPositions;
         _grid = grid;
-        _fuelProvider = new FuelProvider(_grid);
+        _fuelProvider = new FuelProvider(_grid, this, tankContainer);
     }
+
+    public event Action PlaceFreed;
 
     public void Arrive(Ship ship)
     {
-        if (ship.Target == _leftRefuelingPoint)
+        List<int> freeSpotsIndecies = new List<int>();
+
+        for (int i = 0; i < _ships.Length; i++)
         {
-            if (_leftShip != null)
-                throw new System.InvalidOperationException("Left refueling point is already taken.");
-
-            _leftShip = ship;
-
-            _leftShip.LeavedStation += FreeRefuelingPoint;
+            if (_ships[i] == null)
+                freeSpotsIndecies.Add(i);
         }
-        else if (ship.Target == _rightRefuelingPoint)
-        {
-            if (_rightShip != null)
-                throw new System.InvalidOperationException("Right refueling point is already taken.");
 
-            _rightShip = ship;
+        if (freeSpotsIndecies.Count == 0)
+            throw new InvalidOperationException("All refueling places are taken.");
 
-            _rightShip.LeavedStation += FreeRefuelingPoint;
-        }
-        else if (ship.Target == _topRefuelingPoint)
-        {
-            if (_topShip != null)
-                throw new System.InvalidOperationException("Top refueling point is already taken.");
+        int randomSpot = freeSpotsIndecies[Random.Range(0, freeSpotsIndecies.Count)];
 
-            _topShip = ship;
+        _ships[randomSpot] = ship;
+        ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
 
-            _topShip.LeavedStation += FreeRefuelingPoint;
-        }
+        ship.LeavedStation += FreeRefuelingPoint;
+        ship.StopedAtRefuelingPoint += _fuelProvider.TryRefuel;
+    }
+
+    public void Refuel(int refuelingSpot, Fuel fuel)
+    {
+        if (_ships[refuelingSpot].Position != _refuelingPoints[refuelingSpot].position)
+            throw new InvalidOperationException("Ship is not on point yet.");
+
+        _ships[refuelingSpot].Refuel(fuel);
+    }
+
+    public void Enable()
+    {
+        _grid.PipelineChanged += _fuelProvider.TryRefuel;
+    }
+
+    public void Disable()
+    {
+        _grid.PipelineChanged -= _fuelProvider.TryRefuel;    
     }
 
     private void FreeRefuelingPoint(Ship ship)
     {
         ship.LeavedStation -= FreeRefuelingPoint;
+        ship.StopedAtRefuelingPoint -= _fuelProvider.TryRefuel;
 
-        if (ship == _leftShip)
-            _leftShip = null;
-        else if (ship == _topShip)
-            _topShip = null;
-        else if (ship == _rightShip)
-            _rightShip = null;
-    }
+        _ships[Array.IndexOf(_ships, ship)] = null;
 
-    public void Enable()
-    {
-        _grid.PipelineChanged += OnPipelineChanged;
-    }
+        _fuelProvider.TryRefuel();
 
-    public void Disable()
-    {
-        _grid.PipelineChanged -= OnPipelineChanged;    
-    }
-
-    private void OnPipelineChanged()
-    {
-        foreach (var path in _fuelProvider.TryFindPath())
-        {
-            if (path.Key == 0)
-            {
-                if (_leftShip != null)
-                    RefuelOnLeft(path.Value);
-            }
-            else if(path.Key == 1)
-            {
-                if (_topShip != null)
-                    RefuelOnTop(path.Value);
-            }
-            else if (path.Key == 2) 
-            {
-                if (_rightShip != null)
-                    RefuelOnRight(path.Value);
-            }
-        } 
-    }
-
-    private void RefuelOnLeft(Fuel fuel)
-    {
-        _leftShip.Refuel(fuel);
-    }
-
-    private void RefuelOnRight(Fuel fuel)
-    {
-        _rightShip.Refuel(fuel);
-    }
-
-    private void RefuelOnTop(Fuel fuel)
-    {
-        _topShip.Refuel(fuel);
+        PlaceFreed?.Invoke();
     }
 }

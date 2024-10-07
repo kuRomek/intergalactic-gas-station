@@ -16,6 +16,8 @@ public class Presenter : MonoBehaviour
     private void OnEnable()
     {
         _model.Moved += OnMoved;
+        _model.Rotated += OnRotated;
+        _model.Destroying += OnDestroying;
         _model.ExceptionCaught += WriteExceptionMessage;
 
         _activatable?.Enable();
@@ -24,6 +26,7 @@ public class Presenter : MonoBehaviour
     private void OnDisable()
     {
         _model.Moved -= OnMoved;
+        _model.Rotated -= OnRotated;
         _model.ExceptionCaught -= WriteExceptionMessage;
 
         _activatable?.Disable();
@@ -48,6 +51,7 @@ public class Presenter : MonoBehaviour
 
         OnMoved();
         OnRotated();
+        OnScaled();
     }
 
     private void OnMoved()
@@ -58,5 +62,15 @@ public class Presenter : MonoBehaviour
     private void OnRotated()
     {
         transform.rotation = _model.Rotation;
+    }
+
+    private void OnScaled()
+    {
+        transform.localScale = _model.Scale;
+    }
+
+    private void OnDestroying()
+    {
+        Destroy(gameObject);
     }
 }

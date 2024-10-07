@@ -1,24 +1,39 @@
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using static System.Collections.Specialized.BitVector32;
 
 public class Root : MonoBehaviour
 {
     [SerializeField] private PipeTemplatePresenter[] _pipeTemplatePresenters;
+    [SerializeField] private TankPresenter[] _tankPresenters;
     [SerializeField] private PlayerInputController _inputController;
     [SerializeField] private GridPresenter _gridPresenter;
     [SerializeField] private PipeDraggerPresenter _pipeDraggerPresenter;
     [SerializeField] private StationPresenter _stationPresenter;
     [SerializeField] private PresenterFactory _presenterFactory;
-    [SerializeField] private ShipTrajectory _leftTrajectory;
-    [SerializeField] private ShipTrajectory _rightTrajectory;
-    [SerializeField] private ShipTrajectory _topTrajectory;
+    [SerializeField] private Transform[] _shipSpawningAreas;
+    [SerializeField] private Transform[] _refuelingPoints;
+    [SerializeField] private Transform _tanksPlace;
+    [SerializeField] private Transform _shipsQueue;
+    
+    private Queue<Ship> _shipsInQueue = new Queue<Ship>();
 
     private void Awake()
     {
         Grid grid = new Grid(_gridPresenter.transform.position, _gridPresenter.transform.rotation);
         _gridPresenter.Init(grid);
 
-        Station station = new Station(_leftTrajectory.RefuelingPoint.position, _rightTrajectory.RefuelingPoint.position, _topTrajectory.RefuelingPoint.position, grid);
+        TankContainer tankContainer = new TankContainer(_tanksPlace.position);
+        _presenterFactory.CreateTank(tankContainer.Add(Tank.Type.Big, Fuel.Default));
+        _presenterFactory.CreateTank(tankContainer.Add(Tank.Type.Small, Fuel.Default));
+        _presenterFactory.CreateTank(tankContainer.Add(Tank.Type.Medium, Fuel.Default));
+
+        Station station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), _gridPresenter.Model, tankContainer);
         _stationPresenter.Init(station);
+
+        station.PlaceFreed += LetShipOnStation;
 
         foreach (PipeTemplatePresenter pipeTemplatePresenter in _pipeTemplatePresenters)
         {
@@ -40,16 +55,26 @@ public class Root : MonoBehaviour
         PipeDragger pipeDragger = new PipeDragger(_inputController, grid);
         _pipeDraggerPresenter.Init(pipeDragger);
 
-        Ship ship1 = new Ship(_leftTrajectory, new Fuel[] { Fuel.Default });
-        _presenterFactory.CreateShip(ship1);
-        _stationPresenter.Model.Arrive(ship1);
+        for (int i = 0; i < 10; i++)
+        {
+            Ship newShip = new Ship(_shipsQueue, new Fuel[] { Fuel.Default });
+            _shipsInQueue.Enqueue(newShip);
+            _presenterFactory.CreateShip(newShip);
+        }
 
-        Ship ship2 = new Ship(_topTrajectory, new Fuel[] { Fuel.Default });
-        _presenterFactory.CreateShip(ship2);
-        _stationPresenter.Model.Arrive(ship2);
+        station.Arrive(_shipsInQueue.Dequeue());
+        station.Arrive(_shipsInQueue.Dequeue());
+        station.Arrive(_shipsInQueue.Dequeue());
+    }
 
-        Ship ship3 = new Ship(_rightTrajectory, new Fuel[] { Fuel.Default });
-        _presenterFactory.CreateShip(ship3);
-        _stationPresenter.Model.Arrive(ship3);
+    private void OnDisable()
+    {
+        _stationPresenter.Model.PlaceFreed -= LetShipOnStation;
+    }
+
+    private void LetShipOnStation()
+    {
+        if (_shipsInQueue.Count > 0)
+            _stationPresenter.Model.Arrive(_shipsInQueue.Dequeue());
     }
 }
