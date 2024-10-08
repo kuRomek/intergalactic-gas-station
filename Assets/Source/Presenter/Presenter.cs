@@ -3,10 +3,12 @@ using UnityEngine;
 public class Presenter : MonoBehaviour
 {
     private Transformable _model;
+    private View _view;
     private IUpdatable _updatable = null;
     private IActivatable _activatable = null;
 
     public Transformable Model => _model;
+    public View View => _view;
 
     private void Update()
     {
@@ -40,6 +42,7 @@ public class Presenter : MonoBehaviour
     public void Init(Transformable model)
     {
         _model = model;
+        _view = GetComponent<View>();
 
         if (_model is IUpdatable updatable)
             _updatable = updatable;

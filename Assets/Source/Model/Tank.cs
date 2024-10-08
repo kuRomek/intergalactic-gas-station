@@ -1,10 +1,11 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class Tank : Transformable
 {
-    private Type _type;
-    private Fuel _fuelType;
+    [SerializeField] private Type _type;
+    [SerializeField] private Fuel _fuelType;
     private int _capacity;
     private int _currentAmount;
 

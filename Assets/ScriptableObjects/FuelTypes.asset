@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 786984dee596f2f44b1d71aea4bccfc0, type: 3}
+  m_Name: FuelTypes
+  m_EditorClassIdentifier: 
+  _fuelCells:
+  - _fuel: 0
+    _color: {r: 0.3764706, g: 0.37254903, b: 0.33333334, a: 0}
+  - _fuel: 1
+    _color: {r: 0.5372549, g: 0.16470589, b: 0.13333334, a: 0}
+  - _fuel: 2
+    _color: {r: 0.21867214, g: 0.509434, b: 0.32785812, a: 0}
+  - _fuel: 3
+    _color: {r: 0.21462265, g: 0.29015929, b: 0.5, a: 0}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -22,6 +23,8 @@ public class Station : Transformable, IActivatable
     }
 
     public event Action PlaceFreed;
+
+    public int ActiveShipCount => _ships.Where(ship => ship != null).Count();
 
     public void Arrive(Ship ship)
     {

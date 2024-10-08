@@ -5,18 +5,21 @@ public class PresenterFactory : MonoBehaviour
     [SerializeField] private ShipPresenter _shipPresenter;
     [SerializeField] private TankPresenter _tankPresenter;
 
-    public void CreateShip(Transformable shipModel)
+    public void CreateShip(Ship shipModel)
     {
         CreatePresenter(_shipPresenter, shipModel);
     }
 
-    public void CreateTank(Transformable tankModel)
+    public void CreateTank(Tank tankModel)
     {
-        CreatePresenter(_tankPresenter, tankModel);
+        TankPresenter presenter = CreatePresenter(_tankPresenter, tankModel) as TankPresenter;
+        presenter.View.Init(tankModel.FuelType);
     }
 
-    public void CreatePresenter(Presenter presenterTemplate, Transformable model)
+    public Presenter CreatePresenter(Presenter presenterTemplate, Transformable model)
     {
-        Instantiate(presenterTemplate).Init(model);
+        Presenter presenter = Instantiate(presenterTemplate);
+        presenter.Init(model);
+        return presenter;
     }
 }

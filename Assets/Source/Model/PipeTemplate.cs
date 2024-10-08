@@ -7,16 +7,18 @@ public class PipeTemplate : Transformable, IGridMember
     private PipePiece[] _pipePieces;
     private List<PipeTemplate> _connectedTemplates = new List<PipeTemplate>();
 
-    public PipeTemplate(PipePiece[] pipePieces) : base(pipePieces[pipePieces.Length / 2].Position, default)
+    public PipeTemplate(PipePiece[] pipePieces, Fuel fuelType) : base(pipePieces[pipePieces.Length / 2].Position, default)
     {
         _pipePieces = pipePieces ?? throw new ArgumentNullException(nameof(pipePieces));
         CenterPiece = pipePieces[pipePieces.Length / 2];
+
+        FuelType = fuelType;
     }
 
     public IReadOnlyCollection<PipePiece> PipePieces => _pipePieces;
     public IReadOnlyList<PipeTemplate> ConnectedTemplates => _connectedTemplates;
     public PipePiece CenterPiece { get; private set; }
-    public Fuel FuelType => CenterPiece.FuelType;
+    public Fuel FuelType { get; }
     public int[] GridPosition { get; private set; } = null;
 
     public void PlaceOnGrid(IGrid grid)
