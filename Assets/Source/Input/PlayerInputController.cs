@@ -30,6 +30,10 @@ public class PlayerInputController : MonoBehaviour
     private void OnDisable()
     {
         _input.Disable();
+
+        //_input.Player.Press.performed -= OnButtonPressed;
+        //_input.Player.Drag.performed -= OnDragging;
+        //_input.Player.Press.canceled -= OnDragCanceld;
     }
 
     private void OnButtonPressed(InputAction.CallbackContext context)

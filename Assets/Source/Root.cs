@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -36,9 +37,24 @@ public class Root : MonoBehaviour
 
         foreach (PipeTemplatePresenter pipeTemplatePresenter in _pipeTemplatePresenters)
         {
-            pipeTemplatePresenter.enabled = true;
-            pipeTemplatePresenter.Inited += PlaceOnGrid;
+            PipePiecePresenter[] pipePiecePresenters = pipeTemplatePresenter.GetComponentsInChildren<PipePiecePresenter>();
+
+            PipePiece[] pipePieces = new PipePiece[pipePiecePresenters.Length];
+
+            for (int i = 0; i < pipePieces.Length; i++)
+            {
+                PipePiece pipePiece = new PipePiece(pipePiecePresenters[i].transform.position, pipeTemplatePresenter.transform.position, pipeTemplatePresenter.FuelType);
+                pipePiecePresenters[i].Init(pipePiece);
+                pipePieces[i] = pipePiecePresenters[i].Model;
+            }
+
+            pipeTemplatePresenter.Init(new PipeTemplate(pipePieces, pipeTemplatePresenter.FuelType));
+            pipeTemplatePresenter.View.Init(pipeTemplatePresenter.FuelType);
+
+            _grid.Place(pipeTemplatePresenter.Model);
         }
+
+        _inputController.enabled = true;
 
         PipeDragger pipeDragger = new PipeDragger(_inputController, grid);
         _pipeDraggerPresenter.Init(pipeDragger);
@@ -52,16 +68,12 @@ public class Root : MonoBehaviour
             _presenterFactory.CreateShip(newShip);
         }
 
-        (_levelState = new LevelState(_levelCompleteMenu, shipsQueue, station)).Enable();
+        _levelState = new LevelState(_levelCompleteMenu, shipsQueue, station);
+        _levelState.Enable();
     }
 
     private void OnDisable()
     {
         _levelState.Disable();
-    }
-
-    private void PlaceOnGrid(PipeTemplate pipeTemplate)
-    {
-        _grid.Place(pipeTemplate);
     }
 }

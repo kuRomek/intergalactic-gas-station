@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ship : Transformable, IUpdatable
 {
-    private const float DistanceTolerance = 0.001f;
+    private const float DistanceTolerance = 0.05f;
 
     private Vector3 _refuelingPosition;
     private Vector3 _startPosition;
@@ -35,10 +35,10 @@ public class Ship : Transformable, IUpdatable
     {
         if (Position != Target)
         {
-            MoveTo(Vector3.Lerp(Position, Target, _speed * deltaTime));
-
-            if (Vector3.SqrMagnitude(_refuelingPosition - Position) <= DistanceTolerance)
-                MoveTo(Target);
+            if (Vector3.SqrMagnitude(Target - Position) <= DistanceTolerance)
+                MoveTo(Vector3.MoveTowards(Position, Target, _speed / 3f * deltaTime));
+            else
+                MoveTo(Vector3.Lerp(Position, Target, _speed * deltaTime));
 
             if (Position == _refuelingPosition)
                 StopedAtRefuelingPoint?.Invoke();

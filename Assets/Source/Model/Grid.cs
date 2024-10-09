@@ -58,7 +58,7 @@ public class Grid : Transformable, IGrid
             foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
                 _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = null;
         }
-        catch (NullReferenceException)
+        catch (Exception exception) when (exception is NullReferenceException || exception is ArgumentException)
         {
             templateOriginalPosition = default;
         }
@@ -66,24 +66,19 @@ public class Grid : Transformable, IGrid
         try
         {
             pipeTemplate.PlaceOnGrid(this);
-
-            foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
-                _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = pipeTemplate;
-
         }
         catch (Exception exception) when (exception is ArgumentException || exception is InvalidOperationException)
         {
             pipeTemplate.MoveTo(templateOriginalPosition);
 
             foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
-            {
                 pipePiece.MoveTo(templateOriginalPosition + pipePiece.LocalPosition);
-                _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = null;
-            }
 
             pipeTemplate.PlaceOnGrid(this);
-            WriteException(exception.Message);
         }
+
+        foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
+            _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = pipeTemplate;
 
         ConnectNearbyTemplates(pipeTemplate);
         PipelineChanged?.Invoke();

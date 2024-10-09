@@ -73,7 +73,7 @@ public class Station : Transformable, IActivatable
 
         _ships[Array.IndexOf(_ships, ship)] = null;
 
-        _fuelProvider.TryRefuel();
+        //_fuelProvider.TryRefuel();
 
         PlaceFreed?.Invoke();
     }

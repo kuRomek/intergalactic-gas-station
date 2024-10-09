@@ -18,9 +18,5 @@ MonoBehaviour:
     _fuelType: 0
   - _type: 2
     _fuelType: 0
-  - _type: 1
-    _fuelType: 0
-  - _type: 2
-    _fuelType: 0
   - _type: 2
     _fuelType: 0

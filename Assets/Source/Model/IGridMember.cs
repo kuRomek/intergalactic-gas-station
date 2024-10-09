@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
 public interface IGridMember
 {
     int[] GridPosition { get; }

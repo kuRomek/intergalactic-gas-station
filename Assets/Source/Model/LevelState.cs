@@ -3,7 +3,7 @@ using System.Collections.Generic;
 public class LevelState : IActivatable
 {
     private UIMenu _levelCompleteWindow;
-    private Queue<Ship> _shipsQueue = new Queue<Ship>();
+    private Queue<Ship> _shipsQueue;
     private Station _station;
     
     public LevelState(UIMenu levelCompleteWindow, Queue<Ship> shipsQueue, Station station)
