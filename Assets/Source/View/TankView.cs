@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class TankView : View
 {
-    [SerializeField] private FuelTypes _fuelTypes;
+    [SerializeField] private FuelCollors _fuelTypes;
 
     private Color _color;
 

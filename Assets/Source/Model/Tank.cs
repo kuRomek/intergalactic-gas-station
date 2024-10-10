@@ -1,46 +1,31 @@
 using System;
 using UnityEngine;
+using static ITank;
 
-[Serializable]
-public class Tank : Transformable
+public class Tank : Transformable, ITank
 {
-    [SerializeField] private Type _type;
-    [SerializeField] private Fuel _fuelType;
-    private int _capacity;
+    private Size _size;
+    private Fuel _fuelType;
     private int _currentAmount;
 
-    public Tank(Vector3 position, Type type, Fuel fuelType) : base(position, default)
+    public Tank(Vector3 position, Size size, Fuel fuelType) : base(position, default)
     {
-        _type = type;
-
-        if (_type == Type.Big)
-            _capacity = 6;
-        else if (_type == Type.Medium)
-            _capacity = 3;
-        else if (_type == Type.Small)
-            _capacity = 2;
-
-        ScaleTo(new Vector3(1f, _capacity / 6f, 1f));
-
-        _currentAmount = _capacity;
+        _size = size;
+        _currentAmount = (int)_size;
         _fuelType = fuelType;
+
+        ScaleTo(new Vector3(1f, _currentAmount / 6f, 1f));
     }
 
     public event Action Emptied;
 
-    public enum Type
-    {
-        Big,
-        Medium,
-        Small
-    }
-
     public Fuel FuelType => _fuelType;
-    public int Capacity => _capacity;
+    public int Capacity => (int)_size;
+    public int CurrentAmount => _currentAmount;
 
-    public void TakeFuel()
+    public void TakeFuel(int amount)
     {
-        int takingAmount = (int)MathF.Min(_currentAmount, 2);
+        int takingAmount = (int)MathF.Min(_currentAmount, amount);
 
         _currentAmount -= takingAmount;
 

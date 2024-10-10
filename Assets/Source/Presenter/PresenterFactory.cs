@@ -7,7 +7,8 @@ public class PresenterFactory : MonoBehaviour
 
     public void CreateShip(Ship shipModel)
     {
-        CreatePresenter(_shipPresenter, shipModel);
+        ShipPresenter presenter = CreatePresenter(_shipPresenter, shipModel) as ShipPresenter;
+        presenter.View.Init(shipModel.Tanks);
     }
 
     public void CreateTank(Tank tankModel)

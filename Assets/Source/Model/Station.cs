@@ -24,6 +24,7 @@ public class Station : Transformable, IActivatable
 
     public event Action PlaceFreed;
 
+    public Ship[] Ships => _ships;
     public int ActiveShipCount => _ships.Where(ship => ship != null).Count();
 
     public void Arrive(Ship ship)
@@ -48,22 +49,27 @@ public class Station : Transformable, IActivatable
         ship.StopedAtRefuelingPoint += _fuelProvider.TryRefuel;
     }
 
-    public void Refuel(int refuelingSpot, Fuel fuel)
+    public void Refuel(Ship ship, ShipTank shipTank, int amount, out int residue)
     {
-        if (_ships[refuelingSpot].Position != _refuelingPoints[refuelingSpot].position)
+        if (ship.Position != ship.Target)
             throw new InvalidOperationException("Ship is not on point yet.");
 
-        _ships[refuelingSpot].Refuel(fuel);
+        if (ship == null)
+            throw new NullReferenceException();
+
+        ship.Refuel(shipTank, amount, out residue);
     }
 
     public void Enable()
     {
         _grid.PipelineChanged += _fuelProvider.TryRefuel;
+        _fuelProvider.Enable();
     }
 
     public void Disable()
     {
-        _grid.PipelineChanged -= _fuelProvider.TryRefuel;    
+        _grid.PipelineChanged -= _fuelProvider.TryRefuel;
+        _fuelProvider.Disable();
     }
 
     private void FreeRefuelingPoint(Ship ship)
@@ -73,7 +79,7 @@ public class Station : Transformable, IActivatable
 
         _ships[Array.IndexOf(_ships, ship)] = null;
 
-        //_fuelProvider.TryRefuel();
+        _fuelProvider.TryRefuel();
 
         PlaceFreed?.Invoke();
     }

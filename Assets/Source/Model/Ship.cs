@@ -12,24 +12,22 @@ public class Ship : Transformable, IUpdatable
     private int _emptyTanks;
     private float _speed = 3f;
 
-    public Ship(Transform shipQueue, Fuel[] fuelTypes) : base(shipQueue.position, default)
+    public Ship(Transform shipQueue, ShipSetup shipSetup) : base(shipQueue.position, default)
     {
-        if (fuelTypes.Length > 3)
-            throw new ArgumentException("Ship can take maximum 3 types of fuel.");
-
         Target = Position;
 
-        _tanks = new ShipTank[fuelTypes.Length];
-        _emptyTanks = fuelTypes.Length;
+        _tanks = new ShipTank[shipSetup.Tanks.Length];
+        _emptyTanks = _tanks.Length;
 
-        for (int i = 0; i < fuelTypes.Length; i++)
-            _tanks[i] = new ShipTank(fuelTypes[i]);
+        for (int i = 0; i < _tanks.Length; i++)
+            _tanks[i] = new ShipTank(shipSetup.Tanks[i].FuelType, shipSetup.Tanks[i].Size);
     }
 
     public event Action StopedAtRefuelingPoint;
     public event Action<Ship> LeavedStation;
 
     public Vector3 Target { get; private set; }
+    public ShipTank[] Tanks => _tanks;
 
     public void Update(float deltaTime)
     {
@@ -45,13 +43,15 @@ public class Ship : Transformable, IUpdatable
         }
     }
 
-    public void Refuel(Fuel fuel)
+    public void Refuel(ShipTank shipTank, int amount, out int residue)
     {
-        ShipTank tankToRefuel = _tanks.FirstOrDefault(tank => tank.Fuel == fuel) ?? throw new ArgumentException("No corresponding tank to refuel.");
-        tankToRefuel.Refuel();
+        shipTank.Refuel(amount, out residue);
 
-        if (--_emptyTanks == 0)
-            LeaveStation();
+        if (shipTank.IsFull)
+        {
+            if (--_emptyTanks == 0)
+                LeaveStation();
+        }
     }
 
     public void ArriveAtStation(Vector3 startPosition, Transform refuelingPoint)

@@ -1,18 +1,36 @@
-public class ShipTank
+using System;
+using static ITank;
+
+public class ShipTank : ITank
 {
-    public ShipTank(Fuel fuel)
+    private Size _size;
+    private int _currentAmount;
+
+    public ShipTank(Fuel fuel, Size size)
     {
-        Fuel = fuel;
+        FuelType = fuel;
+        _size = size;
+        _currentAmount = 0;
     }
 
-    public Fuel Fuel { get; }
-    public bool IsFull { get; private set; } = false;
+    public event Action FuelAmountChanged;
 
-    public void Refuel()
+    public Fuel FuelType { get; }
+    public bool IsFull { get; private set; } = false;
+    public int CurrentAmount => _currentAmount;
+    public int Capacity => (int)_size;
+
+    public void Refuel(int amount, out int residue)
     {
         if (IsFull)
-            throw new System.InvalidOperationException("Tank is already full.");
+            throw new InvalidOperationException("Tank is already full.");
 
-        IsFull = true;
+        _currentAmount += amount;
+        residue = _currentAmount - Capacity;
+
+        FuelAmountChanged?.Invoke();
+
+        if (_currentAmount >= Capacity)
+            IsFull = true;
     }
 }

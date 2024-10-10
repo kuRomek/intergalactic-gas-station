@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="FuelTypes", menuName="Fuel/FuelTypes", order=51)]
-public class FuelTypes : ScriptableObject
+public class FuelCollors : ScriptableObject
 {
     [SerializeField] private FuelCell[] _fuelCells;
 

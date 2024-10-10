@@ -29,8 +29,8 @@ public class Root : MonoBehaviour
 
         TankContainer tankContainer = new TankContainer(_tanksPlace.position);
 
-        foreach (TankCell tank in _levelSetup.Tanks)
-            _presenterFactory.CreateTank(tankContainer.Add(tank.Type, tank.FuelType));
+        foreach (TankSetup tank in _levelSetup.Tanks)
+            _presenterFactory.CreateTank(tankContainer.Add(tank.Size, tank.FuelType));
 
         Station station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), _gridPresenter.Model, tankContainer);
         _stationPresenter.Init(station);
@@ -61,9 +61,9 @@ public class Root : MonoBehaviour
 
         Queue<Ship> shipsQueue = new Queue<Ship>();
 
-        for (int i = 0; i < _levelSetup.ShipCount; i++)
+        for (int i = 0; i < _levelSetup.Ships.Length; i++)
         {
-            Ship newShip = new Ship(_shipsWaitingPlace, new Fuel[] { Fuel.Default });
+            Ship newShip = new Ship(_shipsWaitingPlace, _levelSetup.Ships[i]);
             shipsQueue.Enqueue(newShip);
             _presenterFactory.CreateShip(newShip);
         }

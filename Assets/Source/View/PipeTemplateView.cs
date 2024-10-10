@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PipeTemplateView : View
 {
-    [SerializeField] private FuelTypes _fuelTypes;
+    [SerializeField] private FuelCollors _fuelTypes;
 
     private Color _color;
 

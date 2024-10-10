@@ -19,6 +19,9 @@ public class Grid : Transformable, IGrid
 
     public Vector3 CalculateWorldPosition(int[] gridPosition)
     {
+        if (gridPosition == null)
+            throw new ArgumentNullException(nameof(gridPosition));
+
         if (gridPosition.Length != 2)
             throw new ArgumentException("The grid is 2-dimensional.");
 
@@ -58,7 +61,7 @@ public class Grid : Transformable, IGrid
             foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
                 _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = null;
         }
-        catch (Exception exception) when (exception is NullReferenceException || exception is ArgumentException)
+        catch (Exception exception) when (exception is ArgumentNullException)
         {
             templateOriginalPosition = default;
         }
@@ -82,6 +85,13 @@ public class Grid : Transformable, IGrid
 
         ConnectNearbyTemplates(pipeTemplate);
         PipelineChanged?.Invoke();
+
+        Console.WriteLine($"({pipeTemplate.GridPosition[0]}, {pipeTemplate.GridPosition[1]}) is connected with ");
+
+        foreach (PipeTemplate pipeTemplate1 in pipeTemplate.ConnectedTemplates)
+            Console.Write($"({pipeTemplate1.GridPosition[0]}, {pipeTemplate1.GridPosition[1]}) ");
+
+        Console.WriteLine();
     }
 
     private void ConnectNearbyTemplates(PipeTemplate pipeTemplate)
