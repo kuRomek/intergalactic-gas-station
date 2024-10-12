@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public class LevelState : IActivatable
 {
@@ -8,6 +9,7 @@ public class LevelState : IActivatable
     private List<Ship> _shipsQueue;
     private Station _station;
     private Timer _timer;
+    private List<Fuel> _fuelTypesOnLevel = new List<Fuel>();
     
     public LevelState(UIMenu levelCompleteWindow, UIMenu loseWindow, TankContainer tanks, List<Ship> shipsQueue, Station station, Timer timer)
     {
@@ -19,6 +21,12 @@ public class LevelState : IActivatable
         _timer = timer;
 
         _timer.Expired += OnTimerExpired;
+
+        foreach (Tank tank in _tanks)
+        {
+            if (_fuelTypesOnLevel.Contains(tank.FuelType) == false)
+                _fuelTypesOnLevel.Add(tank.FuelType);
+        }
 
         LetShipOnStation();
         LetShipOnStation();
@@ -45,15 +53,37 @@ public class LevelState : IActivatable
     {
         if (_shipsQueue.Count > 0)
         {
-            Fuel fuel = _tanks.Peek().FuelType;
-            int fuelCount = _tanks.Peek().CurrentAmount;
-            Ship ship = _shipsQueue.Find(ship => new List<ShipTank>(ship.Tanks).Find(tank => tank.FuelType == fuel) != null);
+            if (_station.ActiveShipCount == 0)
+            {
+                _station.Arrive(_shipsQueue[0]);
+                _shipsQueue.RemoveAt(0);
+                return;
+            }
+            
+            List<Fuel> lackingFuelTypes = new List<Fuel>(_fuelTypesOnLevel);
 
-            ship ??= _shipsQueue[0];
+            foreach (Ship ship in _station.Ships)
+            {
+                if (ship == null)
+                    continue;
 
-            _shipsQueue.Remove(ship);
+                foreach (ShipTank shipTank in ship.Tanks)
+                    lackingFuelTypes.Remove(shipTank.FuelType);
+            }
 
-            _station.Arrive(ship);
+            Ship shipToArrive = null;
+
+            foreach (Fuel fuel in lackingFuelTypes)
+            {
+                if ((shipToArrive = _shipsQueue.Find(ship => ship.Tanks.Find(tank => tank.FuelType == fuel) != null)) != null)
+                    break;
+            }
+
+            shipToArrive ??= _shipsQueue[0];
+
+            _shipsQueue.Remove(shipToArrive);
+
+            _station.Arrive(shipToArrive);
         }
         else if (_station.ActiveShipCount == 0)
         {
