@@ -9,15 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5666d962ca04bc49b77ce9e07143d23, type: 3}
-  m_Name: FuelTypes
+  m_Script: {fileID: 11500000, guid: 79e2e8d00d2189c4a9e21bc00f7c8e18, type: 3}
+  m_Name: FuelColors
   m_EditorClassIdentifier: 
   _fuelCells:
   - _fuel: 0
-    _color: {r: 0.3764706, g: 0.37254903, b: 0.33333334, a: 1}
+    _color: {r: 0.7264151, g: 0.6851137, b: 0.6339, a: 1}
+    _material: {fileID: 2100000, guid: 2a83d5649571df2428ba181c99f7e0a0, type: 2}
   - _fuel: 1
     _color: {r: 0.5372549, g: 0.16470589, b: 0.13333334, a: 1}
+    _material: {fileID: 2100000, guid: 7addbf1b956eec24e821b75fb51df055, type: 2}
   - _fuel: 2
     _color: {r: 0.21867214, g: 0.509434, b: 0.32785812, a: 1}
+    _material: {fileID: 2100000, guid: 7ae3e96f835b73b4487205876f01afee, type: 2}
   - _fuel: 3
     _color: {r: 0.21462265, g: 0.29015929, b: 0.5, a: 1}
+    _material: {fileID: 2100000, guid: c0f9b9846a572444b8849ea557e46bda, type: 2}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipView : View
@@ -5,7 +6,7 @@ public class ShipView : View
     [SerializeField] private FuelView _fuelViewPrefab;
     [SerializeField] private Canvas _fuelViewPlace;
 
-    public void Init(ShipTank[] shipTanks)
+    public void Init(IReadOnlyList<ShipTank> shipTanks)
     {
         foreach (ShipTank shipTank in shipTanks)
         {

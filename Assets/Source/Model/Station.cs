@@ -6,17 +6,16 @@ using Random = UnityEngine.Random;
 
 public class Station : Transformable, IActivatable
 {
-    private const int ShipCount = 3;
-
     private FuelProvider _fuelProvider;
     private Grid _grid;
-    private Ship[] _ships = new Ship[ShipCount];
+    private Ship[] _ships;
     private Transform[] _refuelingPoints;
     private Vector3[] _startPositions;
 
     public Station(Transform[] refuelingPoints, Vector3[] startPositions, Grid grid, TankContainer tankContainer) : base(default, default)
     {
         _refuelingPoints = refuelingPoints;
+        _ships = new Ship[refuelingPoints.Length];
         _startPositions = startPositions;
         _grid = grid;
         _fuelProvider = new FuelProvider(_grid, this, tankContainer);
@@ -25,6 +24,7 @@ public class Station : Transformable, IActivatable
     public event Action PlaceFreed;
 
     public Ship[] Ships => _ships;
+    public Transform[] RefuelingPoints => _refuelingPoints;
     public int ActiveShipCount => _ships.Where(ship => ship != null).Count();
 
     public void Arrive(Ship ship)
@@ -47,35 +47,24 @@ public class Station : Transformable, IActivatable
 
         ship.LeavedStation += FreeRefuelingPoint;
         ship.StopedAtRefuelingPoint += _fuelProvider.TryRefuel;
-    }
-
-    public void Refuel(Ship ship, ShipTank shipTank, int amount, out int residue)
-    {
-        if (ship.Position != ship.Target)
-            throw new InvalidOperationException("Ship is not on point yet.");
-
-        if (ship == null)
-            throw new NullReferenceException();
-
-        ship.Refuel(shipTank, amount, out residue);
+        ship.TankRefueled += _fuelProvider.TryRefuel;
     }
 
     public void Enable()
     {
         _grid.PipelineChanged += _fuelProvider.TryRefuel;
-        _fuelProvider.Enable();
     }
 
     public void Disable()
     {
         _grid.PipelineChanged -= _fuelProvider.TryRefuel;
-        _fuelProvider.Disable();
     }
 
     private void FreeRefuelingPoint(Ship ship)
     {
         ship.LeavedStation -= FreeRefuelingPoint;
         ship.StopedAtRefuelingPoint -= _fuelProvider.TryRefuel;
+        ship.TankRefueled -= _fuelProvider.TryRefuel;
 
         _ships[Array.IndexOf(_ships, ship)] = null;
 

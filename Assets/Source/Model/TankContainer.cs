@@ -14,8 +14,6 @@ public class TankContainer : IEnumerable<Tank>
         _tanksPosition = tankPosition;
     }
 
-    public event Action<Tank> TankEmptied;
-
     public Tank Add(ITank.Size type, Fuel fuelType)
     {
         Tank newTank = new Tank(default, type, fuelType);
@@ -45,8 +43,6 @@ public class TankContainer : IEnumerable<Tank>
             foreach (Tank tank in _tanks)
                 tank.MoveTo(tank.Position + elevation);
         }
-
-        TankEmptied?.Invoke(removingTank);
 
         removingTank.Destroy();
     }

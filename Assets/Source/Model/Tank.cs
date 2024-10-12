@@ -14,20 +14,22 @@ public class Tank : Transformable, ITank
         _currentAmount = (int)_size;
         _fuelType = fuelType;
 
-        ScaleTo(new Vector3(1f, _currentAmount / 6f, 1f));
+        ScaleTo(new Vector3(1f, (float)_size / MaximumSize, 1f));
     }
 
     public event Action Emptied;
+    public event Action FuelAmountChanged;
 
     public Fuel FuelType => _fuelType;
     public int Capacity => (int)_size;
     public int CurrentAmount => _currentAmount;
 
-    public void TakeFuel(int amount)
+    public void TakeFuel(int requestedAmount, out int resultAmount)
     {
-        int takingAmount = (int)MathF.Min(_currentAmount, amount);
+        resultAmount = (int)MathF.Min(requestedAmount, _currentAmount);
 
-        _currentAmount -= takingAmount;
+        _currentAmount -= resultAmount;
+        FuelAmountChanged?.Invoke();
 
         if (_currentAmount == 0)
             Emptied?.Invoke();

@@ -14,7 +14,7 @@ public class PresenterFactory : MonoBehaviour
     public void CreateTank(Tank tankModel)
     {
         TankPresenter presenter = CreatePresenter(_tankPresenter, tankModel) as TankPresenter;
-        presenter.View.Init(tankModel.FuelType);
+        presenter.View.Init(tankModel);
     }
 
     public Presenter CreatePresenter(Presenter presenterTemplate, Transformable model)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class Ship : Transformable, IUpdatable
 
     private Vector3 _refuelingPosition;
     private Vector3 _startPosition;
-    private ShipTank[] _tanks;
+    private List<ShipTank> _tanks;
     private int _emptyTanks;
     private float _speed = 3f;
 
@@ -16,18 +17,19 @@ public class Ship : Transformable, IUpdatable
     {
         Target = Position;
 
-        _tanks = new ShipTank[shipSetup.Tanks.Length];
-        _emptyTanks = _tanks.Length;
+        _tanks = new List<ShipTank>(shipSetup.Tanks.Length);
+        _emptyTanks = _tanks.Capacity;
 
-        for (int i = 0; i < _tanks.Length; i++)
-            _tanks[i] = new ShipTank(shipSetup.Tanks[i].FuelType, shipSetup.Tanks[i].Size);
+        for (int i = 0; i < _tanks.Capacity; i++)
+            _tanks.Add(new ShipTank(shipSetup.Tanks[i].FuelType, shipSetup.Tanks[i].Size));
     }
 
+    public event Action TankRefueled;
     public event Action StopedAtRefuelingPoint;
     public event Action<Ship> LeavedStation;
 
     public Vector3 Target { get; private set; }
-    public ShipTank[] Tanks => _tanks;
+    public List<ShipTank> Tanks => _tanks;
 
     public void Update(float deltaTime)
     {
@@ -43,15 +45,34 @@ public class Ship : Transformable, IUpdatable
         }
     }
 
-    public void Refuel(ShipTank shipTank, int amount, out int residue)
+    public void Refuel(int amount, Fuel fuelType)
     {
-        shipTank.Refuel(amount, out residue);
+        List<ShipTank> tanks = Tanks.FindAll(tank => tank.FuelType == fuelType && tank.IsFull == false);
 
-        if (shipTank.IsFull)
+        if (tanks.Count == 0)
+            throw new InvalidOperationException($"The ship does not have any tanks with {fuelType} fuel.");
+
+        foreach (ShipTank tank in tanks)
         {
-            if (--_emptyTanks == 0)
-                LeaveStation();
+            tank.Refuel(amount);
+            amount -= tank.Capacity;
+
+            if (tank.IsFull)
+            {
+                if (--_emptyTanks == 0)
+                    LeaveStation();
+                else
+                    TankRefueled?.Invoke();
+            }
+
+            if (amount <= 0)
+                return;
         }
+    }
+
+    public int RequestFuelCount(Fuel fuel)
+    {
+        return Tanks.FindAll(tank => tank.FuelType == fuel && tank.IsFull == false).Sum(tank => tank.Capacity - tank.CurrentAmount);
     }
 
     public void ArriveAtStation(Vector3 startPosition, Transform refuelingPoint)

@@ -6,17 +6,19 @@ public class FuelView : View
 {
     [SerializeField] private TextMeshProUGUI _currentAmount;
     [SerializeField] private TextMeshProUGUI _maxAmount;
-    [SerializeField] private FuelCollors _fuelCollors;
+    [SerializeField] private FuelColors _fuelCollors;
 
-    private ShipTank _tank;
+    private ITank _tank;
 
-    public void Init(ShipTank tank)
+    public void Init(ITank tank)
     {
         _tank = tank;
         _maxAmount.text = Convert.ToString(_tank.Capacity);
 
-        _maxAmount.color = _fuelCollors.GetColorOf(_tank.FuelType);
-        _currentAmount.color = _fuelCollors.GetColorOf(_tank.FuelType);
+        _maxAmount.color = _fuelCollors.GetMaterialOf(_tank.FuelType).color;
+        _currentAmount.color = _fuelCollors.GetMaterialOf(_tank.FuelType).color;
+
+        OnFuelAmountChanged();
 
         _tank.FuelAmountChanged += OnFuelAmountChanged;
     }
