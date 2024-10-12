@@ -5291,6 +5291,15 @@ MonoBehaviour:
   _startScreen: {fileID: 1599173121}
   _levelButtons:
   - {fileID: 212771734}
+  - {fileID: 1348451900}
+  - {fileID: 710475311}
+  - {fileID: 21712976}
+  - {fileID: 1032873554}
+  - {fileID: 1351911987}
+  - {fileID: 1675866353}
+  - {fileID: 1488784778}
+  - {fileID: 1740695095}
+  - {fileID: 1513084726}
   _backButton: {fileID: 1035368813}
 --- !u!1 &2016446815
 GameObject:

@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class PipeTemplateView : View
 {
-    [SerializeField] private FuelCollors _fuelTypes;
-
-    private Color _color;
+    [SerializeField] private FuelColors _fuelTypes;
 
     public void Init(Fuel fuel)
     {
-        _color = _fuelTypes.GetColorOf(fuel);
+        Material material = _fuelTypes.GetMaterialOf(fuel);
 
         foreach (Renderer pieceRenderer in GetComponentsInChildren<Renderer>())
-            pieceRenderer.material.color = _color;
+            pieceRenderer.material = material;
     }
 }

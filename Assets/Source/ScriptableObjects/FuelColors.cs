@@ -3,13 +3,13 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="FuelTypes", menuName="Fuel/FuelTypes", order=51)]
-public class FuelCollors : ScriptableObject
+public class FuelColors : ScriptableObject
 {
     [SerializeField] private FuelCell[] _fuelCells;
 
-    public Color GetColorOf(Fuel fuel)
+    public Material GetMaterialOf(Fuel fuel)
     {
-        return _fuelCells.FirstOrDefault(cell => cell.Fuel == fuel).Color;
+        return _fuelCells.FirstOrDefault(cell => cell.Fuel == fuel).Material;
     }
 }
 
@@ -17,8 +17,8 @@ public class FuelCollors : ScriptableObject
 public class FuelCell
 {
     [SerializeField] private Fuel _fuel;
-    [SerializeField] private Color _color;
+    [SerializeField] private Material _material;
 
     public Fuel Fuel => _fuel;
-    public Color Color => _color;
+    public Material Material => _material;
 }

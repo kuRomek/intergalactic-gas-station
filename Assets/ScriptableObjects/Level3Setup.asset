@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa29e6aab07a55e47a98e6b3422c29ed, type: 3}
+  m_Name: Level3Setup
+  m_EditorClassIdentifier: 
+  _ships:
+  - {fileID: 11400000, guid: fbb6e5adfdaa03449b2dec4da198249e, type: 2}
+  - {fileID: 11400000, guid: 8d5ceab9205516045a4f5c436781e02b, type: 2}
+  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
+  - {fileID: 11400000, guid: 13dfe7d68d26060429a4e022a523d5d9, type: 2}
+  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
+  - {fileID: 11400000, guid: 11e460cdf9128b44b8b8c4be90a47abe, type: 2}
+  - {fileID: 11400000, guid: af1033f50aa8b614db9e714726da17b4, type: 2}
+  - {fileID: 11400000, guid: fbb6e5adfdaa03449b2dec4da198249e, type: 2}
+  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
+  - {fileID: 11400000, guid: 11e460cdf9128b44b8b8c4be90a47abe, type: 2}
+  _tanks:
+  - _size: 6
+    _fuelType: 1
+  - _size: 3
+    _fuelType: 3
+  - _size: 3
+    _fuelType: 1
+  - _size: 2
+    _fuelType: 1
+  - _size: 6
+    _fuelType: 3
+  - _size: 6
+    _fuelType: 1
+  - _size: 2
+    _fuelType: 3
+  - _size: 2
+    _fuelType: 1
+  - _size: 2
+    _fuelType: 3
+  - _size: 2
+    _fuelType: 1

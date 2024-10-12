@@ -10,21 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa29e6aab07a55e47a98e6b3422c29ed, type: 3}
-  m_Name: Level1
+  m_Name: Level1Setup
   m_EditorClassIdentifier: 
   _ships:
+  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
+  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
+  - {fileID: 11400000, guid: af1033f50aa8b614db9e714726da17b4, type: 2}
   - {fileID: 11400000, guid: fbb6e5adfdaa03449b2dec4da198249e, type: 2}
+  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
   - {fileID: 11400000, guid: fbb6e5adfdaa03449b2dec4da198249e, type: 2}
-  - {fileID: 11400000, guid: fbb6e5adfdaa03449b2dec4da198249e, type: 2}
-  - {fileID: 11400000, guid: f7d77b6551f11a44d83867db69c3556c, type: 2}
-  - {fileID: 11400000, guid: fbb6e5adfdaa03449b2dec4da198249e, type: 2}
+  - {fileID: 11400000, guid: af1033f50aa8b614db9e714726da17b4, type: 2}
   _tanks:
   - _size: 6
     _fuelType: 1
-  - _size: 2
-    _fuelType: 1
-  - _size: 2
-    _fuelType: 2
   - _size: 3
     _fuelType: 1
   - _size: 2
@@ -33,5 +31,8 @@ MonoBehaviour:
     _fuelType: 1
   - _size: 6
     _fuelType: 1
-  - _size: 6
+  - _size: 2
     _fuelType: 1
+  - _size: 2
+    _fuelType: 1
+  _timeInSeconds: 60

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-public class FuelProvider : IActivatable
+public class FuelProvider
 {
     private Grid _grid;
     private Station _station;
@@ -13,25 +12,6 @@ public class FuelProvider : IActivatable
         _grid = grid;
         _station = station;
         _tanks = tankContainer;
-
-        _tanks.TankEmptied += Unsubscribe;
-
-        foreach (Tank tank in _tanks)
-            tank.Emptied += TryRefuel;
-    }
-
-    private void Unsubscribe(Tank tank)
-    {
-        tank.Emptied -= TryRefuel;
-    }
-
-    public void Enable()
-    {
-    }
-
-    public void Disable()
-    {
-        _tanks.TankEmptied -= Unsubscribe;
     }
 
     public void TryRefuel()
@@ -40,12 +20,19 @@ public class FuelProvider : IActivatable
         {
             try
             {
-                if (_grid.RefuelingPoints[i] is PipeTemplate pipeTemplate && pipeTemplate.ConnectedTemplates.Count > 0 && DFSToFuelSource(pipeTemplate, _tanks.Peek().FuelType) == true)
+                if (_station.Ships[i].Position != _station.RefuelingPoints[i].position)
+                    continue;
+
+                if (_grid.RefuelingPoints[i] is PipeTemplate pipeTemplate && pipeTemplate.ConnectedTemplates.Count > 0 && DFSToFuelSource(pipeTemplate, _tanks.Peek().FuelType))
                 {
-                    ShipTank tankToRefuel = _station.Ships[i].Tanks.FirstOrDefault(tank => tank.FuelType == _tanks.Peek().FuelType && tank.IsFull == false);
-                    int refuelingAmount = (int)MathF.Min(_tanks.Peek().CurrentAmount, tankToRefuel.Capacity - tankToRefuel.CurrentAmount);
-                    _station.Refuel(_station.Ships[i], tankToRefuel, refuelingAmount, out int residue);
-                    _tanks.Peek().TakeFuel(refuelingAmount - residue);
+                    Fuel requestedFuel = _tanks.Peek().FuelType;
+                    int requestedAmount = _station.Ships[i].RequestFuelCount(requestedFuel);
+                    _tanks.Peek().TakeFuel(requestedAmount, out int resultAmount);
+                    _station.Ships[i].Refuel(resultAmount, requestedFuel);
+
+                    if (resultAmount < requestedAmount)
+                        TryRefuel();
+
                     return;
                 }
             }
@@ -61,8 +48,9 @@ public class FuelProvider : IActivatable
 
         List<PipeTemplate> checkedTemplates = new List<PipeTemplate>();
         Stack<PipeTemplate> templatesToCheck = new Stack<PipeTemplate>();
+
         templatesToCheck.Push(pipeTemplate);
-        fuel = pipeTemplate.FuelType;
+
         PipeTemplate checkingTemplate;
 
         do
@@ -76,7 +64,7 @@ public class FuelProvider : IActivatable
 
             foreach (PipeTemplate connectedTemplate in checkingTemplate.ConnectedTemplates)
             {
-                if (checkedTemplates.Find(template => template == connectedTemplate) == null && connectedTemplate.FuelType == fuel)
+                if (checkedTemplates.Find(template => template == connectedTemplate) == null && (connectedTemplate.FuelType == fuel || connectedTemplate.FuelType == Fuel.Default))
                     templatesToCheck.Push(connectedTemplate);
             }
         }

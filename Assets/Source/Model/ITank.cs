@@ -1,3 +1,5 @@
+using System;
+
 public interface ITank
 {
     const int MaximumSize = 6;
@@ -9,6 +11,9 @@ public interface ITank
         Small = 2
     }
 
-    public Fuel FuelType { get; }
-    public int Capacity { get; }
+    event Action FuelAmountChanged;
+
+    Fuel FuelType { get; }
+    int Capacity { get; }
+    int CurrentAmount { get; }
 }

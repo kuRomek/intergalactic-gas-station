@@ -29,6 +29,11 @@ public class PipeDragger : Transformable, IActivatable
     private void OnDragStarted(PipeTemplate pipeTemplate)
     {
         _draggingPipeTemplate = pipeTemplate;
+
+        _draggingPipeTemplate.MoveTo(_draggingPipeTemplate.Position - Vector3.forward);
+
+        foreach (PipePiece pipe in _draggingPipeTemplate.PipePieces)
+            pipe.MoveTo(pipe.Position - Vector3.forward);
     }
 
     private void OnDragging(Vector3 delta)
@@ -46,6 +51,11 @@ public class PipeDragger : Transformable, IActivatable
     {
         if (_draggingPipeTemplate != null)
         {
+            _draggingPipeTemplate.MoveTo(_draggingPipeTemplate.Position + Vector3.forward);
+
+            foreach (PipePiece pipe in _draggingPipeTemplate.PipePieces)
+                pipe.MoveTo(pipe.Position + Vector3.forward);
+
             _grid.Place(_draggingPipeTemplate);
             _draggingPipeTemplate = null;
         }

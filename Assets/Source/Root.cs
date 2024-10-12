@@ -16,7 +16,9 @@ public class Root : MonoBehaviour
     [SerializeField] private Transform _tanksPlace;
     [SerializeField] private Transform _shipsWaitingPlace;
     [SerializeField] private LevelSetup _levelSetup;
-    [SerializeField] private UIMenu _levelCompleteMenu;
+    [SerializeField] private UIMenu _levelCompleteWindow;
+    [SerializeField] private UIMenu _loseWindow;
+    [SerializeField] private TimerView _timerView;
     
     private Grid _grid;
     private LevelState _levelState;
@@ -59,16 +61,19 @@ public class Root : MonoBehaviour
         PipeDragger pipeDragger = new PipeDragger(_inputController, grid);
         _pipeDraggerPresenter.Init(pipeDragger);
 
-        Queue<Ship> shipsQueue = new Queue<Ship>();
+        List<Ship> shipsQueue = new List<Ship>();
 
         for (int i = 0; i < _levelSetup.Ships.Length; i++)
         {
             Ship newShip = new Ship(_shipsWaitingPlace, _levelSetup.Ships[i]);
-            shipsQueue.Enqueue(newShip);
+            shipsQueue.Add(newShip);
             _presenterFactory.CreateShip(newShip);
         }
 
-        _levelState = new LevelState(_levelCompleteMenu, shipsQueue, station);
+        Timer timer = new Timer(_levelSetup.TimeInSeconds);
+        _timerView.Init(timer);
+
+        _levelState = new LevelState(_levelCompleteWindow, _loseWindow, tankContainer, shipsQueue, station, timer);
         _levelState.Enable();
     }
 
