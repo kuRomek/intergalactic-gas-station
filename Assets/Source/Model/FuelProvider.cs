@@ -43,7 +43,7 @@ public class FuelProvider
 
     private bool DFSToFuelSource(PipeTemplate pipeTemplate, Fuel fuel)
     {
-        if (pipeTemplate.FuelType != fuel)
+        if (pipeTemplate.FuelType != fuel && pipeTemplate.FuelType != Fuel.Default)
             throw new InvalidOperationException("Pipes and fuel don't match.");
 
         List<PipeTemplate> checkedTemplates = new List<PipeTemplate>();

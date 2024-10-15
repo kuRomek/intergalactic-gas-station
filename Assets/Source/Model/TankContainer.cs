@@ -9,10 +9,12 @@ public class TankContainer : IEnumerable<Tank>
     private Vector3 _tanksPosition;
     private Tank _lastTank;
 
-    public TankContainer(Vector3 tankPosition)
+    public TankContainer(Vector3 tanksPosition)
     {
-        _tanksPosition = tankPosition;
+        _tanksPosition = tanksPosition;
     }
+
+    public event Action<Vector3> TankEmptied;
 
     public Tank Add(ITank.Size type, Fuel fuelType)
     {
@@ -39,10 +41,16 @@ public class TankContainer : IEnumerable<Tank>
         if (_tanks.Count > 0)
         {
             Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / 6f * Vector3.down) - _tanks.Peek().Position;
-
-            foreach (Tank tank in _tanks)
-                tank.MoveTo(tank.Position + elevation);
+            TankEmptied?.Invoke(elevation);
         }
+
+        //if (_tanks.Count > 0)
+        //{
+        //    Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / 6f * Vector3.down) - _tanks.Peek().Position;
+
+        //    foreach (Tank tank in _tanks)
+        //        tank.MoveTo(tank.Position + elevation);
+        //}
 
         removingTank.Destroy();
     }

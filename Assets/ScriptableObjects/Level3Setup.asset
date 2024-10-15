@@ -13,34 +13,41 @@ MonoBehaviour:
   m_Name: Level3Setup
   m_EditorClassIdentifier: 
   _ships:
-  - {fileID: 11400000, guid: fbb6e5adfdaa03449b2dec4da198249e, type: 2}
   - {fileID: 11400000, guid: 8d5ceab9205516045a4f5c436781e02b, type: 2}
-  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
-  - {fileID: 11400000, guid: 13dfe7d68d26060429a4e022a523d5d9, type: 2}
-  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
   - {fileID: 11400000, guid: 11e460cdf9128b44b8b8c4be90a47abe, type: 2}
-  - {fileID: 11400000, guid: af1033f50aa8b614db9e714726da17b4, type: 2}
+  - {fileID: 11400000, guid: 11e460cdf9128b44b8b8c4be90a47abe, type: 2}
+  - {fileID: 11400000, guid: 13dfe7d68d26060429a4e022a523d5d9, type: 2}
+  - {fileID: 11400000, guid: 436a239610d1aba4a88f748638ccf522, type: 2}
+  - {fileID: 11400000, guid: 1d2217f850c3b954aaaa850b6cff110d, type: 2}
+  - {fileID: 11400000, guid: 5890e3b8b8d292043bd2d5ff6fcd880f, type: 2}
+  - {fileID: 11400000, guid: 5890e3b8b8d292043bd2d5ff6fcd880f, type: 2}
   - {fileID: 11400000, guid: fbb6e5adfdaa03449b2dec4da198249e, type: 2}
   - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
-  - {fileID: 11400000, guid: 11e460cdf9128b44b8b8c4be90a47abe, type: 2}
+  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
+  - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
   _tanks:
-  - _size: 6
-    _fuelType: 1
   - _size: 3
-    _fuelType: 3
+    _fuelType: 2
   - _size: 3
     _fuelType: 1
   - _size: 2
-    _fuelType: 1
-  - _size: 6
+    _fuelType: 2
+  - _size: 3
+    _fuelType: 2
+  - _size: 2
+    _fuelType: 3
+  - _size: 3
+    _fuelType: 2
+  - _size: 3
     _fuelType: 3
   - _size: 6
     _fuelType: 1
   - _size: 2
     _fuelType: 3
-  - _size: 2
+  - _size: 3
     _fuelType: 1
-  - _size: 2
+  - _size: 6
     _fuelType: 3
   - _size: 2
-    _fuelType: 1
+    _fuelType: 2
+  _timeInSeconds: 240

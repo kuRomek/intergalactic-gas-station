@@ -47,7 +47,6 @@ public class Station : Transformable, IActivatable
 
         ship.LeavedStation += FreeRefuelingPoint;
         ship.StopedAtRefuelingPoint += _fuelProvider.TryRefuel;
-        ship.TankRefueled += _fuelProvider.TryRefuel;
     }
 
     public void Enable()
@@ -64,7 +63,6 @@ public class Station : Transformable, IActivatable
     {
         ship.LeavedStation -= FreeRefuelingPoint;
         ship.StopedAtRefuelingPoint -= _fuelProvider.TryRefuel;
-        ship.TankRefueled -= _fuelProvider.TryRefuel;
 
         _ships[Array.IndexOf(_ships, ship)] = null;
 

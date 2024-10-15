@@ -20,19 +20,27 @@ public class ShipTank : ITank
     public int CurrentAmount => _currentAmount;
     public int Capacity => (int)_size;
 
-    public void Refuel(int amount)
+    public void Refuel(int amount, out int residue)
     {
         if (IsFull)
             throw new InvalidOperationException("Tank is already full.");
 
-        _currentAmount += amount;
+        int lackingAmount = Capacity - _currentAmount;
 
-        if (_currentAmount > Capacity)
-            throw new InvalidOperationException($"After refueling tank cannot contain more fuel than its capacity. {_currentAmount}/{Capacity}");
+        if (amount > lackingAmount)
+        {
+            residue = amount - lackingAmount;
+            _currentAmount += lackingAmount;
+        }
+        else
+        {
+            residue = 0;
+            _currentAmount += amount;
+        }
 
         FuelAmountChanged?.Invoke();
 
-        if (_currentAmount >= Capacity)
+        if (_currentAmount == Capacity)
             IsFull = true;
     }
 }

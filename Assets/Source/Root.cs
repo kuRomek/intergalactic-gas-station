@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,6 +18,7 @@ public class Root : MonoBehaviour
     [SerializeField] private UIMenu _levelCompleteWindow;
     [SerializeField] private UIMenu _loseWindow;
     [SerializeField] private TimerView _timerView;
+    [SerializeField] private TankContainerShifter _tankContainerShifter;
     
     private Grid _grid;
     private LevelState _levelState;
@@ -30,6 +30,9 @@ public class Root : MonoBehaviour
         _grid = grid;
 
         TankContainer tankContainer = new TankContainer(_tanksPlace.position);
+        _tankContainerShifter.Init(tankContainer);
+
+        Utils.Shuffle(_levelSetup.Tanks);
 
         foreach (TankSetup tank in _levelSetup.Tanks)
             _presenterFactory.CreateTank(tankContainer.Add(tank.Size, tank.FuelType));

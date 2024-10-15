@@ -54,7 +54,7 @@ public class Ship : Transformable, IUpdatable
 
         foreach (ShipTank tank in tanks)
         {
-            tank.Refuel(amount);
+            tank.Refuel(amount, out int residue);
             amount -= tank.Capacity;
 
             if (tank.IsFull)
