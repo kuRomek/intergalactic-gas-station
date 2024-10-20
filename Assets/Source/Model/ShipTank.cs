@@ -18,6 +18,7 @@ public class ShipTank : ITank
     public Fuel FuelType { get; }
     public bool IsFull { get; private set; } = false;
     public int CurrentAmount => _currentAmount;
+    public Size Size => _size;
     public int Capacity => (int)_size;
 
     public void Refuel(int amount, out int residue)

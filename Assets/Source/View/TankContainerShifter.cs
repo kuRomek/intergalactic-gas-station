@@ -9,18 +9,18 @@ public class TankContainerShifter : MonoBehaviour
 
     private void OnDisable()
     {
-        _tankContainer.TankEmptied -= StartShiftingTanks;
+        _tankContainer.FirstTankRemoved -= OnTankEmptied;
     }
 
     public void Init(TankContainer tankContainer)
     {
         _tankContainer = tankContainer;
-        _tankContainer.TankEmptied += StartShiftingTanks;
+        _tankContainer.FirstTankRemoved += OnTankEmptied;
 
         enabled = true;
     }
 
-    private void StartShiftingTanks(Vector3 shift)
+    private void OnTankEmptied(Vector3 shift)
     {
         if (_shifting != null)
             StopCoroutine(_shifting);
@@ -30,6 +30,8 @@ public class TankContainerShifter : MonoBehaviour
 
     private IEnumerator ShiftTanks(Vector3 shift)
     {
+        yield return new WaitForFixedUpdate();
+
         Vector3[] startPositions = _tankContainer.Select(tank => tank.Position).ToArray();
 
         while (_tankContainer.Peek().Position != startPositions[0] + shift)

@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="FuelTypes", menuName="Fuel/FuelTypes", order=51)]
 public class FuelColors : ScriptableObject
 {
-    [SerializeField] private FuelCell[] _fuelCells;
+    [SerializeField] private FuelCellView[] _fuelCells;
 
     public Material GetMaterialOf(Fuel fuel)
     {
@@ -14,7 +14,7 @@ public class FuelColors : ScriptableObject
 }
 
 [Serializable]
-public class FuelCell
+public class FuelCellView
 {
     [SerializeField] private Fuel _fuel;
     [SerializeField] private Material _material;

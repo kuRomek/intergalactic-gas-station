@@ -13,22 +13,22 @@ MonoBehaviour:
   m_Name: Level4Setup
   m_EditorClassIdentifier: 
   _ships:
-  - {fileID: 11400000, guid: f7d77b6551f11a44d83867db69c3556c, type: 2}
-  - {fileID: 11400000, guid: 1d2217f850c3b954aaaa850b6cff110d, type: 2}
   - {fileID: 11400000, guid: 8d5ceab9205516045a4f5c436781e02b, type: 2}
+  - {fileID: 11400000, guid: 1d2217f850c3b954aaaa850b6cff110d, type: 2}
+  - {fileID: 11400000, guid: f7d77b6551f11a44d83867db69c3556c, type: 2}
   - {fileID: 11400000, guid: af87ac2b84353ee4580430abbad37a9e, type: 2}
   - {fileID: 11400000, guid: 8695841f7fc0d6a469c704ab2e0b5caa, type: 2}
   _tanks:
+  - _size: 6
+    _fuelType: 3
+  - _size: 2
+    _fuelType: 3
   - _size: 3
     _fuelType: 2
-  - _size: 6
-    _fuelType: 3
-  - _size: 6
-    _fuelType: 1
-  - _size: 2
-    _fuelType: 3
   - _size: 2
     _fuelType: 2
-  - _size: 2
+  - _size: 3
+    _fuelType: 1
+  - _size: 6
     _fuelType: 1
   _timeInSeconds: 120

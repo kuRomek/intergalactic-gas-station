@@ -2,28 +2,25 @@ using System;
 
 public class Timer : IUpdatable
 {
-    private float _seconds;
-    private bool _running;
-
     public Timer(float seconds)
     {
-        _seconds = seconds;
-        _running = true;
+        SecondsLeft = seconds;
+        SecondsPassed = 0f;
+        IsRunning = true;
     }
 
     public event Action Expired;
     public event Action TimeChanged;
 
-    public float Seconds => _seconds;
-
     public void Update(float deltaTime)
     {
-        if (_running)
+        if (IsRunning)
         {
-            _seconds -= deltaTime;
+            SecondsLeft -= deltaTime;
+            SecondsPassed += deltaTime;
             TimeChanged?.Invoke();
             
-            if (_seconds <= 0)
+            if (SecondsLeft <= 0)
             {
                 Stop();
                 Expired?.Invoke();
@@ -31,8 +28,17 @@ public class Timer : IUpdatable
         }
     }
 
+    public float SecondsLeft { get; private set; }
+    public float SecondsPassed { get; private set; }
+    public bool IsRunning { get; private set; }
+
     public void Stop()
     {
-        _running = false;
+        IsRunning = false;
+    }
+
+    public void AddTime(float seconds)
+    {
+        SecondsLeft += seconds;
     }
 }

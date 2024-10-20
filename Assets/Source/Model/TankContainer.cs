@@ -6,53 +6,71 @@ using UnityEngine;
 public class TankContainer : IEnumerable<Tank>
 {
     private Queue<Tank> _tanks = new Queue<Tank>();
+    private PresenterFactory _presenterFactory;
     private Vector3 _tanksPosition;
     private Tank _lastTank;
+    private Dictionary<Fuel, int> _fuelCounts = new Dictionary<Fuel, int>();
 
-    public TankContainer(Vector3 tanksPosition)
+    public TankContainer(Vector3 tanksPosition, PresenterFactory presenterFactory)
     {
         _tanksPosition = tanksPosition;
+        _presenterFactory = presenterFactory;
     }
 
-    public event Action<Vector3> TankEmptied;
+    public event Action<Vector3> FirstTankRemoved;
+    public event Action TankEmptied;
+
+    public IEnumerator<Tank> GetEnumerator()
+    {
+        return _tanks.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _tanks.GetEnumerator();
+    }
+
+    public int Count => _tanks.Count;
 
     public Tank Add(ITank.Size type, Fuel fuelType)
     {
         Tank newTank = new Tank(default, type, fuelType);
+        PutToEnd(newTank);
 
-        if (_tanks.Count == 0)
-            newTank.MoveTo(_tanksPosition + Vector3.down * newTank.Capacity / 6f);
+        _presenterFactory.CreateTank(newTank);
+
+        _tanks.Enqueue(newTank);
+
+        if (_fuelCounts.ContainsKey(newTank.FuelType))
+            _fuelCounts[newTank.FuelType] += newTank.Capacity;
         else
-            newTank.MoveTo(_lastTank.Position + Vector3.down * (_lastTank.Capacity / 6f + newTank.Capacity / 6f + 0.25f));
+            _fuelCounts[newTank.FuelType] = newTank.Capacity;
 
-        _lastTank = newTank;
-        _tanks.Enqueue(_lastTank);
+        newTank.FuelDecreased += DecreseAmount;
+        newTank.Emptied += RemoveTank;
 
-        _lastTank.Emptied += RemoveTank;
-
-        return _lastTank;
+        return newTank;
     }
 
-    public void RemoveTank()
+    private void DecreseAmount(Fuel fuel, int amount)
     {
-        Tank removingTank = _tanks.Dequeue();
-        removingTank.Emptied -= RemoveTank;
+        _fuelCounts[fuel] -= amount;
+    }
+
+    public void RemoveTank(Tank tank)
+    {
+        _tanks.Dequeue();
+        tank.Emptied -= RemoveTank;
 
         if (_tanks.Count > 0)
         {
             Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / 6f * Vector3.down) - _tanks.Peek().Position;
-            TankEmptied?.Invoke(elevation);
+            FirstTankRemoved?.Invoke(elevation);
         }
 
-        //if (_tanks.Count > 0)
-        //{
-        //    Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / 6f * Vector3.down) - _tanks.Peek().Position;
+        tank.Destroy();
 
-        //    foreach (Tank tank in _tanks)
-        //        tank.MoveTo(tank.Position + elevation);
-        //}
-
-        removingTank.Destroy();
+        TankEmptied?.Invoke();
     }
 
     public Tank Peek()
@@ -63,13 +81,31 @@ public class TankContainer : IEnumerable<Tank>
             throw new NullReferenceException();
     }
 
-    public IEnumerator<Tank> GetEnumerator()
+    public void PutFirstToEnd()
     {
-        return _tanks.GetEnumerator();
+        Tank tank = _tanks.Dequeue();
+        _tanks.Enqueue(tank);
+        PutToEnd(tank);
+
+        Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / 6f * Vector3.down) - _tanks.Peek().Position;
+        FirstTankRemoved?.Invoke(elevation);
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    public int GetCount(Fuel fuel)
     {
-        return _tanks.GetEnumerator();
+        if (_fuelCounts.TryGetValue(fuel, out int count))
+            return count;
+        else
+            return 0;
+    }
+
+    private void PutToEnd(Tank tank)
+    {
+        if (_tanks.Count == 0)
+            tank.MoveTo(_tanksPosition + Vector3.down * tank.Capacity / 6f);
+        else
+            tank.MoveTo(_lastTank.Position + Vector3.down * (_lastTank.Capacity / 6f + tank.Capacity / 6f + 0.25f));
+
+        _lastTank = tank;
     }
 }

@@ -29,17 +29,6 @@ public class Root : MonoBehaviour
         _gridPresenter.Init(grid);
         _grid = grid;
 
-        TankContainer tankContainer = new TankContainer(_tanksPlace.position);
-        _tankContainerShifter.Init(tankContainer);
-
-        Utils.Shuffle(_levelSetup.Tanks);
-
-        foreach (TankSetup tank in _levelSetup.Tanks)
-            _presenterFactory.CreateTank(tankContainer.Add(tank.Size, tank.FuelType));
-
-        Station station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), _gridPresenter.Model, tankContainer);
-        _stationPresenter.Init(station);
-
         foreach (PipeTemplatePresenter pipeTemplatePresenter in _pipeTemplatePresenters)
         {
             PipePiecePresenter[] pipePiecePresenters = pipeTemplatePresenter.GetComponentsInChildren<PipePiecePresenter>();
@@ -59,25 +48,49 @@ public class Root : MonoBehaviour
             _grid.Place(pipeTemplatePresenter.Model);
         }
 
+        TankContainer tankContainer = new TankContainer(_tanksPlace.position, _presenterFactory);
+        _tankContainerShifter.Init(tankContainer);
+
+        Station station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), grid, tankContainer);
+        _stationPresenter.Init(station);
+
+        if (_levelSetup != null)
+        {
+            foreach (TankSetup tank in _levelSetup.Tanks)
+                tankContainer.Add(tank.Size, tank.FuelType);
+
+            List<Ship> shipsQueue = new List<Ship>();
+
+            for (int i = 0; i < _levelSetup.Ships.Length; i++)
+            {
+                Ship newShip = new Ship(_shipsWaitingPlace.position, _levelSetup.Ships[i]);
+                shipsQueue.Add(newShip);
+                _presenterFactory.CreateShip(newShip);
+            }
+
+            Utils.Shuffle(_levelSetup.Tanks);
+            Utils.Shuffle(_levelSetup.Ships);
+
+            Timer timer = new Timer(_levelSetup.TimeInSeconds);
+            _timerView.Init(timer);
+
+            _levelState = new LevelState(_levelCompleteWindow, _loseWindow, tankContainer, shipsQueue, station, timer);
+        }
+        else
+        {
+            Timer timer = new Timer(120);
+            _timerView.Init(timer);
+
+            _levelState = new LevelState(_levelCompleteWindow, _loseWindow, tankContainer, _shipsWaitingPlace.position, _presenterFactory, station, timer);
+        }
+
+        _levelState.Enable();
+
+        _inputController.Init(_levelState);
         _inputController.enabled = true;
 
         PipeDragger pipeDragger = new PipeDragger(_inputController, grid);
         _pipeDraggerPresenter.Init(pipeDragger);
-
-        List<Ship> shipsQueue = new List<Ship>();
-
-        for (int i = 0; i < _levelSetup.Ships.Length; i++)
-        {
-            Ship newShip = new Ship(_shipsWaitingPlace, _levelSetup.Ships[i]);
-            shipsQueue.Add(newShip);
-            _presenterFactory.CreateShip(newShip);
-        }
-
-        Timer timer = new Timer(_levelSetup.TimeInSeconds);
-        _timerView.Init(timer);
-
-        _levelState = new LevelState(_levelCompleteWindow, _loseWindow, tankContainer, shipsQueue, station, timer);
-        _levelState.Enable();
     }
 
     private void OnDisable()

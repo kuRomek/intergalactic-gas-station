@@ -7,8 +7,10 @@ public class TimerView : MonoBehaviour
 {
     private const float SecondsInMinute = 60f;
 
-    [SerializeField] private TextMeshProUGUI _secondsUI;
-    [SerializeField] private TextMeshProUGUI _minutesUI;
+    [SerializeField] private TextMeshProUGUI _secondsLeftUI;
+    [SerializeField] private TextMeshProUGUI _minutesLeftUI;
+    [SerializeField] private TextMeshProUGUI _secondsPassedUI;
+    [SerializeField] private TextMeshProUGUI _minutesPassedUI;
     [SerializeField] private Image _timerWheel;
 
     private Timer _timer;
@@ -27,15 +29,23 @@ public class TimerView : MonoBehaviour
     public void Init(Timer timer)
     {
         _timer = timer;
-        _startSeconds = _timer.Seconds;
+        _startSeconds = _timer.SecondsLeft;
 
         _timer.TimeChanged += OnTimeChanged;
     }
 
     private void OnTimeChanged()
     {
-        _secondsUI.text = ((int)(_timer.Seconds % SecondsInMinute)).ToString("00");
-        _minutesUI.text = ((int)(_timer.Seconds / SecondsInMinute)).ToString();
-        _timerWheel.fillAmount = _timer.Seconds / _startSeconds;
+        _secondsLeftUI.text = ((int)(_timer.SecondsLeft % SecondsInMinute)).ToString("00");
+        _minutesLeftUI.text = ((int)(_timer.SecondsLeft / SecondsInMinute)).ToString();
+
+        if (_timerWheel != null)
+            _timerWheel.fillAmount = _timer.SecondsLeft / _startSeconds;
+
+        if (_secondsPassedUI != null && _minutesPassedUI != null)
+        {
+            _secondsPassedUI.text = ((int)(_timer.SecondsPassed % SecondsInMinute)).ToString("00");
+            _minutesPassedUI.text = ((int)(_timer.SecondsPassed / SecondsInMinute)).ToString();
+        }
     }
 }

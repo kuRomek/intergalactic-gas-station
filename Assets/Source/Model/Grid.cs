@@ -85,13 +85,6 @@ public class Grid : Transformable, IGrid
 
         ConnectNearbyTemplates(pipeTemplate);
         PipelineChanged?.Invoke();
-
-        Console.WriteLine($"({pipeTemplate.GridPosition[0]}, {pipeTemplate.GridPosition[1]}) is connected with ");
-
-        foreach (PipeTemplate pipeTemplate1 in pipeTemplate.ConnectedTemplates)
-            Console.Write($"({pipeTemplate1.GridPosition[0]}, {pipeTemplate1.GridPosition[1]}) ");
-
-        Console.WriteLine();
     }
 
     private void ConnectNearbyTemplates(PipeTemplate pipeTemplate)

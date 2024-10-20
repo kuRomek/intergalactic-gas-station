@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StartScreen : UIMenu
@@ -12,19 +13,26 @@ public class StartScreen : UIMenu
     private void OnEnable()
     {
         _playButton.onClick.AddListener(OnPlayButtonClicked);
+        _infiniteGameButton.onClick.AddListener(OnInfiniteGameButtonClicked);
         _settingButton.onClick.AddListener(OnSettingsButtonClicked);
     }
 
     private void OnDisable()
     {
-        _playButton.onClick.RemoveListener(OnPlayButtonClicked);
-        _settingButton.onClick.RemoveListener(OnSettingsButtonClicked);
+        _playButton.onClick.RemoveAllListeners();
+        _infiniteGameButton.onClick.RemoveAllListeners();
+        _settingButton.onClick.RemoveAllListeners();
     }
 
     private void OnPlayButtonClicked()
     {
         Hide();
         _levelSelection.Show();
+    }
+
+    private void OnInfiniteGameButtonClicked()
+    {
+        SceneManager.LoadScene("InfiniteGame");
     }
 
     private void OnSettingsButtonClicked()

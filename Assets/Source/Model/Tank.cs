@@ -17,8 +17,9 @@ public class Tank : Transformable, ITank
         ScaleTo(new Vector3(1f, (float)_size / MaximumSize, 1f));
     }
 
-    public event Action Emptied;
+    public event Action<Tank> Emptied;
     public event Action FuelAmountChanged;
+    public event Action<Fuel, int> FuelDecreased;
 
     public Fuel FuelType => _fuelType;
     public int Capacity => (int)_size;
@@ -30,8 +31,9 @@ public class Tank : Transformable, ITank
 
         _currentAmount -= resultAmount;
         FuelAmountChanged?.Invoke();
+        FuelDecreased?.Invoke(FuelType, resultAmount);
 
         if (_currentAmount == 0)
-            Emptied?.Invoke();
+            Emptied?.Invoke(this);
     }
 }

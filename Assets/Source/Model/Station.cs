@@ -23,6 +23,16 @@ public class Station : Transformable, IActivatable
 
     public event Action PlaceFreed;
 
+    public void Enable()
+    {
+        _grid.PipelineChanged += _fuelProvider.TryRefuel;
+    }
+
+    public void Disable()
+    {
+        _grid.PipelineChanged -= _fuelProvider.TryRefuel;
+    }
+
     public Ship[] Ships => _ships;
     public Transform[] RefuelingPoints => _refuelingPoints;
     public int ActiveShipCount => _ships.Where(ship => ship != null).Count();
@@ -45,18 +55,10 @@ public class Station : Transformable, IActivatable
         _ships[randomSpot] = ship;
         ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
 
+        _fuelProvider.RemoveSoftLock();
+
         ship.LeavedStation += FreeRefuelingPoint;
         ship.StopedAtRefuelingPoint += _fuelProvider.TryRefuel;
-    }
-
-    public void Enable()
-    {
-        _grid.PipelineChanged += _fuelProvider.TryRefuel;
-    }
-
-    public void Disable()
-    {
-        _grid.PipelineChanged -= _fuelProvider.TryRefuel;
     }
 
     private void FreeRefuelingPoint(Ship ship)
@@ -65,8 +67,6 @@ public class Station : Transformable, IActivatable
         ship.StopedAtRefuelingPoint -= _fuelProvider.TryRefuel;
 
         _ships[Array.IndexOf(_ships, ship)] = null;
-
-        _fuelProvider.TryRefuel();
 
         PlaceFreed?.Invoke();
     }

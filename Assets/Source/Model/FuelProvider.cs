@@ -23,22 +23,55 @@ public class FuelProvider
                 if (_station.Ships[i].Position != _station.RefuelingPoints[i].position)
                     continue;
 
-                if (_grid.RefuelingPoints[i] is PipeTemplate pipeTemplate && pipeTemplate.ConnectedTemplates.Count > 0 && DFSToFuelSource(pipeTemplate, _tanks.Peek().FuelType))
+                if (_grid.RefuelingPoints[i] is PipeTemplate pipeTemplate && pipeTemplate.ConnectedTemplates.Count > 0 && 
+                    DFSToFuelSource(pipeTemplate, _tanks.Peek().FuelType))
                 {
-                    Fuel requestedFuel = _tanks.Peek().FuelType;
-                    int requestedAmount = _station.Ships[i].RequestFuelCount(requestedFuel);
-                    _tanks.Peek().TakeFuel(requestedAmount, out int resultAmount);
-                    _station.Ships[i].Refuel(resultAmount, requestedFuel);
+                    int oldTankCount = _tanks.Count;
+                    Refuel(_station.Ships[i]);
 
-                    if (resultAmount < requestedAmount)
+                    if (oldTankCount != _tanks.Count || _station.Ships[i].EmptyTanks != 0)
                         TryRefuel();
-
-                    return;
                 }
             }
             catch (Exception exception) when (exception is InvalidOperationException || exception is ArgumentException || exception is NullReferenceException)
             { }
         }
+    }
+
+    public void RemoveSoftLock()
+    {
+        while (CheckSoftLock())
+            _tanks.PutFirstToEnd();
+    }
+
+    private void Refuel(Ship ship)
+    {
+        Fuel requestedFuel = _tanks.Peek().FuelType;
+        int requestedAmount = ship.RequestFuelCount(requestedFuel);
+        _tanks.Peek().TakeFuel(requestedAmount, out int resultAmount);
+        ship.Refuel(resultAmount, requestedFuel);
+
+        RemoveSoftLock();
+    }
+
+    private bool CheckSoftLock()
+    {
+        if (_station.ActiveShipCount == 0)
+            return false;
+
+        foreach (Ship ship in _station.Ships)
+        {
+            if (ship == null)
+                continue;
+
+            foreach (ShipTank tank in ship.Tanks)
+            {
+                if (tank.IsFull == false && tank.FuelType == _tanks.Peek().FuelType)
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     private bool DFSToFuelSource(PipeTemplate pipeTemplate, Fuel fuel)

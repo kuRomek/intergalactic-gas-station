@@ -6,6 +6,7 @@ public class PlayerInputController : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
 
+    private LevelState _levelState;
     private PlayerInput _input;
     private Vector2 _lastMousePosition;
 
@@ -31,13 +32,21 @@ public class PlayerInputController : MonoBehaviour
     {
         _input.Disable();
 
-        //_input.Player.Press.performed -= OnButtonPressed;
-        //_input.Player.Drag.performed -= OnDragging;
-        //_input.Player.Press.canceled -= OnDragCanceld;
+        _input.Player.Press.performed -= OnButtonPressed;
+        _input.Player.Drag.performed -= OnDragging;
+        _input.Player.Press.canceled -= OnDragCanceld;
+    }
+
+    public void Init(LevelState levelState)
+    {
+        _levelState = levelState;
     }
 
     private void OnButtonPressed(InputAction.CallbackContext context)
     {
+        if (_levelState.IsGameOver)
+            return;
+
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity))
@@ -53,6 +62,9 @@ public class PlayerInputController : MonoBehaviour
 
     private void OnDragging(InputAction.CallbackContext context)
     {
+        if (_levelState.IsGameOver)
+            return;
+
         Vector2 newMousePosition = _camera.ScreenToWorldPoint(context.action.ReadValue<Vector2>());
         Dragging?.Invoke(newMousePosition - _lastMousePosition);
         _lastMousePosition = newMousePosition;
@@ -60,6 +72,9 @@ public class PlayerInputController : MonoBehaviour
 
     private void OnDragCanceld(InputAction.CallbackContext context)
     {
+        if (_levelState.IsGameOver)
+            return;
+
         DragCanceled?.Invoke();
     }
 }

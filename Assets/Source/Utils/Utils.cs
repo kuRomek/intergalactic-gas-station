@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 public static class Utils
 {
-    public static void Shuffle<T>(T[] array)
+    public static void Shuffle<T>(IList<T> array)
     {
-        int n = array.Length;
+        int n = array.Count;
 
         while (n > 1)
         {
