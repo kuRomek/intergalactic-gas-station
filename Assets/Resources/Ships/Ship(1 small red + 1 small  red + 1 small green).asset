@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17416e2c0bf228f4ba2562a1a2f38959, type: 3}
-  m_Name: Ship(1 small green + 2 small red)
+  m_Name: Ship(1 small red + 1 small  red + 1 small green)
   m_EditorClassIdentifier: 
   _tanks:
   - _size: 2
+    _fuelType: 1
+  - _size: 2
+    _fuelType: 1
+  - _size: 2
     _fuelType: 2
-  - _size: 2
-    _fuelType: 1
-  - _size: 2
-    _fuelType: 1

@@ -14,7 +14,7 @@ public class LevelSetup : ScriptableObject
 }
 
 [Serializable]
-public class TankSetup
+public struct TankSetup
 {
     [SerializeField] private ITank.Size _size;
     [SerializeField] private Fuel _fuelType;

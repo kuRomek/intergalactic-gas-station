@@ -93,7 +93,8 @@ public class LevelState : IActivatable
 
     private void LetShipOnStation()
     {
-        _timer.AddTime(5);
+        if (IsGameInfinite)
+            _timer.AddTime(5);
 
         if (_shipsQueue.Count > 0)
         {

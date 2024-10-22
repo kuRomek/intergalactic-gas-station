@@ -106,6 +106,8 @@ public class Grid : Transformable, IGrid
 
         foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
         {
+            bool[] connections = new bool[4] { false, false, false, false };
+
             foreach (int[] offset in indexOffsets)
             {
                 IGridMember checkingCell;
@@ -113,15 +115,102 @@ public class Grid : Transformable, IGrid
                 try
                 {
                     checkingCell = _cells[pipePiece.GridPosition[0] + offset[0], pipePiece.GridPosition[1] + offset[1]];
+
+                    if (checkingCell != null)
+                    {
+                        //TODO: сделать провверку на подходящее топливо (а в dfs убрать)
+                        if (checkingCell != pipeTemplate && checkingCell is PipeTemplate nearbyTemplate)
+                        {
+                            pipeTemplate.Connect(nearbyTemplate);
+
+                            if (nearbyTemplate.FuelType == pipePiece.FuelType || nearbyTemplate.FuelType == Fuel.Default)
+                            {
+                                connections[Array.IndexOf(indexOffsets, offset)] = true;
+                                CheckConnections(nearbyTemplate);
+                            }
+
+                            if (pipePiece.FuelType == Fuel.Default)
+                            {
+                                connections[Array.IndexOf(indexOffsets, offset)] = true;
+                                CheckConnections(nearbyTemplate);
+                            }
+                        }
+                        else
+                        {
+                            connections[Array.IndexOf(indexOffsets, offset)] = true;
+                        }
+                    }
                 }
                 catch (IndexOutOfRangeException)
                 {
+                    if (pipePiece.GridPosition[0] + offset[0] == 2 && (pipePiece.GridPosition[1] + offset[1] == -1 || pipePiece.GridPosition[1] + offset[1] == Size))
+                        connections[Array.IndexOf(indexOffsets, offset)] = true;
+                    else if (pipePiece.GridPosition[0] + offset[0] == -1 && pipePiece.GridPosition[1] + offset[1] == 2)
+                        connections[Array.IndexOf(indexOffsets, offset)] = true;
+                    else if (pipePiece.GridPosition[0] + offset[0] == Size && pipePiece.GridPosition[1] + offset[1] == 2)
+                        connections[Array.IndexOf(indexOffsets, offset)] = true;
+
                     continue;
                 }
-
-                if (checkingCell != null && checkingCell != pipeTemplate && checkingCell is PipeTemplate nearbyTemplate)
-                    pipeTemplate.Connect(nearbyTemplate);
             }
+
+            pipePiece.EstablishVisualConnection(connections);
+        }
+    }
+
+    private void CheckConnections(PipeTemplate pipeTemplate)
+    {
+        int[][] indexOffsets = new int[4][]
+        {
+            new int[2] { 1, 0 },
+            new int[2] { 0, 1 },
+            new int[2] { -1, 0 },
+            new int[2] { 0, -1 }
+        };
+
+        foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
+        {
+            bool[] connections = new bool[4] { false, false, false, false };
+
+            foreach (int[] offset in indexOffsets)
+            {
+                IGridMember checkingCell;
+
+                try
+                {
+                    checkingCell = _cells[pipePiece.GridPosition[0] + offset[0], pipePiece.GridPosition[1] + offset[1]];
+
+                    if (checkingCell != null)
+                    {
+                        //TODO: сделать провверку на подходящее топливо (а в dfs убрать)
+                        if (checkingCell != pipeTemplate && checkingCell is PipeTemplate nearbyTemplate)
+                        {
+                            if (nearbyTemplate.FuelType == pipePiece.FuelType || nearbyTemplate.FuelType == Fuel.Default)
+                                connections[Array.IndexOf(indexOffsets, offset)] = true;
+
+                            if (pipePiece.FuelType == Fuel.Default)
+                                connections[Array.IndexOf(indexOffsets, offset)] = true;
+                        }
+                        else
+                        {
+                            connections[Array.IndexOf(indexOffsets, offset)] = true;
+                        }
+                    }
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    if (pipePiece.GridPosition[0] + offset[0] == 2 && (pipePiece.GridPosition[1] + offset[1] == -1 || pipePiece.GridPosition[1] + offset[1] == Size))
+                        connections[Array.IndexOf(indexOffsets, offset)] = true;
+                    else if (pipePiece.GridPosition[0] + offset[0] == -1 && pipePiece.GridPosition[1] + offset[1] == 2)
+                        connections[Array.IndexOf(indexOffsets, offset)] = true;
+                    else if (pipePiece.GridPosition[0] + offset[0] == Size && pipePiece.GridPosition[1] + offset[1] == 2)
+                        connections[Array.IndexOf(indexOffsets, offset)] = true;
+
+                    continue;
+                }
+            }
+
+            pipePiece.EstablishVisualConnection(connections);
         }
     }
 }

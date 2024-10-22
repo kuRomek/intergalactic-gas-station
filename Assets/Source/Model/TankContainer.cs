@@ -78,7 +78,7 @@ public class TankContainer : IEnumerable<Tank>
         if (_tanks.Count > 0)
             return _tanks.Peek();
         else
-            throw new NullReferenceException();
+            return null;
     }
 
     public void PutFirstToEnd()

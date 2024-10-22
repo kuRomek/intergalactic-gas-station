@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class Root : MonoBehaviour
 {
-    [SerializeField] private PipeTemplatePresenter[] _pipeTemplatePresenters;
     [SerializeField] private PlayerInputController _inputController;
     [SerializeField] private GridPresenter _gridPresenter;
     [SerializeField] private PipeDraggerPresenter _pipeDraggerPresenter;
@@ -29,7 +29,9 @@ public class Root : MonoBehaviour
         _gridPresenter.Init(grid);
         _grid = grid;
 
-        foreach (PipeTemplatePresenter pipeTemplatePresenter in _pipeTemplatePresenters)
+        PipeTemplatePresenter[] pipeTemplatePresenters = _gridPresenter.GetComponentsInChildren<PipeTemplatePresenter>();
+
+        foreach (PipeTemplatePresenter pipeTemplatePresenter in pipeTemplatePresenters)
         {
             PipePiecePresenter[] pipePiecePresenters = pipeTemplatePresenter.GetComponentsInChildren<PipePiecePresenter>();
 
@@ -37,7 +39,10 @@ public class Root : MonoBehaviour
 
             for (int i = 0; i < pipePieces.Length; i++)
             {
-                PipePiece pipePiece = new PipePiece(pipePiecePresenters[i].transform.position, pipeTemplatePresenter.transform.position, pipeTemplatePresenter.FuelType);
+                PipePiece pipePiece = new PipePiece(pipePiecePresenters[i].transform.position, 
+                    pipePiecePresenters[pipePiecePresenters.Length / 2].transform.position, 
+                    pipePiecePresenters[i].transform.rotation, pipeTemplatePresenter.FuelType);
+
                 pipePiecePresenters[i].Init(pipePiece);
                 pipePieces[i] = pipePiecePresenters[i].Model;
             }
@@ -56,6 +61,9 @@ public class Root : MonoBehaviour
 
         if (_levelSetup != null)
         {
+            Utils.Shuffle(_levelSetup.Tanks);
+            Utils.Shuffle(_levelSetup.Ships);
+
             foreach (TankSetup tank in _levelSetup.Tanks)
                 tankContainer.Add(tank.Size, tank.FuelType);
 
@@ -67,9 +75,6 @@ public class Root : MonoBehaviour
                 shipsQueue.Add(newShip);
                 _presenterFactory.CreateShip(newShip);
             }
-
-            Utils.Shuffle(_levelSetup.Tanks);
-            Utils.Shuffle(_levelSetup.Ships);
 
             Timer timer = new Timer(_levelSetup.TimeInSeconds);
             _timerView.Init(timer);

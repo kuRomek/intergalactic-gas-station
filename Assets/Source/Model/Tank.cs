@@ -20,6 +20,7 @@ public class Tank : Transformable, ITank
     public event Action<Tank> Emptied;
     public event Action FuelAmountChanged;
     public event Action<Fuel, int> FuelDecreased;
+    public event Action<float> AmountChanging;
 
     public Fuel FuelType => _fuelType;
     public int Capacity => (int)_size;
@@ -28,6 +29,7 @@ public class Tank : Transformable, ITank
     public void TakeFuel(int requestedAmount, out int resultAmount)
     {
         resultAmount = (int)MathF.Min(requestedAmount, _currentAmount);
+        AmountChanging?.Invoke(resultAmount);
 
         _currentAmount -= resultAmount;
         FuelAmountChanged?.Invoke();

@@ -25,6 +25,7 @@ public class TankContainerShifter : MonoBehaviour
         if (_shifting != null)
             StopCoroutine(_shifting);
 
+        if (_tankContainer.Peek() != null)
         _shifting = StartCoroutine(ShiftTanks(shift));
     }
 
