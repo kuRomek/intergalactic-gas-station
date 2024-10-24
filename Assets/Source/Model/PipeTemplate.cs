@@ -54,4 +54,10 @@ public class PipeTemplate : Transformable, IGridMember
         if (_connectedTemplates.Remove(pipeTemplate) == true)
             pipeTemplate.Disconnect(this);
     }
+
+    public void RecoverOriginalView()
+    {
+        foreach (PipePiece pipePiece in _pipePieces)
+            pipePiece.RecoverOriginalView();
+    }
 }

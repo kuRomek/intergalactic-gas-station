@@ -25,11 +25,13 @@ public class Station : Transformable, IActivatable
 
     public void Enable()
     {
+        _fuelProvider.Enable();
         _grid.PipelineChanged += _fuelProvider.TryRefuel;
     }
 
     public void Disable()
     {
+        _fuelProvider.Disable();
         _grid.PipelineChanged -= _fuelProvider.TryRefuel;
     }
 
@@ -56,6 +58,8 @@ public class Station : Transformable, IActivatable
         ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
 
         _fuelProvider.RemoveSoftLock();
+
+        ship.Refueled += _fuelProvider.OnRefueled;
 
         ship.LeavedStation += FreeRefuelingPoint;
         ship.StopedAtRefuelingPoint += _fuelProvider.TryRefuel;

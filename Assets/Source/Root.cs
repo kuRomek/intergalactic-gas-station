@@ -7,6 +7,7 @@ public class Root : MonoBehaviour
 {
     [SerializeField] private PlayerInputController _inputController;
     [SerializeField] private GridPresenter _gridPresenter;
+    [SerializeField] private PipeDivider[] _pipeDividers;
     [SerializeField] private PipeDraggerPresenter _pipeDraggerPresenter;
     [SerializeField] private StationPresenter _stationPresenter;
     [SerializeField] private PresenterFactory _presenterFactory;
@@ -25,7 +26,7 @@ public class Root : MonoBehaviour
 
     private void Awake()
     {
-        Grid grid = new Grid(_gridPresenter.transform.position, _gridPresenter.transform.rotation);
+        Grid grid = new Grid(_gridPresenter.transform.position, _gridPresenter.transform.rotation, _pipeDividers);
         _gridPresenter.Init(grid);
         _grid = grid;
 

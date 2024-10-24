@@ -9,7 +9,7 @@ public class TankContainer : IEnumerable<Tank>
     private PresenterFactory _presenterFactory;
     private Vector3 _tanksPosition;
     private Tank _lastTank;
-    private Dictionary<Fuel, int> _fuelCounts = new Dictionary<Fuel, int>();
+    private Dictionary<Fuel, float> _fuelCounts = new Dictionary<Fuel, float>();
 
     public TankContainer(Vector3 tanksPosition, PresenterFactory presenterFactory)
     {
@@ -18,7 +18,7 @@ public class TankContainer : IEnumerable<Tank>
     }
 
     public event Action<Vector3> FirstTankRemoved;
-    public event Action TankEmptied;
+    public event Action<Tank> TankEmptied;
 
     public IEnumerator<Tank> GetEnumerator()
     {
@@ -52,7 +52,7 @@ public class TankContainer : IEnumerable<Tank>
         return newTank;
     }
 
-    private void DecreseAmount(Fuel fuel, int amount)
+    private void DecreseAmount(Fuel fuel, float amount)
     {
         _fuelCounts[fuel] -= amount;
     }
@@ -70,7 +70,7 @@ public class TankContainer : IEnumerable<Tank>
 
         tank.Destroy();
 
-        TankEmptied?.Invoke();
+        TankEmptied?.Invoke(tank);
     }
 
     public Tank Peek()
@@ -83,6 +83,9 @@ public class TankContainer : IEnumerable<Tank>
 
     public void PutFirstToEnd()
     {
+        if (Count == 0)
+            return;
+
         Tank tank = _tanks.Dequeue();
         _tanks.Enqueue(tank);
         PutToEnd(tank);
@@ -91,9 +94,9 @@ public class TankContainer : IEnumerable<Tank>
         FirstTankRemoved?.Invoke(elevation);
     }
 
-    public int GetCount(Fuel fuel)
+    public float GetCount(Fuel fuel)
     {
-        if (_fuelCounts.TryGetValue(fuel, out int count))
+        if (_fuelCounts.TryGetValue(fuel, out float count))
             return count;
         else
             return 0;

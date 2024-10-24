@@ -4,7 +4,7 @@ using static ITank;
 public class ShipTank : ITank
 {
     private Size _size;
-    private int _currentAmount;
+    private float _currentAmount;
 
     public ShipTank(Fuel fuel, Size size)
     {
@@ -14,19 +14,20 @@ public class ShipTank : ITank
     }
 
     public event Action FuelAmountChanged;
+    public event Action<ShipTank> Filled;
 
     public Fuel FuelType { get; }
     public bool IsFull { get; private set; } = false;
-    public int CurrentAmount => _currentAmount;
+    public float CurrentAmount => _currentAmount;
     public Size Size => _size;
-    public int Capacity => (int)_size;
+    public float Capacity => (float)_size;
 
-    public void Refuel(int amount, out int residue)
+    public void Refuel(float amount, out float residue)
     {
         if (IsFull)
             throw new InvalidOperationException("Tank is already full.");
 
-        int lackingAmount = Capacity - _currentAmount;
+        float lackingAmount = Capacity - _currentAmount;
 
         if (amount > lackingAmount)
         {
@@ -40,8 +41,14 @@ public class ShipTank : ITank
         }
 
         FuelAmountChanged?.Invoke();
+    }
 
+    public void OnViewChangingStopped()
+    {
         if (_currentAmount == Capacity)
+        {
             IsFull = true;
+            Filled?.Invoke(this);
+        }
     }
 }

@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c697bbd29805a41b5d9523d3682978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fuelViewPrefab: {fileID: 1753544207239288838, guid: d8b4402f35f05334d9a1fd5e6d386850, type: 3}
+  _fuelViewPrefab: {fileID: 120549424331417029, guid: 49258f2fdf9a11545bc8adfa09ffe317, type: 3}
   _fuelViewPlace: {fileID: 379519295059173994}
 --- !u!1 &8855277605291888237
 GameObject:
@@ -149,8 +149,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -1.2}
-  m_SizeDelta: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -1.839}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &379519295059173994
 Canvas:
@@ -235,8 +235,8 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 0.5, y: 0.33333334}
-  m_Spacing: {x: 0, y: 0}
+  m_CellSize: {x: 0.3, y: 1}
+  m_Spacing: {x: 0.03, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1001 &2704634978643842069

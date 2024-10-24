@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Grid : Transformable, IGrid
@@ -8,8 +8,12 @@ public class Grid : Transformable, IGrid
     private const int Size = 5;
 
     private IGridMember[,] _cells = new IGridMember[Size, Size];
+    private PipeDivider[] _pipeDividers;
 
-    public Grid(Vector3 position, Quaternion rotation) : base(position, rotation) { }
+    public Grid(Vector3 position, Quaternion rotation, PipeDivider[] pipeDividers) : base(position, rotation) 
+    {
+        _pipeDividers = pipeDividers;
+    }
 
     public event Action PipelineChanged;
 
@@ -58,8 +62,7 @@ public class Grid : Transformable, IGrid
         {
             templateOriginalPosition = CalculateWorldPosition(pipeTemplate.GridPosition);
 
-            foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
-                _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = null;
+            RemoveTemplate(pipeTemplate);
         }
         catch (Exception exception) when (exception is ArgumentNullException)
         {
@@ -87,7 +90,7 @@ public class Grid : Transformable, IGrid
         PipelineChanged?.Invoke();
     }
 
-    private void ConnectNearbyTemplates(PipeTemplate pipeTemplate)
+    public void CheckConnections(PipeTemplate pipeTemplate)
     {
         int[][] indexOffsets = new int[4][]
         {
@@ -96,13 +99,6 @@ public class Grid : Transformable, IGrid
             new int[2] { -1, 0 },
             new int[2] { 0, -1 }
         };
-
-        List<PipeTemplate> connectedTemplates = new List<PipeTemplate>();
-
-        connectedTemplates.AddRange(pipeTemplate.ConnectedTemplates);
-
-        foreach (PipeTemplate connectedTemplate in connectedTemplates)
-            pipeTemplate.Disconnect(connectedTemplate);
 
         foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
         {
@@ -121,18 +117,18 @@ public class Grid : Transformable, IGrid
                         //TODO: сделать провверку на подходящее топливо (а в dfs убрать)
                         if (checkingCell != pipeTemplate && checkingCell is PipeTemplate nearbyTemplate)
                         {
-                            pipeTemplate.Connect(nearbyTemplate);
-
-                            if (nearbyTemplate.FuelType == pipePiece.FuelType || nearbyTemplate.FuelType == Fuel.Default)
+                            if (pipePiece.FuelType == Fuel.Default || nearbyTemplate.FuelType == pipePiece.FuelType || nearbyTemplate.FuelType == Fuel.Default)
                             {
-                                connections[Array.IndexOf(indexOffsets, offset)] = true;
-                                CheckConnections(nearbyTemplate);
-                            }
+                                int connectionNumber = Array.IndexOf(indexOffsets, offset);
+                                connections[connectionNumber] = true;
 
-                            if (pipePiece.FuelType == Fuel.Default)
-                            {
-                                connections[Array.IndexOf(indexOffsets, offset)] = true;
-                                CheckConnections(nearbyTemplate);
+                                int[] cell1 = new int[2] { pipePiece.GridPosition[0], pipePiece.GridPosition[1] };
+                                int[] cell2 = new int[2] { pipePiece.GridPosition[0] + offset[0], pipePiece.GridPosition[1] + offset[1] };
+
+                                _pipeDividers.FirstOrDefault(divider => (divider.Connection[0].SequenceEqual(cell1) &&
+                                                                        divider.Connection[1].SequenceEqual(cell2)) ||
+                                                                        (divider.Connection[0].SequenceEqual(cell2) &&
+                                                                        divider.Connection[1].SequenceEqual(cell1))).gameObject.SetActive(true);
                             }
                         }
                         else
@@ -158,7 +154,49 @@ public class Grid : Transformable, IGrid
         }
     }
 
-    private void CheckConnections(PipeTemplate pipeTemplate)
+    public void RemoveTemplate(PipeTemplate pipeTemplate)
+    {
+        foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
+            _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = null;
+
+        int[][] indexOffsets = new int[4][]
+        {
+            new int[2] { 1, 0 },
+            new int[2] { 0, 1 },
+            new int[2] { -1, 0 },
+            new int[2] { 0, -1 }
+        };
+
+        foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
+        {
+            foreach (int[] offset in indexOffsets)
+            {
+                IGridMember checkingCell;
+
+                try
+                {
+                    checkingCell = _cells[pipePiece.GridPosition[0] + offset[0], pipePiece.GridPosition[1] + offset[1]];
+
+                    if (checkingCell != null)
+                    {
+                        int[] cell1 = new int[2] { pipePiece.GridPosition[0], pipePiece.GridPosition[1]};
+                        int[] cell2 = new int[2] { pipePiece.GridPosition[0] + offset[0], pipePiece.GridPosition[1] + offset[1] };
+
+                        _pipeDividers.FirstOrDefault(divider => (divider.Connection[0].SequenceEqual(cell1) &&
+                                                                        divider.Connection[1].SequenceEqual(cell2)) ||
+                                                                        (divider.Connection[0].SequenceEqual(cell2) &&
+                                                                        divider.Connection[1].SequenceEqual(cell1))).gameObject.SetActive(false);
+                    }
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    continue;
+                }
+            }
+        }
+    }
+
+    private void ConnectNearbyTemplates(PipeTemplate pipeTemplate)
     {
         int[][] indexOffsets = new int[4][]
         {
@@ -185,11 +223,13 @@ public class Grid : Transformable, IGrid
                         //TODO: сделать провверку на подходящее топливо (а в dfs убрать)
                         if (checkingCell != pipeTemplate && checkingCell is PipeTemplate nearbyTemplate)
                         {
-                            if (nearbyTemplate.FuelType == pipePiece.FuelType || nearbyTemplate.FuelType == Fuel.Default)
-                                connections[Array.IndexOf(indexOffsets, offset)] = true;
+                            pipeTemplate.Connect(nearbyTemplate);
 
-                            if (pipePiece.FuelType == Fuel.Default)
+                            if (pipePiece.FuelType == Fuel.Default || nearbyTemplate.FuelType == pipePiece.FuelType || nearbyTemplate.FuelType == Fuel.Default)
+                            {
                                 connections[Array.IndexOf(indexOffsets, offset)] = true;
+                                CheckConnections(nearbyTemplate);
+                            }
                         }
                         else
                         {

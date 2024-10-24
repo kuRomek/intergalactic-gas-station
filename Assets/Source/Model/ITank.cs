@@ -14,6 +14,8 @@ public interface ITank
     event Action FuelAmountChanged;
 
     Fuel FuelType { get; }
-    int Capacity { get; }
-    int CurrentAmount { get; }
+    float Capacity { get; }
+    float CurrentAmount { get; }
+
+    void OnViewChangingStopped();
 }

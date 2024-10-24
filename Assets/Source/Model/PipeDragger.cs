@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PipeDragger : Transformable, IActivatable
@@ -29,6 +30,19 @@ public class PipeDragger : Transformable, IActivatable
     private void OnDragStarted(PipeTemplate pipeTemplate)
     {
         _draggingPipeTemplate = pipeTemplate;
+
+        _grid.RemoveTemplate(pipeTemplate);
+        pipeTemplate.RecoverOriginalView();
+
+        List<PipeTemplate> connectedTemplates = new List<PipeTemplate>();
+
+        connectedTemplates.AddRange(pipeTemplate.ConnectedTemplates);
+
+        foreach (PipeTemplate connectedTemplate in connectedTemplates)
+        {
+            pipeTemplate.Disconnect(connectedTemplate);
+            _grid.CheckConnections(connectedTemplate);
+        }
 
         _draggingPipeTemplate.MoveTo(_draggingPipeTemplate.Position - Vector3.forward);
 

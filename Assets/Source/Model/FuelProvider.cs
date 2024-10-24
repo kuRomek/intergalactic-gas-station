@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-public class FuelProvider
+public class FuelProvider : IActivatable
 {
     private Grid _grid;
     private Station _station;
     private TankContainer _tanks;
+    private bool _providing = false;
 
     public FuelProvider(Grid grid, Station station, TankContainer tankContainer)
     {
@@ -14,8 +15,21 @@ public class FuelProvider
         _tanks = tankContainer;
     }
 
+    public void Enable()
+    {
+        _tanks.TankEmptied += OnTankEmptied;
+    }
+
+    public void Disable()
+    {
+        _tanks.TankEmptied -= OnTankEmptied;
+    }
+
     public void TryRefuel()
     {
+        if (_providing)
+            return;
+
         for (int i = 0; i < _grid.RefuelingPoints.Length; i++)
         {
             try
@@ -23,15 +37,8 @@ public class FuelProvider
                 if (_station.Ships[i].Position != _station.RefuelingPoints[i].position)
                     continue;
 
-                if (_grid.RefuelingPoints[i] is PipeTemplate pipeTemplate && pipeTemplate.ConnectedTemplates.Count > 0 && 
-                    DFSToFuelSource(pipeTemplate, _tanks.Peek().FuelType))
-                {
-                    int oldTankCount = _tanks.Count;
+                if (DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType))
                     Refuel(_station.Ships[i]);
-
-                    if (oldTankCount != _tanks.Count || _station.Ships[i].EmptyTanks != 0)
-                        TryRefuel();
-                }
             }
             catch (Exception exception) when (exception is InvalidOperationException || exception is ArgumentException || exception is NullReferenceException)
             { }
@@ -47,16 +54,41 @@ public class FuelProvider
     private void Refuel(Ship ship)
     {
         Fuel requestedFuel = _tanks.Peek().FuelType;
-        int requestedAmount = ship.RequestFuelCount(requestedFuel);
-        _tanks.Peek().TakeFuel(requestedAmount, out int resultAmount);
+        float requestedAmount = ship.RequestFuelCount(requestedFuel);
+
+        if (requestedAmount == 0)
+            return;
+
+        _tanks.Peek().TakeFuel(requestedAmount, out float resultAmount);
         ship.Refuel(resultAmount, requestedFuel);
+
+        _providing = true;
+    }
+
+    private void OnTankEmptied(Tank tank)
+    {
+        _providing = false;
+
+        TryRefuel();
+
+        RemoveSoftLock();
+    }
+
+    public void OnRefueled(Ship ship)
+    {
+        if (ship.EmptyTanks == 0)
+            ship.Refueled -= OnRefueled;
+
+        _providing = false;
+
+        TryRefuel();
 
         RemoveSoftLock();
     }
 
     private bool CheckSoftLock()
     {
-        if (_station.ActiveShipCount == 0)
+        if (_tanks.Count == 0 || _station.ActiveShipCount == 0)
             return false;
 
         foreach (Ship ship in _station.Ships)
@@ -74,10 +106,16 @@ public class FuelProvider
         return true;
     }
 
-    private bool DFSToFuelSource(PipeTemplate pipeTemplate, Fuel fuel)
+    private bool DFSToFuelSource(IGridMember gridCell, Fuel fuel)
     {
-        if (pipeTemplate.FuelType != fuel && pipeTemplate.FuelType != Fuel.Default)
-            throw new InvalidOperationException("Pipes and fuel don't match.");
+        if (gridCell == null) 
+            return false;
+
+        PipeTemplate pipeTemplate = gridCell as PipeTemplate;
+
+        if (pipeTemplate.ConnectedTemplates.Count == 0 || 
+            (pipeTemplate.FuelType != fuel && pipeTemplate.FuelType != Fuel.Default))
+            return false;
 
         List<PipeTemplate> checkedTemplates = new List<PipeTemplate>();
         Stack<PipeTemplate> templatesToCheck = new Stack<PipeTemplate>();

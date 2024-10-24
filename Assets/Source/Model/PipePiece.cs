@@ -10,6 +10,7 @@ public class PipePiece : Transformable, IGridMember
     }
 
     public event Action<bool[]> ConnectionIsEstablished;
+    public event Action OriginalViewRecovering;
 
     public void PlaceOnGrid(IGrid grid)
     {
@@ -19,6 +20,11 @@ public class PipePiece : Transformable, IGridMember
     public void EstablishVisualConnection(bool[] connections)
     {
         ConnectionIsEstablished?.Invoke(connections);
+    }
+
+    public void RecoverOriginalView()
+    {
+        OriginalViewRecovering?.Invoke();
     }
 
     public Fuel FuelType { get; private set; }
