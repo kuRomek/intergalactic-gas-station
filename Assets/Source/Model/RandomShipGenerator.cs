@@ -18,7 +18,7 @@ public class RandomShipGenerator
     public Ship Generate(float dificulty)
     {
         if (dificulty < 0 || dificulty > 1)
-            throw new System.ArgumentOutOfRangeException("Difficulty has to be in range (0, 1).");
+            throw new System.ArgumentOutOfRangeException("Difficulty has to be in range [0, 1].");
 
         GeneratedShips++;
 

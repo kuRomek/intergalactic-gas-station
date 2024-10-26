@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PipeDragger : Transformable, IActivatable
+public class PipeDragger : IActivatable
 {
     private PlayerInputController _input;
     private Grid _grid;
     private PipeTemplate _draggingPipeTemplate = null;
 
-    public PipeDragger(PlayerInputController playerInputController, Grid grid) : base(default, default) 
+    public PipeDragger(PlayerInputController playerInputController, Grid grid) 
     {
         _input = playerInputController;
         _grid = grid;
@@ -15,14 +15,14 @@ public class PipeDragger : Transformable, IActivatable
 
     public void Enable()
     {
-        _input.ButtonPressed += OnDragStarted;
+        _input.DragStarted += OnDragStarted;
         _input.Dragging += OnDragging;
         _input.DragCanceled += OnDragCanceled;
     }
 
     public void Disable()
     {
-        _input.ButtonPressed -= OnDragStarted;
+        _input.DragStarted -= OnDragStarted;
         _input.Dragging -= OnDragging;
         _input.DragCanceled -= OnDragCanceled;
     }

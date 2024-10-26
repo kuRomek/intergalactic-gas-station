@@ -16,11 +16,11 @@ public class Timer : IUpdatable
     {
         if (IsRunning)
         {
-            SecondsLeft -= deltaTime;
+            SecondsLeft = MathF.Max(0f, SecondsLeft - deltaTime);
             SecondsPassed += deltaTime;
             TimeChanged?.Invoke();
             
-            if (SecondsLeft <= 0)
+            if (SecondsLeft == 0)
             {
                 Stop();
                 Expired?.Invoke();

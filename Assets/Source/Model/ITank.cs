@@ -7,8 +7,8 @@ public interface ITank
     enum Size
     {
         Big = MaximumSize,
-        Medium = 3,
-        Small = 2
+        Medium = MaximumSize / 2,
+        Small = MaximumSize / 3
     }
 
     event Action FuelAmountChanged;

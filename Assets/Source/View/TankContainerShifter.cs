@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class TankContainerShifter : MonoBehaviour
 {
+    private const float DistanceTolerance = 0.01f;
+
+    [SerializeField] private float _speed = 10f;
+
     private TankContainer _tankContainer;
     private Coroutine _shifting;
+
+    private void OnEnable()
+    {
+        _tankContainer.FirstTankRemoved += OnTankEmptied;
+    }
 
     private void OnDisable()
     {
@@ -15,8 +24,6 @@ public class TankContainerShifter : MonoBehaviour
     public void Init(TankContainer tankContainer)
     {
         _tankContainer = tankContainer;
-        _tankContainer.FirstTankRemoved += OnTankEmptied;
-
         enabled = true;
     }
 
@@ -25,27 +32,36 @@ public class TankContainerShifter : MonoBehaviour
         if (_shifting != null)
             StopCoroutine(_shifting);
 
-        if (_tankContainer.Peek() != null)
         _shifting = StartCoroutine(ShiftTanks(shift));
     }
 
     private IEnumerator ShiftTanks(Vector3 shift)
     {
-        yield return new WaitForFixedUpdate();
+        yield return null;
 
         Vector3[] startPositions = _tankContainer.Select(tank => tank.Position).ToArray();
 
-        while (_tankContainer.Peek().Position != startPositions[0] + shift)
+        int i;
+
+        while ((_tankContainer.Peek() != null) && Vector3.SqrMagnitude(_tankContainer.Peek().Position - startPositions[0] + shift) > DistanceTolerance)
         {
-            int i = 0;
+            i = 0;
 
             foreach (Tank tank in _tankContainer)
             {
-                tank.MoveTo(Vector3.Lerp(tank.Position, startPositions[i] + shift, 10f * Time.deltaTime));
+                tank.MoveTo(Vector3.Lerp(tank.Position, startPositions[i] + shift, _speed * Time.deltaTime));
                 i++;
             }
 
             yield return null;
+        }
+
+        i = 0;
+
+        foreach (Tank tank in _tankContainer)
+        {
+            tank.MoveTo(startPositions[i] + shift);
+            i++;
         }
     }
 }

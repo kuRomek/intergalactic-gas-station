@@ -10,22 +10,22 @@ public class PlayerInputController : MonoBehaviour
     private PlayerInput _input;
     private Vector2 _lastMousePosition;
 
-    public event Action<PipeTemplate> ButtonPressed;
+    public event Action<PipeTemplate> DragStarted;
     public event Action<Vector3> Dragging;
     public event Action DragCanceled;
 
     private void Awake()
     {
         _input = new PlayerInput();
-
-        _input.Player.Press.performed += OnButtonPressed;
-        _input.Player.Drag.performed += OnDragging;
-        _input.Player.Press.canceled += OnDragCanceld;
     }
 
     private void OnEnable()
     {
         _input.Enable();
+
+        _input.Player.Press.performed += OnButtonPressed;
+        _input.Player.Drag.performed += OnDragging;
+        _input.Player.Press.canceled += OnDragCanceld;
     }
 
     private void OnDisable()
@@ -54,7 +54,7 @@ public class PlayerInputController : MonoBehaviour
             PipeTemplatePresenter pipeTemplate = hit.collider.GetComponentInParent<PipeTemplatePresenter>();
 
             if (pipeTemplate != null)
-                ButtonPressed?.Invoke(pipeTemplate.Model);
+                DragStarted?.Invoke(pipeTemplate.Model);
 
             _lastMousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
         }

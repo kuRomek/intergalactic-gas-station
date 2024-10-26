@@ -14,7 +14,7 @@ public class ShipTank : ITank
     }
 
     public event Action FuelAmountChanged;
-    public event Action<ShipTank> Filled;
+    public event Action<ShipTank> Refueled;
 
     public Fuel FuelType { get; }
     public bool IsFull { get; private set; } = false;
@@ -48,7 +48,7 @@ public class ShipTank : ITank
         if (_currentAmount == Capacity)
         {
             IsFull = true;
-            Filled?.Invoke(this);
+            Refueled?.Invoke(this);
         }
     }
 }

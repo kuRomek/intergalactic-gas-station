@@ -17,12 +17,12 @@ public class FuelProvider : IActivatable
 
     public void Enable()
     {
-        _tanks.TankEmptied += OnTankEmptied;
+        _tanks.TankEmptied += StopProviding;
     }
 
     public void Disable()
     {
-        _tanks.TankEmptied -= OnTankEmptied;
+        _tanks.TankEmptied -= StopProviding;
     }
 
     public void TryRefuel()
@@ -51,6 +51,13 @@ public class FuelProvider : IActivatable
             _tanks.PutFirstToEnd();
     }
 
+    public void StopProviding()
+    {
+        _providing = false;
+        TryRefuel();
+        RemoveSoftLock();
+    }
+
     private void Refuel(Ship ship)
     {
         Fuel requestedFuel = _tanks.Peek().FuelType;
@@ -65,30 +72,9 @@ public class FuelProvider : IActivatable
         _providing = true;
     }
 
-    private void OnTankEmptied(Tank tank)
-    {
-        _providing = false;
-
-        TryRefuel();
-
-        RemoveSoftLock();
-    }
-
-    public void OnRefueled(Ship ship)
-    {
-        if (ship.EmptyTanks == 0)
-            ship.Refueled -= OnRefueled;
-
-        _providing = false;
-
-        TryRefuel();
-
-        RemoveSoftLock();
-    }
-
     private bool CheckSoftLock()
     {
-        if (_tanks.Count == 0 || _station.ActiveShipCount == 0)
+        if (_tanks.Count <= 1 || _station.ActiveShipCount <= 1)
             return false;
 
         foreach (Ship ship in _station.Ships)

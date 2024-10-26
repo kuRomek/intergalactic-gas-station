@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Station : Transformable, IActivatable
+public class Station : IActivatable
 {
     private FuelProvider _fuelProvider;
     private Grid _grid;
@@ -12,7 +12,7 @@ public class Station : Transformable, IActivatable
     private Transform[] _refuelingPoints;
     private Vector3[] _startPositions;
 
-    public Station(Transform[] refuelingPoints, Vector3[] startPositions, Grid grid, TankContainer tankContainer) : base(default, default)
+    public Station(Transform[] refuelingPoints, Vector3[] startPositions, Grid grid, TankContainer tankContainer)
     {
         _refuelingPoints = refuelingPoints;
         _ships = new Ship[refuelingPoints.Length];
@@ -59,16 +59,16 @@ public class Station : Transformable, IActivatable
 
         _fuelProvider.RemoveSoftLock();
 
-        ship.Refueled += _fuelProvider.OnRefueled;
-
+        ship.TankRefueled += _fuelProvider.StopProviding;
         ship.LeavedStation += FreeRefuelingPoint;
-        ship.StopedAtRefuelingPoint += _fuelProvider.TryRefuel;
+        ship.StoppedAtRefuelingPoint += _fuelProvider.TryRefuel;
     }
 
     private void FreeRefuelingPoint(Ship ship)
     {
+        ship.TankRefueled -= _fuelProvider.StopProviding;
         ship.LeavedStation -= FreeRefuelingPoint;
-        ship.StopedAtRefuelingPoint -= _fuelProvider.TryRefuel;
+        ship.StoppedAtRefuelingPoint -= _fuelProvider.TryRefuel;
 
         _ships[Array.IndexOf(_ships, ship)] = null;
 

@@ -21,13 +21,13 @@ public class PipePiecePresenter : Presenter
 
     private void OnEnable()
     {
-        Model.ConnectionIsEstablished += ChangeView;
+        Model.ConnectionIsEstablishing += ChangeView;
         Model.OriginalViewRecovering += RecoverOriginalView;
     }
 
     private void OnDisable()
     {
-        Model.ConnectionIsEstablished -= ChangeView;
+        Model.ConnectionIsEstablishing -= ChangeView;
         Model.OriginalViewRecovering -= RecoverOriginalView;
     }
 

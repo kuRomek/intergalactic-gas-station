@@ -6,10 +6,8 @@ using UnityEngine;
 public class Root : MonoBehaviour
 {
     [SerializeField] private PlayerInputController _inputController;
-    [SerializeField] private GridPresenter _gridPresenter;
+    [SerializeField] private Transform _grid;
     [SerializeField] private PipeDivider[] _pipeDividers;
-    [SerializeField] private PipeDraggerPresenter _pipeDraggerPresenter;
-    [SerializeField] private StationPresenter _stationPresenter;
     [SerializeField] private PresenterFactory _presenterFactory;
     [SerializeField] private Transform[] _shipSpawningAreas;
     [SerializeField] private Transform[] _refuelingPoints;
@@ -21,16 +19,15 @@ public class Root : MonoBehaviour
     [SerializeField] private TimerView _timerView;
     [SerializeField] private TankContainerShifter _tankContainerShifter;
     
-    private Grid _grid;
     private LevelState _levelState;
+    private PipeDragger _pipeDragger;
+    private Station _station;
 
     private void Awake()
     {
-        Grid grid = new Grid(_gridPresenter.transform.position, _gridPresenter.transform.rotation, _pipeDividers);
-        _gridPresenter.Init(grid);
-        _grid = grid;
+        Grid grid = new Grid(_pipeDividers);
 
-        PipeTemplatePresenter[] pipeTemplatePresenters = _gridPresenter.GetComponentsInChildren<PipeTemplatePresenter>();
+        PipeTemplatePresenter[] pipeTemplatePresenters = _grid.GetComponentsInChildren<PipeTemplatePresenter>();
 
         foreach (PipeTemplatePresenter pipeTemplatePresenter in pipeTemplatePresenters)
         {
@@ -51,14 +48,13 @@ public class Root : MonoBehaviour
             pipeTemplatePresenter.Init(new PipeTemplate(pipePieces, pipeTemplatePresenter.FuelType));
             pipeTemplatePresenter.View.Init(pipeTemplatePresenter.FuelType);
 
-            _grid.Place(pipeTemplatePresenter.Model);
+            grid.Place(pipeTemplatePresenter.Model);
         }
 
         TankContainer tankContainer = new TankContainer(_tanksPlace.position, _presenterFactory);
         _tankContainerShifter.Init(tankContainer);
 
-        Station station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), grid, tankContainer);
-        _stationPresenter.Init(station);
+        _station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), grid, tankContainer);
 
         if (_levelSetup != null)
         {
@@ -80,27 +76,33 @@ public class Root : MonoBehaviour
             Timer timer = new Timer(_levelSetup.TimeInSeconds);
             _timerView.Init(timer);
 
-            _levelState = new LevelState(_levelCompleteWindow, _loseWindow, tankContainer, shipsQueue, station, timer);
+            _levelState = new NonInfiniteLevelState(_levelCompleteWindow, _loseWindow, _station, shipsQueue, timer);
         }
         else
         {
             Timer timer = new Timer(120);
             _timerView.Init(timer);
 
-            _levelState = new LevelState(_levelCompleteWindow, _loseWindow, tankContainer, _shipsWaitingPlace.position, _presenterFactory, station, timer);
+            _levelState = new InfiniteLevelState(_levelCompleteWindow, _loseWindow, tankContainer, _shipsWaitingPlace.position, _presenterFactory, _station, timer);
         }
-
-        _levelState.Enable();
 
         _inputController.Init(_levelState);
         _inputController.enabled = true;
 
-        PipeDragger pipeDragger = new PipeDragger(_inputController, grid);
-        _pipeDraggerPresenter.Init(pipeDragger);
+        _pipeDragger = new PipeDragger(_inputController, grid);
+    }
+
+    private void OnEnable()
+    {
+        _station.Enable();
+        _levelState.Enable();
+        _pipeDragger.Enable();
     }
 
     private void OnDisable()
     {
+        _station.Disable();
         _levelState.Disable();
+        _pipeDragger.Disable();
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class Grid : Transformable, IGrid
+public class Grid : IGrid
 {
     private const float WorldOffset = 2f;
     private const int Size = 5;
@@ -10,7 +10,7 @@ public class Grid : Transformable, IGrid
     private IGridMember[,] _cells = new IGridMember[Size, Size];
     private PipeDivider[] _pipeDividers;
 
-    public Grid(Vector3 position, Quaternion rotation, PipeDivider[] pipeDividers) : base(position, rotation) 
+    public Grid(PipeDivider[] pipeDividers)
     {
         _pipeDividers = pipeDividers;
     }

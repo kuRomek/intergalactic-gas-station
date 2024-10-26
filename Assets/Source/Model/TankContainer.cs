@@ -10,6 +10,7 @@ public class TankContainer : IEnumerable<Tank>
     private Vector3 _tanksPosition;
     private Tank _lastTank;
     private Dictionary<Fuel, float> _fuelCounts = new Dictionary<Fuel, float>();
+    private float _distanceBetweenTanks = 0.25f;
 
     public TankContainer(Vector3 tanksPosition, PresenterFactory presenterFactory)
     {
@@ -18,7 +19,7 @@ public class TankContainer : IEnumerable<Tank>
     }
 
     public event Action<Vector3> FirstTankRemoved;
-    public event Action<Tank> TankEmptied;
+    public event Action TankEmptied;
 
     public IEnumerator<Tank> GetEnumerator()
     {
@@ -70,7 +71,7 @@ public class TankContainer : IEnumerable<Tank>
 
         tank.Destroy();
 
-        TankEmptied?.Invoke(tank);
+        TankEmptied?.Invoke();
     }
 
     public Tank Peek()
@@ -105,9 +106,10 @@ public class TankContainer : IEnumerable<Tank>
     private void PutToEnd(Tank tank)
     {
         if (_tanks.Count == 0)
-            tank.MoveTo(_tanksPosition + Vector3.down * tank.Capacity / 6f);
+            tank.MoveTo(_tanksPosition + Vector3.down * tank.Capacity / ITank.MaximumSize);
         else
-            tank.MoveTo(_lastTank.Position + Vector3.down * (_lastTank.Capacity / 6f + tank.Capacity / 6f + 0.25f));
+            tank.MoveTo(_lastTank.Position + 
+                        Vector3.down * (_lastTank.Capacity / ITank.MaximumSize + tank.Capacity / ITank.MaximumSize + _distanceBetweenTanks));
 
         _lastTank = tank;
     }

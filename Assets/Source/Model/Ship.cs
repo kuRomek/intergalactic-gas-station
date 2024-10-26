@@ -22,24 +22,13 @@ public class Ship : Transformable, IUpdatable
         for (int i = 0; i < _tanks.Capacity; i++)
         {
             _tanks.Add(new ShipTank(shipSetup.Tanks[i].FuelType, shipSetup.Tanks[i].Size));
-            _tanks[_tanks.Count - 1].Filled += OnTankFilled;
+            _tanks[_tanks.Count - 1].Refueled += OnTankFilled;
         }
     }
 
-    public Ship(Vector3 shipWaitingPlace, ShipTank[] tanks) : base(shipWaitingPlace, default)
-    {
-        Target = Position;
-
-        _tanks = new List<ShipTank>(tanks.Length);
-        _emptyTanks = _tanks.Capacity;
-
-        for (int i = 0; i < _tanks.Capacity; i++)
-            _tanks.Add(new ShipTank(tanks[i].FuelType, tanks[i].Size));
-    }
-
-    public event Action StopedAtRefuelingPoint;
+    public event Action StoppedAtRefuelingPoint;
     public event Action<Ship> LeavedStation;
-    public event Action<Ship> Refueled;
+    public event Action TankRefueled;
 
     public void Update(float deltaTime)
     {
@@ -51,7 +40,7 @@ public class Ship : Transformable, IUpdatable
                 MoveTo(Vector3.Lerp(Position, Target, _speed * deltaTime));
 
             if (Position == _refuelingPosition)
-                StopedAtRefuelingPoint?.Invoke();
+                StoppedAtRefuelingPoint?.Invoke();
         }
     }
 
@@ -71,9 +60,9 @@ public class Ship : Transformable, IUpdatable
 
     private void OnTankFilled(ShipTank shipTank)
     {
-        shipTank.Filled -= OnTankFilled;
+        shipTank.Refueled -= OnTankFilled;
 
-        Refueled?.Invoke(this);
+        TankRefueled?.Invoke();
 
         if (--_emptyTanks == 0)
             LeaveStation();
