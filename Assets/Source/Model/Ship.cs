@@ -68,6 +68,11 @@ public class Ship : Transformable, IUpdatable
             LeaveStation();
     }
 
+    public void OnViewChangingStopped(ITank tank)
+    {
+        _tanks.Find(tankToFind => tankToFind == tank).OnViewChangingStopped();
+    }
+
     public float RequestFuelCount(Fuel fuel)
     {
         ShipTank tankToRefuel = Tanks.Find(tank => tank.FuelType == fuel && tank.IsFull == false);

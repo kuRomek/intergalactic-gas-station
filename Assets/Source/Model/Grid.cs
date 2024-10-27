@@ -10,16 +10,9 @@ public class Grid : IGrid
     private IGridMember[,] _cells = new IGridMember[Size, Size];
     private PipeDivider[] _pipeDividers;
 
-    public Grid(PipeDivider[] pipeDividers)
-    {
-        _pipeDividers = pipeDividers;
-    }
-
     public event Action PipelineChanged;
 
     public IGridMember[,] Cells => _cells;
-    public IGridMember[] RefuelingPoints => new IGridMember[3] { _cells[2, 0], _cells[0, 2], _cells[2, 4] };
-    public IGridMember FuelSourcePoint => _cells[4, 2];
 
     public Vector3 CalculateWorldPosition(int[] gridPosition)
     {
@@ -88,6 +81,14 @@ public class Grid : IGrid
 
         ConnectNearbyTemplates(pipeTemplate);
         PipelineChanged?.Invoke();
+    }
+
+    public IGridMember[] RefuelingPoints => new IGridMember[3] { _cells[2, 0], _cells[0, 2], _cells[2, 4] };
+    public IGridMember FuelSourcePoint => _cells[4, 2];
+
+    public void AddDividers(PipeDivider[] dividers)
+    {
+        _pipeDividers = dividers;
     }
 
     public void CheckConnections(PipeTemplate pipeTemplate)

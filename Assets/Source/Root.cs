@@ -1,14 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
+[RequireComponent(typeof(PresenterFactory))]
 public class Root : MonoBehaviour
 {
     [SerializeField] private PlayerInputController _inputController;
-    [SerializeField] private Transform _grid;
-    [SerializeField] private PipeDivider[] _pipeDividers;
-    [SerializeField] private PresenterFactory _presenterFactory;
+    [SerializeField] private Transform _gridTransform;
     [SerializeField] private Transform[] _shipSpawningAreas;
     [SerializeField] private Transform[] _refuelingPoints;
     [SerializeField] private Transform _tanksPlace;
@@ -19,42 +18,20 @@ public class Root : MonoBehaviour
     [SerializeField] private TimerView _timerView;
     [SerializeField] private TankContainerShifter _tankContainerShifter;
     
+    private PresenterFactory _presenterFactory;
     private LevelState _levelState;
     private PipeDragger _pipeDragger;
     private Station _station;
+    private Grid _grid;
 
     private void Awake()
     {
-        Grid grid = new Grid(_pipeDividers);
-
-        PipeTemplatePresenter[] pipeTemplatePresenters = _grid.GetComponentsInChildren<PipeTemplatePresenter>();
-
-        foreach (PipeTemplatePresenter pipeTemplatePresenter in pipeTemplatePresenters)
-        {
-            PipePiecePresenter[] pipePiecePresenters = pipeTemplatePresenter.GetComponentsInChildren<PipePiecePresenter>();
-
-            PipePiece[] pipePieces = new PipePiece[pipePiecePresenters.Length];
-
-            for (int i = 0; i < pipePieces.Length; i++)
-            {
-                PipePiece pipePiece = new PipePiece(pipePiecePresenters[i].transform.position, 
-                    pipePiecePresenters[pipePiecePresenters.Length / 2].transform.position, 
-                    pipePiecePresenters[i].transform.rotation, pipeTemplatePresenter.FuelType);
-
-                pipePiecePresenters[i].Init(pipePiece);
-                pipePieces[i] = pipePiecePresenters[i].Model;
-            }
-
-            pipeTemplatePresenter.Init(new PipeTemplate(pipePieces, pipeTemplatePresenter.FuelType));
-            pipeTemplatePresenter.View.Init(pipeTemplatePresenter.FuelType);
-
-            grid.Place(pipeTemplatePresenter.Model);
-        }
+        _presenterFactory = GetComponent<PresenterFactory>();
 
         TankContainer tankContainer = new TankContainer(_tanksPlace.position, _presenterFactory);
         _tankContainerShifter.Init(tankContainer);
 
-        _station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), grid, tankContainer);
+        _station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), _grid, tankContainer);
 
         if (_levelSetup != null)
         {
@@ -89,7 +66,7 @@ public class Root : MonoBehaviour
         _inputController.Init(_levelState);
         _inputController.enabled = true;
 
-        _pipeDragger = new PipeDragger(_inputController, grid);
+        _pipeDragger = new PipeDragger(_inputController, _grid);
     }
 
     private void OnEnable()
@@ -104,5 +81,12 @@ public class Root : MonoBehaviour
         _station.Disable();
         _levelState.Disable();
         _pipeDragger.Disable();
+    }
+
+    [Inject]
+    private void Construct(Grid grid)
+    {
+        _grid = grid;
+        _grid.AddDividers(_gridTransform.GetComponentsInChildren<PipeDivider>(includeInactive:true));
     }
 }

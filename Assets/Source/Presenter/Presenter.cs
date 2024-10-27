@@ -23,6 +23,9 @@ public class Presenter : MonoBehaviour
         _model.ExceptionCaught += WriteExceptionMessage;
 
         _activatable?.Enable();
+
+        if (this is IActivatable activatable)
+            activatable.Enable();
     }
 
     private void OnDisable()
@@ -33,11 +36,9 @@ public class Presenter : MonoBehaviour
         _model.ExceptionCaught -= WriteExceptionMessage;
 
         _activatable?.Disable();
-    }
 
-    private void WriteExceptionMessage(string message)
-    {
-        Debug.Log(message);
+        if (this is IActivatable activatable)
+            activatable.Disable();
     }
 
     public void Init(Transformable model)
@@ -56,6 +57,11 @@ public class Presenter : MonoBehaviour
         OnMoved();
         OnRotated();
         OnScaled();
+    }
+
+    private void WriteExceptionMessage(string message)
+    {
+        Debug.Log(message);
     }
 
     private void OnMoved()

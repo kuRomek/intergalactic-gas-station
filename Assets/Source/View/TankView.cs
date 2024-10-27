@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TankView : View
@@ -7,17 +8,36 @@ public class TankView : View
     [SerializeField] private MeshRenderer _meshRenderer;
 
     private Color _color;
-    private ITank _tank;
 
-    public void Init(ITank tank)
+    public event Action ViewChangingStopped;
+
+    private void OnEnable()
     {
-        _tank = tank;
+        _fuelView.ViewChangingStopped += OnViewChangingStopped;
+    }
 
-        _color = _fuelTypes.GetMaterialOf(_tank.FuelType).color;
+    private void OnDisable()
+    {
+        _fuelView.ViewChangingStopped -= OnViewChangingStopped;
+    }
+
+    private void OnViewChangingStopped(ITank tank)
+    {
+        ViewChangingStopped?.Invoke();
+    }
+
+    public void CreateFuelView(ITank tank)
+    {
+        _color = _fuelTypes.GetMaterialOf(tank.FuelType).color;
         _meshRenderer.material.color = _color;
 
-        _meshRenderer.transform.localScale = new Vector3(1f, _tank.Capacity / ITank.MaximumSize, 1f);
+        _meshRenderer.transform.localScale = new Vector3(1f, tank.Capacity / ITank.MaximumSize, 1f);
 
-        _fuelView.Init(_tank);
+        _fuelView.Init(tank);
+    }
+
+    public void ChangeView()
+    {
+        _fuelView.ChangeView();
     }
 }

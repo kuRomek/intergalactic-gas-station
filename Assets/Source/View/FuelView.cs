@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,11 @@ public class FuelView : View
     [SerializeField] private FuelColors _fuelCollors;
 
     private ITank _tank;
+    private Coroutine _changingView;
+
+    public event Action<ITank> ViewChangingStopped;
+
+    public ITank Tank => _tank;
 
     public void Init(ITank tank)
     {
@@ -25,27 +31,17 @@ public class FuelView : View
         _fuelIndicatorFilled.color = Color.white;
         _fuelIndicatorColor.color = _fuelCollors.GetMaterialOf(_tank.FuelType).color;
         _fuelIndicatorFilled.fillAmount = _tank.CurrentAmount / _tank.Capacity;
-
-        _tank.FuelAmountChanged += StartChangingView;
     }
 
-    private void OnEnable()
+    public void ChangeView()
     {
-        if (_tank != null)
-            _tank.FuelAmountChanged += StartChangingView;
+        if (_changingView != null)
+            StopCoroutine(_changingView);
+
+        _changingView = StartCoroutine(StartChangingView());
     }
 
-    private void OnDisable()
-    {
-        _tank.FuelAmountChanged -= StartChangingView;
-    }
-
-    private void StartChangingView()
-    {
-        StartCoroutine(ChangeView());
-    }
-
-    private IEnumerator ChangeView()
+    private IEnumerator StartChangingView()
     {
         float currentAmountView = _fuelIndicatorFilled.fillAmount;
 
@@ -59,6 +55,6 @@ public class FuelView : View
 
         _fuelIndicatorFilled.fillAmount = _tank.CurrentAmount / _tank.Capacity;
 
-        _tank.OnViewChangingStopped();
+        ViewChangingStopped?.Invoke(_tank);
     }
 }

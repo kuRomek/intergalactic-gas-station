@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 6125202135192895865}
   - component: {fileID: 8394218333559990449}
   - component: {fileID: 5729003145868405313}
+  - component: {fileID: 642755682309306336}
   m_Layer: 0
   m_Name: Pipe (3)
   m_TagString: Untagged
@@ -207,6 +208,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9afdaf0097a70244eba75398e8353124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &642755682309306336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4679328366630398328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bb2e868a486a740adc4c9608c631ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8386841066410084894
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,6 +234,7 @@ GameObject:
   - component: {fileID: 1435385424460900526}
   - component: {fileID: 2095350587434026102}
   - component: {fileID: 4347848827018649796}
+  - component: {fileID: 7550395440467193316}
   m_Layer: 0
   m_Name: Pipe (4)
   m_TagString: Untagged
@@ -351,5 +365,17 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9afdaf0097a70244eba75398e8353124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7550395440467193316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8386841066410084894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bb2e868a486a740adc4c9608c631ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -1,47 +1,20 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter))]
-public class PipePiecePresenter : Presenter
+[RequireComponent(typeof(PipePieceView))]
+public class PipePiecePresenter : Presenter, IActivatable
 {
-    private PipeShapes _pipeShapes;
-    private MeshFilter _meshFilter;
-    private Mesh _originalMesh;
-    private Quaternion _originalRotation;
-
     public new PipePiece Model => base.Model as PipePiece;
+    public new PipePieceView View => base.View as PipePieceView;
 
-    private void Awake()
+    public void Enable()
     {
-        _pipeShapes = (PipeShapes)Resources.Load("Pipe Shapes");
-        _meshFilter = GetComponent<MeshFilter>();
-
-        _originalMesh = _meshFilter.mesh;
-        _originalRotation = transform.rotation;
+        Model.ConnectionIsEstablishing += View.ChangeView;
+        Model.OriginalViewRecovering += View.ChengeToOriginalView;
     }
 
-    private void OnEnable()
+    public void Disable()
     {
-        Model.ConnectionIsEstablishing += ChangeView;
-        Model.OriginalViewRecovering += RecoverOriginalView;
-    }
-
-    private void OnDisable()
-    {
-        Model.ConnectionIsEstablishing -= ChangeView;
-        Model.OriginalViewRecovering -= RecoverOriginalView;
-    }
-
-    private void RecoverOriginalView()
-    {
-        _meshFilter.mesh = _originalMesh;
-        transform.rotation = _originalRotation;
-    }
-
-    private void ChangeView(bool[] connections)
-    {
-        Mesh mesh = _pipeShapes.GetShape(connections, out float rotation);
-
-        _meshFilter.mesh = mesh;
-        transform.localRotation = Quaternion.Euler(0f, rotation, 0f);
+        Model.ConnectionIsEstablishing -= View.ChangeView;
+        Model.OriginalViewRecovering -= View.ChengeToOriginalView;
     }
 }
