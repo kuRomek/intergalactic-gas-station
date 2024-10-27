@@ -7,6 +7,7 @@ public class ShipView : View
 {
     [SerializeField] private FuelView _fuelViewPrefab;
     [SerializeField] private Canvas _fuelViewPlace;
+    [SerializeField] private AudioClip _flyAwaySound;
 
     private FuelView[] _fuelViews = null;
 
@@ -51,5 +52,10 @@ public class ShipView : View
             _fuelViews[i].transform.SetParent(_fuelViewPlace.transform);
             _fuelViews[i].ViewChangingStopped += OnViewChangingStopped;
         }
+    }
+
+    public void PlayFlyAwaySound(Ship ship)
+    {
+        PlaySound(_flyAwaySound);
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 [RequireComponent(typeof(PresenterFactory))]
@@ -15,6 +16,8 @@ public class Root : MonoBehaviour
     [SerializeField] private LevelSetup _levelSetup;
     [SerializeField] private UIMenu _levelCompleteWindow;
     [SerializeField] private UIMenu _loseWindow;
+    [SerializeField] private UIMenu _pauseWindow;
+    [SerializeField] private Button _pauseButton;
     [SerializeField] private TimerView _timerView;
     [SerializeField] private TankContainerShifter _tankContainerShifter;
     
@@ -53,14 +56,14 @@ public class Root : MonoBehaviour
             Timer timer = new Timer(_levelSetup.TimeInSeconds);
             _timerView.Init(timer);
 
-            _levelState = new NonInfiniteLevelState(_levelCompleteWindow, _loseWindow, _station, shipsQueue, timer);
+            _levelState = new NonInfiniteLevelState(_levelCompleteWindow, _loseWindow, _pauseWindow, _pauseButton, _station, shipsQueue, timer);
         }
         else
         {
             Timer timer = new Timer(120);
             _timerView.Init(timer);
 
-            _levelState = new InfiniteLevelState(_levelCompleteWindow, _loseWindow, tankContainer, _shipsWaitingPlace.position, _presenterFactory, _station, timer);
+            _levelState = new InfiniteLevelState(_levelCompleteWindow, _loseWindow, _pauseWindow, _pauseButton, tankContainer, _shipsWaitingPlace.position, _presenterFactory, _station, timer);
         }
 
         _inputController.Init(_levelState);
@@ -87,6 +90,5 @@ public class Root : MonoBehaviour
     private void Construct(Grid grid)
     {
         _grid = grid;
-        _grid.AddDividers(_gridTransform.GetComponentsInChildren<PipeDivider>(includeInactive:true));
     }
 }

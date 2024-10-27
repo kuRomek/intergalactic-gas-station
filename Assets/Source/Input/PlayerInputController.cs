@@ -44,7 +44,7 @@ public class PlayerInputController : MonoBehaviour
 
     private void OnButtonPressed(InputAction.CallbackContext context)
     {
-        if (_levelState.IsGameOver)
+        if (_levelState.IsGameOver || _levelState.IsPaused)
             return;
 
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -62,7 +62,7 @@ public class PlayerInputController : MonoBehaviour
 
     private void OnDragging(InputAction.CallbackContext context)
     {
-        if (_levelState.IsGameOver)
+        if (_levelState.IsGameOver || _levelState.IsPaused)
             return;
 
         Vector2 newMousePosition = _camera.ScreenToWorldPoint(context.action.ReadValue<Vector2>());
@@ -72,7 +72,7 @@ public class PlayerInputController : MonoBehaviour
 
     private void OnDragCanceld(InputAction.CallbackContext context)
     {
-        if (_levelState.IsGameOver)
+        if (_levelState.IsGameOver || _levelState.IsPaused)
             return;
 
         DragCanceled?.Invoke();

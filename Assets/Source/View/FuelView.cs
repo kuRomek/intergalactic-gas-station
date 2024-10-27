@@ -8,6 +8,7 @@ public class FuelView : View
     [SerializeField] private Image _fuelIndicatorFilled;
     [SerializeField] private Image _fuelIndicatorColor;
     [SerializeField] private FuelColors _fuelCollors;
+    [SerializeField] private AudioClip _refuelingSound;
 
     private ITank _tank;
     private Coroutine _changingView;
@@ -21,9 +22,6 @@ public class FuelView : View
         _tank = tank;
 
         float originalHeight = _fuelIndicatorColor.rectTransform.sizeDelta.y;
-
-        _fuelIndicatorFilled.rectTransform.sizeDelta = new Vector2(_fuelIndicatorFilled.rectTransform.sizeDelta.x, 
-            originalHeight * (_tank.Capacity / ITank.MaximumSize));
 
         _fuelIndicatorColor.rectTransform.sizeDelta = new Vector2(_fuelIndicatorColor.rectTransform.sizeDelta.x,
             originalHeight * (_tank.Capacity / ITank.MaximumSize));
@@ -45,7 +43,10 @@ public class FuelView : View
     {
         float currentAmountView = _fuelIndicatorFilled.fillAmount;
 
-        while (Mathf.Abs(_tank.CurrentAmount / _tank.Capacity - currentAmountView) < 0.01f == false)
+        if (_refuelingSound != null)
+            PlaySound(_refuelingSound);
+
+        while (Mathf.Abs(_tank.CurrentAmount / _tank.Capacity - currentAmountView) < 0.05f == false)
         {
             currentAmountView = Mathf.Lerp(currentAmountView, _tank.CurrentAmount / _tank.Capacity, Time.deltaTime * 4f);
 

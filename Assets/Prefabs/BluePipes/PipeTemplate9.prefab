@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 1226569720859117894}
   - component: {fileID: 6073868011111617451}
   - component: {fileID: 4820613232258250706}
+  - component: {fileID: 1450555318418226800}
   m_Layer: 0
   m_Name: Pipe (5)
   m_TagString: Untagged
@@ -208,6 +209,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9afdaf0097a70244eba75398e8353124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1450555318418226800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3542272699857260751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bb2e868a486a740adc4c9608c631ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4958776679670294016
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,6 +235,7 @@ GameObject:
   - component: {fileID: 6821749722175394477}
   - component: {fileID: 4281401233366598625}
   - component: {fileID: 7232029235690345817}
+  - component: {fileID: 5559096815090535347}
   m_Layer: 0
   m_Name: Pipe (4)
   m_TagString: Untagged
@@ -354,6 +368,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9afdaf0097a70244eba75398e8353124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5559096815090535347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4958776679670294016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bb2e868a486a740adc4c9608c631ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7883606263776801348
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +394,7 @@ GameObject:
   - component: {fileID: 8017147289194364602}
   - component: {fileID: 3824371669256958735}
   - component: {fileID: 2999332379288395983}
+  - component: {fileID: 7566052832723775679}
   m_Layer: 0
   m_Name: Pipe (3)
   m_TagString: Untagged
@@ -498,5 +525,17 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9afdaf0097a70244eba75398e8353124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7566052832723775679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7883606263776801348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bb2e868a486a740adc4c9608c631ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

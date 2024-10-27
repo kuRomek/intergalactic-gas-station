@@ -18,6 +18,7 @@ public class ShipPresenter : Presenter, IActivatable
             shipTank.FuelAmountChanged += () => View.ChangeView(shipTank);
 
         View.ViewChangingStopped += Model.OnViewChangingStopped;
+        Model.LeavedStation += View.PlayFlyAwaySound;
     }
 
     public void Disable()
@@ -26,5 +27,6 @@ public class ShipPresenter : Presenter, IActivatable
             shipTank.FuelAmountChanged -= () => View.ChangeView(shipTank);
 
         View.ViewChangingStopped -= Model.OnViewChangingStopped;
+        Model.LeavedStation -= View.PlayFlyAwaySound;
     }
 }

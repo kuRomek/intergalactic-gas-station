@@ -1,24 +1,26 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Settings : UIMenu
+public class SettingsWindow : UIMenu
 {
     [SerializeField] private UIMenu _startScreen;
     [SerializeField] private Button _backButton;
     [SerializeField] private Slider _soundVolumeSlider;
     [SerializeField] private Slider _musicVolumeSlider;
-    [SerializeField] private AudioSource _soundAudioSource;
-    [SerializeField] private AudioSource _musicAudioSource;
+    [SerializeField] private Settings _settings;
+
+    private void Awake()
+    {
+        _soundVolumeSlider.value = _settings.SoundVolume;
+        _musicVolumeSlider.value = _settings.MusicVolume;
+    }
 
     private void OnEnable()
     {
         _backButton.onClick.AddListener(OnBackButtonClicked);
 
-        _soundVolumeSlider.onValueChanged.AddListener((_) => _soundAudioSource.volume = _soundVolumeSlider.value);
-        _musicVolumeSlider.onValueChanged.AddListener((_) => _musicAudioSource.volume = _musicVolumeSlider.value);
-
-        _soundVolumeSlider.value = _soundAudioSource.volume;
-        _musicVolumeSlider.value = _musicAudioSource.volume;
+        _soundVolumeSlider.onValueChanged.AddListener((_) => _settings.SetSoundVolume(_soundVolumeSlider.value));
+        _musicVolumeSlider.onValueChanged.AddListener((_) => _settings.SetMusicVolume(_musicVolumeSlider.value));
     }
 
     private void OnDisable()

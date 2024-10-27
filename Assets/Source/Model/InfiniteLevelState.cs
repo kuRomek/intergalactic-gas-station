@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class InfiniteLevelState : LevelState
@@ -12,8 +13,8 @@ public class InfiniteLevelState : LevelState
     private ITank.Size[] _sizes = (ITank.Size[])Enum.GetValues(typeof(ITank.Size));
     private Fuel[] _fuels = (Fuel[])Enum.GetValues(typeof(Fuel));
 
-    public InfiniteLevelState(UIMenu levelCompleteWindow, UIMenu loseWindow, TankContainer tanks, Vector3 shipsWaitingPlace, PresenterFactory presenterFactory, Station station, Timer timer) :
-        base(levelCompleteWindow, loseWindow, station, new List<Ship>(ShipCountForNewTanks + 1), timer)
+    public InfiniteLevelState(UIMenu levelCompleteWindow, UIMenu loseWindow, UIMenu pauseWindow, Button pauseButton, TankContainer tanks, Vector3 shipsWaitingPlace, PresenterFactory presenterFactory, Station station, Timer timer) :
+        base(levelCompleteWindow, loseWindow, pauseWindow, pauseButton, station, new List<Ship>(ShipCountForNewTanks + 1), timer)
     {
         _randomShipGenerator = new RandomShipGenerator(presenterFactory, shipsWaitingPlace);
         _tanks = tanks;

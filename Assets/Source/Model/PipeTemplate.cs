@@ -15,6 +15,8 @@ public class PipeTemplate : Transformable, IGridMember
         FuelType = fuelType;
     }
 
+    public event Action PlacedOnGrid;
+
     public IReadOnlyCollection<PipePiece> PipePieces => _pipePieces;
     public IReadOnlyList<PipeTemplate> ConnectedTemplates => _connectedTemplates;
     public PipePiece CenterPiece { get; private set; }
@@ -32,6 +34,8 @@ public class PipeTemplate : Transformable, IGridMember
 
         foreach (PipePiece pipePiece in _pipePieces)
             pipePiece.MoveTo(grid.CalculateWorldPosition(pipePiece.GridPosition));
+
+        PlacedOnGrid?.Invoke();
     }
 
     public void Connect(PipeTemplate pipeTemplate)

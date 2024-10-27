@@ -38,7 +38,10 @@ public class FuelProvider : IActivatable
                     continue;
 
                 if (DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType))
+                {
                     Refuel(_station.Ships[i]);
+                    break;
+                }
             }
             catch (Exception exception) when (exception is InvalidOperationException || exception is ArgumentException || exception is NullReferenceException)
             { }

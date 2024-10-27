@@ -73,5 +73,7 @@ public class Station : IActivatable
         _ships[Array.IndexOf(_ships, ship)] = null;
 
         PlaceFreed?.Invoke();
+
+        _fuelProvider.TryRefuel();
     }
 }

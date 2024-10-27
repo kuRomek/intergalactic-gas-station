@@ -33,12 +33,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3577639927198621191}
+  m_Father: {fileID: 3639698556594465442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.144, y: 0}
-  m_SizeDelta: {x: 0.08, y: 1.7}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -0.04, y: 0}
+  m_SizeDelta: {x: 0.08, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &5454576953274471329
 Canvas:
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 0.683
+  m_FillAmount: 0.597
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -175,7 +175,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3639698556594465442}
-  - {fileID: 1068471111618824213}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -228,7 +227,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &2083611622049308889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,6 +268,7 @@ MonoBehaviour:
   _fuelIndicatorFilled: {fileID: 5760682231147015326}
   _fuelIndicatorColor: {fileID: 2555428884198569878}
   _fuelCollors: {fileID: 11400000, guid: 2105c08753412b747b7d03f19cf71878, type: 2}
+  _refuelingSound: {fileID: 8300000, guid: 7e9a03e7b11564a48a9aadc52e07feb1, type: 3}
 --- !u!1 &8504386290610630633
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +301,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1068471111618824213}
   m_Father: {fileID: 3577639927198621191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

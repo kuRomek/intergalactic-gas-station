@@ -37,6 +37,11 @@ public class Timer : IUpdatable
         IsRunning = false;
     }
 
+    public void Resume()
+    {
+        IsRunning = true;
+    }
+
     public void AddTime(float seconds)
     {
         SecondsLeft += seconds;

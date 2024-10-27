@@ -19,6 +19,16 @@ public class PipeTemplatePresenter : Presenter
         View.SetColor(_fuelType);
     }
 
+    private void OnEnable()
+    {
+        Model.PlacedOnGrid += View.PlaySoundOnPlaced;
+    }
+
+    private void OnDisable()
+    {
+        Model.PlacedOnGrid -= View.PlaySoundOnPlaced;
+    }
+
     [Inject]
     private void Construct(IGrid grid)
     {
