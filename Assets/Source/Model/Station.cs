@@ -21,7 +21,7 @@ public class Station : IActivatable
         _fuelProvider = new FuelProvider(_grid, this, tankContainer);
     }
 
-    public event Action PlaceFreed;
+    public event Action<Ship> PlaceFreed;
 
     public void Enable()
     {
@@ -57,7 +57,7 @@ public class Station : IActivatable
         _ships[randomSpot] = ship;
         ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
 
-        _fuelProvider.RemoveSoftLock();
+        _fuelProvider.RemoveSoftlock();
 
         ship.TankRefueled += _fuelProvider.StopProviding;
         ship.LeavedStation += FreeRefuelingPoint;
@@ -72,8 +72,6 @@ public class Station : IActivatable
 
         _ships[Array.IndexOf(_ships, ship)] = null;
 
-        PlaceFreed?.Invoke();
-
-        _fuelProvider.TryRefuel();
+        PlaceFreed?.Invoke(ship);
     }
 }

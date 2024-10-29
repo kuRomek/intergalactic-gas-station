@@ -24,11 +24,13 @@ public class PauseWindow : UIMenu
 
     private void OnRestartButtonClicked()
     {
+        Hide();
         SceneManager.LoadScene(SceneManager.GetActiveScene().path);
     }
 
     private void OnLevelSelectionButtonClicked()
     {
+        Hide();
         SceneManager.LoadScene(0);
     }
 }

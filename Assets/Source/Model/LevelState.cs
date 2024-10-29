@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelState : IActivatable
@@ -39,26 +40,24 @@ public class LevelState : IActivatable
     }
 
     public bool IsGameOver { get; private set; } = false;
-    public bool IsPaused { get; private set; } = false;
+    public bool IsPaused { get; private set; } = Time.timeScale == 0f;
     protected List<Ship> ShipsQueue => _shipsQueue;
     protected Timer Timer => _timer;
 
     public void Pause()
     {
-        IsPaused = true;
         _pauseButton.gameObject.SetActive(false);
-        _timer.Stop();
+        Time.timeScale = 0f;
         _pauseWindow.Show();
     }
 
     public void UnPause()
     {
-        IsPaused = false;
         _pauseButton.gameObject.SetActive(true);
-        _timer.Resume();
+        Time.timeScale = 1f;
     }
 
-    protected virtual void OnStationPlaceFreed()
+    protected virtual void OnStationPlaceFreed(Ship ship)
     {
         LetShipOnStation();
     }
@@ -80,7 +79,7 @@ public class LevelState : IActivatable
     private void OnTimerExpired()
     {
         IsGameOver = true;
-        _timer.Stop();
         _loseWindow.Show();
+        _pauseButton.gameObject.SetActive(false);
     }
 }

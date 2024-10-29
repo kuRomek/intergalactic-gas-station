@@ -468,7 +468,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Level 1 \ncomlplete!"
+  m_text: "Level 2 \ncomlplete!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 213db201ac525814091129e1be3b1487, type: 2}
   m_sharedMaterial: {fileID: 9100428932845399759, guid: 213db201ac525814091129e1be3b1487, type: 2}

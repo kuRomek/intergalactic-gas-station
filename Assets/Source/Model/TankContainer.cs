@@ -20,6 +20,7 @@ public class TankContainer : IEnumerable<Tank>
 
     public event Action<Vector3> FirstTankRemoved;
     public event Action TankEmptied;
+    public event Action StoppedShifting;
 
     public IEnumerator<Tank> GetEnumerator()
     {
@@ -32,6 +33,7 @@ public class TankContainer : IEnumerable<Tank>
     }
 
     public int Count => _tanks.Count;
+    public bool IsShifting { get; private set; } = false;
 
     public Tank Add(ITank.Size type, Fuel fuelType)
     {
@@ -53,25 +55,21 @@ public class TankContainer : IEnumerable<Tank>
         return newTank;
     }
 
-    private void DecreseAmount(Fuel fuel, float amount)
-    {
-        _fuelCounts[fuel] -= amount;
-    }
-
     public void RemoveTank(Tank tank)
     {
         _tanks.Dequeue();
         tank.Emptied -= RemoveTank;
 
-        if (_tanks.Count > 0)
-        {
-            Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / 6f * Vector3.down) - _tanks.Peek().Position;
-            FirstTankRemoved?.Invoke(elevation);
-        }
-
         tank.Destroy();
 
         TankEmptied?.Invoke();
+
+        if (_tanks.Count > 0)
+        {
+            Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / ITank.MaximumSize * Vector3.down) - _tanks.Peek().Position;
+            IsShifting = true;
+            FirstTankRemoved?.Invoke(elevation);
+        }
     }
 
     public Tank Peek()
@@ -91,7 +89,8 @@ public class TankContainer : IEnumerable<Tank>
         _tanks.Enqueue(tank);
         PutToEnd(tank);
 
-        Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / 6f * Vector3.down) - _tanks.Peek().Position;
+        Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / ITank.MaximumSize * Vector3.down) - _tanks.Peek().Position;
+        IsShifting = true;
         FirstTankRemoved?.Invoke(elevation);
     }
 
@@ -103,6 +102,12 @@ public class TankContainer : IEnumerable<Tank>
             return 0;
     }
 
+    public void StopShifting()
+    {
+        IsShifting = false;
+        StoppedShifting?.Invoke();
+    }
+
     private void PutToEnd(Tank tank)
     {
         if (_tanks.Count == 0)
@@ -112,5 +117,10 @@ public class TankContainer : IEnumerable<Tank>
                         Vector3.down * (_lastTank.Capacity / ITank.MaximumSize + tank.Capacity / ITank.MaximumSize + _distanceBetweenTanks));
 
         _lastTank = tank;
+    }
+
+    private void DecreseAmount(Fuel fuel, float amount)
+    {
+        _fuelCounts[fuel] -= amount;
     }
 }

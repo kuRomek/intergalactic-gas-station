@@ -13,12 +13,12 @@ public class TankContainerShifter : MonoBehaviour
 
     private void OnEnable()
     {
-        _tankContainer.FirstTankRemoved += OnTankEmptied;
+        _tankContainer.FirstTankRemoved += OnFirstTankRemoved;
     }
 
     private void OnDisable()
     {
-        _tankContainer.FirstTankRemoved -= OnTankEmptied;
+        _tankContainer.FirstTankRemoved -= OnFirstTankRemoved;
     }
 
     public void Init(TankContainer tankContainer)
@@ -27,7 +27,7 @@ public class TankContainerShifter : MonoBehaviour
         enabled = true;
     }
 
-    private void OnTankEmptied(Vector3 shift)
+    private void OnFirstTankRemoved(Vector3 shift)
     {
         if (_shifting != null)
             StopCoroutine(_shifting);
@@ -43,7 +43,7 @@ public class TankContainerShifter : MonoBehaviour
 
         int i;
 
-        while ((_tankContainer.Peek() != null) && Vector3.SqrMagnitude(_tankContainer.Peek().Position - startPositions[0] + shift) > DistanceTolerance)
+        while (Vector3.SqrMagnitude(startPositions[0] + shift - _tankContainer.Peek().Position) > DistanceTolerance)
         {
             i = 0;
 
@@ -54,6 +54,9 @@ public class TankContainerShifter : MonoBehaviour
             }
 
             yield return null;
+
+            if (_tankContainer.Peek() == null)
+                break;
         }
 
         i = 0;
@@ -63,5 +66,7 @@ public class TankContainerShifter : MonoBehaviour
             tank.MoveTo(startPositions[i] + shift);
             i++;
         }
+
+        _tankContainer.StopShifting();
     }
 }

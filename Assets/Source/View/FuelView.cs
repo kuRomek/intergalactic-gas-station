@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class FuelView : View
 {
-    [SerializeField] private Image _fuelIndicatorFilled;
-    [SerializeField] private Image _fuelIndicatorColor;
+    [SerializeField] private Slider _fuelIndicator;
+    [SerializeField] private Image _backgroundImage;
     [SerializeField] private FuelColors _fuelCollors;
     [SerializeField] private AudioClip _refuelingSound;
 
@@ -21,14 +21,16 @@ public class FuelView : View
     {
         _tank = tank;
 
-        float originalHeight = _fuelIndicatorColor.rectTransform.sizeDelta.y;
+        _fuelIndicator.minValue = 0;
+        _fuelIndicator.maxValue = _tank.Capacity;
+        _fuelIndicator.value = _tank.CurrentAmount;
+        _backgroundImage.color = _fuelCollors.GetMaterialOf(_tank.FuelType).color;
 
-        _fuelIndicatorColor.rectTransform.sizeDelta = new Vector2(_fuelIndicatorColor.rectTransform.sizeDelta.x,
-            originalHeight * (_tank.Capacity / ITank.MaximumSize));
+        RectTransform sliderRect = _fuelIndicator.GetComponent<RectTransform>();
 
-        _fuelIndicatorFilled.color = Color.white;
-        _fuelIndicatorColor.color = _fuelCollors.GetMaterialOf(_tank.FuelType).color;
-        _fuelIndicatorFilled.fillAmount = _tank.CurrentAmount / _tank.Capacity;
+        float originalHeight = sliderRect.sizeDelta.y;
+
+        sliderRect.sizeDelta = new Vector2(sliderRect.sizeDelta.x, originalHeight * (_tank.Capacity / ITank.MaximumSize));
     }
 
     public void ChangeView()
@@ -41,20 +43,20 @@ public class FuelView : View
 
     private IEnumerator StartChangingView()
     {
-        float currentAmountView = _fuelIndicatorFilled.fillAmount;
+        float currentAmountView = _fuelIndicator.value;
 
         if (_refuelingSound != null)
             PlaySound(_refuelingSound);
 
-        while (Mathf.Abs(_tank.CurrentAmount / _tank.Capacity - currentAmountView) < 0.05f == false)
+        while (Mathf.Abs(_tank.CurrentAmount - currentAmountView) < 0.05f == false)
         {
-            currentAmountView = Mathf.Lerp(currentAmountView, _tank.CurrentAmount / _tank.Capacity, Time.deltaTime * 4f);
+            currentAmountView = Mathf.Lerp(currentAmountView, _tank.CurrentAmount, Time.deltaTime * 4f);
 
-            _fuelIndicatorFilled.fillAmount = currentAmountView;
+            _fuelIndicator.value = currentAmountView;
             yield return null;
         }
 
-        _fuelIndicatorFilled.fillAmount = _tank.CurrentAmount / _tank.Capacity;
+        _fuelIndicator.value = _tank.CurrentAmount;
 
         ViewChangingStopped?.Invoke(_tank);
     }

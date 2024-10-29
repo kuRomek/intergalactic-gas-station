@@ -6,28 +6,35 @@ public class FuelProvider : IActivatable
     private Grid _grid;
     private Station _station;
     private TankContainer _tanks;
-    private bool _providing = false;
+    private SoftlockHandler _softlockHandler;
+    private bool _refueling = false;
 
     public FuelProvider(Grid grid, Station station, TankContainer tankContainer)
     {
         _grid = grid;
         _station = station;
         _tanks = tankContainer;
+        _softlockHandler = new SoftlockHandler(_tanks, _station);
     }
 
     public void Enable()
     {
         _tanks.TankEmptied += StopProviding;
+        _tanks.StoppedShifting += TryRefuel;
     }
 
     public void Disable()
     {
         _tanks.TankEmptied -= StopProviding;
+        _tanks.StoppedShifting -= TryRefuel;
     }
 
     public void TryRefuel()
     {
-        if (_providing)
+        if (_refueling)
+            return;
+
+        if (_tanks.IsShifting)
             return;
 
         for (int i = 0; i < _grid.RefuelingPoints.Length; i++)
@@ -48,17 +55,17 @@ public class FuelProvider : IActivatable
         }
     }
 
-    public void RemoveSoftLock()
-    {
-        while (CheckSoftLock())
-            _tanks.PutFirstToEnd();
-    }
+    public void RemoveSoftlock() =>
+        _softlockHandler.RemoveSoftlock();
 
     public void StopProviding()
     {
-        _providing = false;
-        TryRefuel();
-        RemoveSoftLock();
+        if (_refueling == true)
+        {
+            _refueling = false;
+            _softlockHandler.RemoveSoftlock();
+            TryRefuel();
+        }
     }
 
     private void Refuel(Ship ship)
@@ -72,27 +79,7 @@ public class FuelProvider : IActivatable
         _tanks.Peek().TakeFuel(requestedAmount, out float resultAmount);
         ship.Refuel(resultAmount, requestedFuel);
 
-        _providing = true;
-    }
-
-    private bool CheckSoftLock()
-    {
-        if (_tanks.Count <= 1 || _station.ActiveShipCount <= 1)
-            return false;
-
-        foreach (Ship ship in _station.Ships)
-        {
-            if (ship == null)
-                continue;
-
-            foreach (ShipTank tank in ship.Tanks)
-            {
-                if (tank.IsFull == false && tank.FuelType == _tanks.Peek().FuelType)
-                    return false;
-            }
-        }
-
-        return true;
+        _refueling = true;
     }
 
     private bool DFSToFuelSource(IGridMember gridCell, Fuel fuel)
