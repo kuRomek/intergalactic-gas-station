@@ -59,14 +59,14 @@ public class Station : IActivatable
 
         _fuelProvider.RemoveSoftlock();
 
-        ship.TankRefueled += _fuelProvider.StopProviding;
+        ship.TankRefueled += _fuelProvider.StopRefueling;
         ship.LeavedStation += FreeRefuelingPoint;
         ship.StoppedAtRefuelingPoint += _fuelProvider.TryRefuel;
     }
 
     private void FreeRefuelingPoint(Ship ship)
     {
-        ship.TankRefueled -= _fuelProvider.StopProviding;
+        ship.TankRefueled -= _fuelProvider.StopRefueling;
         ship.LeavedStation -= FreeRefuelingPoint;
         ship.StoppedAtRefuelingPoint -= _fuelProvider.TryRefuel;
 

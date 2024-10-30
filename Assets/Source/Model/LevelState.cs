@@ -73,6 +73,7 @@ public class LevelState : IActivatable
         {
             _timer.Stop();
             _levelCompleteWindow.Show();
+            _pauseButton.gameObject.SetActive(false);
         }
     }
 
