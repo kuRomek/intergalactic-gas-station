@@ -33,7 +33,6 @@ public class SettingsWindow : UIMenu
 
     private void OnBackButtonClicked()
     {
-        Hide();
         _startScreen.Show();
     }
 }

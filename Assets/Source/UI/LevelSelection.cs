@@ -37,7 +37,6 @@ public class LevelSelection : UIMenu
 
     private void OnBackButtonClicked()
     {
-        Hide();
         _startScreen.Show();
     }
 }

@@ -6,9 +6,13 @@ using UnityEngine;
 public class ShipView : View
 {
     [SerializeField] private FuelView _fuelViewPrefab;
+    [SerializeField] private Transform _tanksViewPlace;
     [SerializeField] private Canvas _fuelViewPlace;
+    [SerializeField] private Animator _burstAnimator;
     [SerializeField] private AudioClip _flyAwaySound;
+    [SerializeField] private AudioClip _arrivalSound;
 
+    public readonly int IsBursting = Animator.StringToHash(nameof(IsBursting));
     private FuelView[] _fuelViews = null;
 
     public event Action<ITank> ViewChangingStopped;
@@ -36,11 +40,6 @@ public class ShipView : View
         _fuelViews.FirstOrDefault(view => view.Tank == tank).ChangeView();
     }
 
-    private void OnViewChangingStopped(ITank tank)
-    {
-        ViewChangingStopped?.Invoke(tank);
-    }
-
     public void CreateFuelViews(IReadOnlyList<ShipTank> shipTanks)
     {
         _fuelViews = new FuelView[shipTanks.Count];
@@ -54,8 +53,30 @@ public class ShipView : View
         }
     }
 
-    public void PlayFlyAwaySound(Ship ship)
+    public void PlayFlyAwaySound(Ship _)
     {
         PlaySound(_flyAwaySound);
+    }
+
+    public void PlayArrivalSound(Ship _)
+    {
+        PlaySound(_arrivalSound);
+    }
+
+    public void PlayBurstingAnimation(Ship _)
+    {
+        _burstAnimator.SetBool(IsBursting, true);
+        _tanksViewPlace.gameObject.SetActive(false);
+    }
+
+    public void PlayIdleAnimation()
+    {
+        _burstAnimator.SetBool(IsBursting, false);
+        _tanksViewPlace.gameObject.SetActive(true);
+    }
+
+    private void OnViewChangingStopped(ITank tank)
+    {
+        ViewChangingStopped?.Invoke(tank);
     }
 }

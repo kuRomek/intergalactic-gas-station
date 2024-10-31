@@ -16,12 +16,24 @@ public class PipeTemplate : Transformable, IGridMember
     }
 
     public event Action PlacedOnGrid;
+    public event Action ProvidingFuel;
+    public event Action ProvidingStopped;
 
     public IReadOnlyCollection<PipePiece> PipePieces => _pipePieces;
     public IReadOnlyList<PipeTemplate> ConnectedTemplates => _connectedTemplates;
     public PipePiece CenterPiece { get; private set; }
     public Fuel FuelType { get; }
     public int[] GridPosition { get; private set; } = null;
+
+    public void OnProvidingFuel()
+    {
+        ProvidingFuel?.Invoke();
+    }
+
+    public void OnProvidingStopped()
+    {
+        ProvidingStopped?.Invoke();
+    }
 
     public void PlaceOnGrid(IGrid grid)
     {

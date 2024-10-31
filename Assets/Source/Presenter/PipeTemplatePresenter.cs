@@ -22,11 +22,15 @@ public class PipeTemplatePresenter : Presenter
     private void OnEnable()
     {
         Model.PlacedOnGrid += View.PlaySoundOnPlaced;
+        Model.ProvidingFuel += View.SetOutline;
+        Model.ProvidingStopped += View.RemoveOutline;
     }
 
     private void OnDisable()
     {
         Model.PlacedOnGrid -= View.PlaySoundOnPlaced;
+        Model.ProvidingFuel -= View.SetOutline;
+        Model.ProvidingStopped -= View.RemoveOutline;
     }
 
     [Inject]

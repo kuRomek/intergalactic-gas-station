@@ -7,6 +7,7 @@ public class FuelProvider : IActivatable
     private Station _station;
     private TankContainer _tanks;
     private SoftlockHandler _softlockHandler;
+    private List<PipeTemplate> _path = null;
     private bool _isRefueling = false;
 
     public FuelProvider(Grid grid, Station station, TankContainer tankContainer)
@@ -60,6 +61,14 @@ public class FuelProvider : IActivatable
 
     public void StopRefueling()
     {
+        if (_path != null)
+        {
+            foreach (PipeTemplate pipeTemplate in _path)
+                pipeTemplate.OnProvidingStopped();
+        }
+
+        _path = null;
+
         _softlockHandler.RemoveSoftlock();
 
         _isRefueling = false;
@@ -80,6 +89,9 @@ public class FuelProvider : IActivatable
 
         _isRefueling = true;
 
+        foreach (PipeTemplate pipe in _path)
+            pipe.OnProvidingFuel();
+
         return true;
     }
 
@@ -94,10 +106,12 @@ public class FuelProvider : IActivatable
             (pipeTemplate.FuelType != fuel && pipeTemplate.FuelType != Fuel.Default))
             return false;
 
+        _path = new List<PipeTemplate>();
         List<PipeTemplate> checkedTemplates = new List<PipeTemplate>();
         Stack<PipeTemplate> templatesToCheck = new Stack<PipeTemplate>();
 
         templatesToCheck.Push(pipeTemplate);
+        _path.Add(pipeTemplate);
 
         PipeTemplate checkingTemplate;
 
@@ -113,10 +127,15 @@ public class FuelProvider : IActivatable
             foreach (PipeTemplate connectedTemplate in checkingTemplate.ConnectedTemplates)
             {
                 if (checkedTemplates.Find(template => template == connectedTemplate) == null && (connectedTemplate.FuelType == fuel || connectedTemplate.FuelType == Fuel.Default))
+                {
                     templatesToCheck.Push(connectedTemplate);
+                    _path.Add(connectedTemplate);
+                }
             }
         }
         while (templatesToCheck.Count > 0);
+
+        _path = null;
 
         return false;
     }

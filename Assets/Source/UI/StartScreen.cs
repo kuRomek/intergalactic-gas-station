@@ -26,7 +26,6 @@ public class StartScreen : UIMenu
 
     private void OnPlayButtonClicked()
     {
-        Hide();
         _levelSelection.Show();
     }
 
@@ -37,7 +36,6 @@ public class StartScreen : UIMenu
 
     private void OnSettingsButtonClicked()
     {
-        Hide();
         _settings.Show();
     }
 }

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Ship : Transformable, IUpdatable
 {
-    private const float DistanceTolerance = 0.05f;
+    private const float DistanceTolerance = 0.04f;
 
     private Vector3 _refuelingPosition;
     private Vector3 _startPosition;
+    private Vector3 _lastTarget;
     private List<ShipTank> _tanks;
     private int _emptyTanks;
     private float _speed = 3f;
@@ -27,6 +28,7 @@ public class Ship : Transformable, IUpdatable
     }
 
     public event Action StoppedAtRefuelingPoint;
+    public event Action<Ship> ArrivingAtStation;
     public event Action<Ship> LeavedStation;
     public event Action TankRefueled;
 
@@ -34,7 +36,7 @@ public class Ship : Transformable, IUpdatable
     {
         if (Position != Target)
         {
-            if (Vector3.SqrMagnitude(Target - Position) <= DistanceTolerance)
+            if (Vector3.SqrMagnitude(Target - Position) <= DistanceTolerance || Vector3.SqrMagnitude(Position - _lastTarget) <= DistanceTolerance)
                 MoveTo(Vector3.MoveTowards(Position, Target, _speed / 3f * deltaTime));
             else
                 MoveTo(Vector3.Lerp(Position, Target, _speed * deltaTime));
@@ -56,16 +58,6 @@ public class Ship : Transformable, IUpdatable
             throw new InvalidOperationException($"The ship does not have not full tanks with {fuelType} fuel.");
 
         tank.Refuel(amount, out float residue);
-    }
-
-    private void OnTankFilled(ShipTank shipTank)
-    {
-        shipTank.Refueled -= OnTankFilled;
-
-        TankRefueled?.Invoke();
-
-        if (--_emptyTanks == 0)
-            LeaveStation();
     }
 
     public void OnViewChangingStopped(ITank tank)
@@ -92,12 +84,26 @@ public class Ship : Transformable, IUpdatable
 
         RotateOn(refuelingPoint.rotation);
 
+        _lastTarget = Target;
         Target = refuelingPoint.position;
+
+        ArrivingAtStation?.Invoke(this);
+    }
+
+    private void OnTankFilled(ShipTank shipTank)
+    {
+        shipTank.Refueled -= OnTankFilled;
+
+        TankRefueled?.Invoke();
+
+        if (--_emptyTanks == 0)
+            LeaveStation();
     }
 
     private void LeaveStation()
     {
-        Target += (Target - _startPosition) * 2f;
+        _lastTarget = Target;
+        Target += Target - _startPosition;
 
         LeavedStation?.Invoke(this);
     }
