@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class FuelProvider : IActivatable
 {
@@ -120,13 +121,44 @@ public class FuelProvider : IActivatable
             checkingTemplate = templatesToCheck.Pop();
             
             if (checkingTemplate == _grid.FuelSourcePoint)
+            {
+                int removedInIteration;
+                List<PipeTemplate> removedTemplates = new List<PipeTemplate>(templatesToCheck);
+                List<PipeTemplate> newPath = _path.Except(removedTemplates).ToList();
+                _path = new List<PipeTemplate>(newPath);
+
+                do
+                {
+                    removedInIteration = 0;
+
+                    foreach (PipeTemplate template in _path)
+                    {
+                        if (template != _grid.FuelSourcePoint &&
+                            template != pipeTemplate)
+                        {
+                            if (template.ConnectedTemplates.Except(removedTemplates).Count() == 1)
+                            {
+                                removedTemplates.Add(template);
+                                newPath.Remove(template);
+                                removedInIteration++;
+                            }
+                        }
+                    }
+
+                    _path = new List<PipeTemplate>(newPath);
+                }
+                while (removedInIteration != 0);
+
                 return true;
+            }
 
             checkedTemplates.Add(checkingTemplate);
 
             foreach (PipeTemplate connectedTemplate in checkingTemplate.ConnectedTemplates)
             {
-                if (checkedTemplates.Find(template => template == connectedTemplate) == null && (connectedTemplate.FuelType == fuel || connectedTemplate.FuelType == Fuel.Default))
+                if (templatesToCheck.Contains(connectedTemplate) == false &&
+                    checkedTemplates.Contains(connectedTemplate) == false && 
+                    (connectedTemplate.FuelType == fuel || connectedTemplate.FuelType == Fuel.Default))
                 {
                     templatesToCheck.Push(connectedTemplate);
                     _path.Add(connectedTemplate);

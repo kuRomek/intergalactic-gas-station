@@ -13,6 +13,7 @@ public class PipeTemplateView : View
     private Renderer[] _piecesRenderers = null;
     private float _maxOutlineWidth = 8f;
     private Coroutine _changingOutlineWidth;
+    private Color _color;
 
     private void Awake()
     {
@@ -21,10 +22,13 @@ public class PipeTemplateView : View
 
         _outline.OutlineWidth = 0f;
         _outline.OutlineColor = Color.white;
+        _outline.enabled = false;
     }
 
     public void SetOutline()
     {
+        _outline.enabled = true;
+
         if (_changingOutlineWidth != null)
             StopCoroutine(_changingOutlineWidth);
 
@@ -37,11 +41,14 @@ public class PipeTemplateView : View
             StopCoroutine(_changingOutlineWidth);
 
         _changingOutlineWidth = StartCoroutine(ChangeOutlineWidth(0f));
+
+        _outline.enabled = false;
     }
 
     public void SetColor(Fuel fuel)
     {
         Material material = _fuelTypes.GetMaterialOf(fuel);
+        _color = material.color;
 
         _piecesRenderers ??= GetComponentsInChildren<Renderer>();
 
@@ -63,12 +70,21 @@ public class PipeTemplateView : View
 
     private IEnumerator ChangeOutlineWidth(float endWidth)
     {
+        Color endColor = endWidth > 0f ? _color * 1.8f : _color;
+
         while (Mathf.Abs(_outline.OutlineWidth - endWidth) > DistanceTolerance)
         {
-            _outline.OutlineWidth = Mathf.Lerp(_outline.OutlineWidth, endWidth, Time.deltaTime * 9f);
+            _outline.OutlineWidth = Mathf.Lerp(_outline.OutlineWidth, endWidth, Time.deltaTime * 10f);
+
+            foreach (Renderer pieceRenderer in _piecesRenderers)
+                pieceRenderer.material.color = Color.Lerp(pieceRenderer.material.color, endColor, Time.deltaTime * 10f);
+
             yield return null;
         }
 
         _outline.OutlineWidth = endWidth;
+
+        foreach (Renderer pieceRenderer in _piecesRenderers)
+            pieceRenderer.material.color = endColor;
     }
 }

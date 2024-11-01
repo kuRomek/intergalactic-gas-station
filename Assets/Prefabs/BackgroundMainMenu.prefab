@@ -557,6 +557,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backgroundImage: {fileID: 37218000147657611}
+  _smoothness: 5
+  _speed: 0.005
 --- !u!1 &7431737798845554164
 GameObject:
   m_ObjectHideFlags: 0

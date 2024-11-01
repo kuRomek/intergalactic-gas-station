@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 7703876129844723738}
   - component: {fileID: 8786743849142352861}
   m_Layer: 0
-  m_Name: LevelBackground
+  m_Name: BackgroundLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,6 +221,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backgroundImage: {fileID: 6288193153768698457}
+  _smoothness: 5
+  _speed: 0.005
 --- !u!1 &6139025361932907802
 GameObject:
   m_ObjectHideFlags: 0
