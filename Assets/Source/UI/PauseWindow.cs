@@ -12,7 +12,7 @@ public class PauseWindow : UIMenu
     {
         _resumeButton.onClick.AddListener(Hide);
         _restartButton.onClick.AddListener(OnRestartButtonClicked);
-        _levelSelectionButton.onClick.AddListener(OnLevelSelectionButtonClicked);
+        _levelSelectionButton.onClick.AddListener(OnMainMenuButtonClicked);
     }
 
     private void OnDisable()
@@ -28,9 +28,8 @@ public class PauseWindow : UIMenu
         SceneManager.LoadScene(SceneManager.GetActiveScene().path);
     }
 
-    private void OnLevelSelectionButtonClicked()
+    private void OnMainMenuButtonClicked()
     {
-        Hide();
         SceneManager.LoadScene(0);
     }
 }

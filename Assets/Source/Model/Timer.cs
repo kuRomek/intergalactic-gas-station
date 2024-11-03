@@ -1,4 +1,5 @@
 using System;
+using YG;
 
 public class Timer : IUpdatable
 {
@@ -6,7 +7,7 @@ public class Timer : IUpdatable
     {
         SecondsLeft = seconds;
         SecondsPassed = 0f;
-        IsRunning = true;
+        Resume();
     }
 
     public event Action Expired;
@@ -35,11 +36,13 @@ public class Timer : IUpdatable
     public void Stop()
     {
         IsRunning = false;
+        YandexGame.GameplayStop();
     }
 
     public void Resume()
     {
         IsRunning = true;
+        YandexGame.GameplayStart();
     }
 
     public void AddTime(float seconds)

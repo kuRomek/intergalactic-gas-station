@@ -119,38 +119,7 @@ public class FuelProvider : IActivatable
         do
         {
             checkingTemplate = templatesToCheck.Pop();
-            
-            if (checkingTemplate == _grid.FuelSourcePoint)
-            {
-                int removedInIteration;
-                List<PipeTemplate> removedTemplates = new List<PipeTemplate>(templatesToCheck);
-                List<PipeTemplate> newPath = _path.Except(removedTemplates).ToList();
-                _path = new List<PipeTemplate>(newPath);
-
-                do
-                {
-                    removedInIteration = 0;
-
-                    foreach (PipeTemplate template in _path)
-                    {
-                        if (template != _grid.FuelSourcePoint &&
-                            template != pipeTemplate)
-                        {
-                            if (template.ConnectedTemplates.Except(removedTemplates).Count() == 1)
-                            {
-                                removedTemplates.Add(template);
-                                newPath.Remove(template);
-                                removedInIteration++;
-                            }
-                        }
-                    }
-
-                    _path = new List<PipeTemplate>(newPath);
-                }
-                while (removedInIteration != 0);
-
-                return true;
-            }
+            _path.Add(checkingTemplate);
 
             checkedTemplates.Add(checkingTemplate);
 
@@ -161,7 +130,14 @@ public class FuelProvider : IActivatable
                     (connectedTemplate.FuelType == fuel || connectedTemplate.FuelType == Fuel.Default))
                 {
                     templatesToCheck.Push(connectedTemplate);
-                    _path.Add(connectedTemplate);
+
+                    if (connectedTemplate == _grid.FuelSourcePoint)
+                    {
+                        checkingTemplate = templatesToCheck.Pop();
+                        _path.Add(checkingTemplate);
+                        FormPath(pipeTemplate, templatesToCheck);
+                        return true;
+                    }
                 }
             }
         }
@@ -170,5 +146,37 @@ public class FuelProvider : IActivatable
         _path = null;
 
         return false;
+    }
+
+    private List<PipeTemplate> FormPath(PipeTemplate refuelingPoint, Stack<PipeTemplate> templatesToCheck)
+    {
+        int removedInIteration;
+        List<PipeTemplate> removedTemplates = new List<PipeTemplate>(templatesToCheck);
+        List<PipeTemplate> newPath = _path.Except(removedTemplates).ToList();
+        _path = new List<PipeTemplate>(newPath);
+
+        do
+        {
+            removedInIteration = 0;
+
+            foreach (PipeTemplate template in _path)
+            {
+                if (template != _grid.FuelSourcePoint &&
+                    template != refuelingPoint)
+                {
+                    if (template.ConnectedTemplates.Except(removedTemplates).Count() == 1)
+                    {
+                        removedTemplates.Add(template);
+                        newPath.Remove(template);
+                        removedInIteration++;
+                    }
+                }
+            }
+
+            _path = new List<PipeTemplate>(newPath);
+        }
+        while (removedInIteration != 0);
+
+        return _path;
     }
 }

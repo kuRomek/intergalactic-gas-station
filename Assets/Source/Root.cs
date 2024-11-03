@@ -86,6 +86,11 @@ public class Root : MonoBehaviour
         _pipeDragger.Disable();
     }
 
+    private void Update()
+    {
+        _levelState.Update(Time.deltaTime);
+    }
+
     [Inject]
     private void Construct(Grid grid)
     {

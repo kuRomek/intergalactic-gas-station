@@ -1,8 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YG;
 
-public class LevelState : IActivatable
+public class LevelState : IActivatable, IUpdatable
 {
     private UIMenu _levelCompleteWindow;
     private UIMenu _loseWindow;
@@ -11,6 +14,10 @@ public class LevelState : IActivatable
     private List<Ship> _shipsQueue;
     private Station _station;
     private Timer _timer;
+    private PlayerProgress _playerProgress;
+    private bool _isShowingFullscreenAd = false;
+    private float _secondsBeforeAd = 1f;
+    private float _remainingSecondsBeforeAd = 1f;
 
     public LevelState(UIMenu levelCompleteWindow, UIMenu loseWindow, UIMenu pauseWindow, Button pauseButton, Station station, List<Ship> shipsQueue, Timer timer)
     {
@@ -21,6 +28,7 @@ public class LevelState : IActivatable
         _station = station;
         _shipsQueue = shipsQueue;
         _timer = timer;
+        _playerProgress = new PlayerProgress();
     }
 
     public void Enable()
@@ -39,6 +47,21 @@ public class LevelState : IActivatable
         _station.PlaceFreed -= OnStationPlaceFreed;
     }
 
+    public void Update(float deltaTime)
+    {
+        if (_isShowingFullscreenAd)
+        {
+            _remainingSecondsBeforeAd -= deltaTime;
+
+            if (_remainingSecondsBeforeAd <= 0)
+            {
+                _remainingSecondsBeforeAd = _secondsBeforeAd;
+                _isShowingFullscreenAd = false;
+                YandexGame.FullscreenShow();
+            }
+        }
+    }
+
     public bool IsGameOver { get; private set; } = false;
     public bool IsPaused { get; private set; } = Time.timeScale == 0f;
     protected List<Ship> ShipsQueue => _shipsQueue;
@@ -48,6 +71,7 @@ public class LevelState : IActivatable
     {
         _pauseButton.gameObject.SetActive(false);
         Time.timeScale = 0f;
+        _timer.Stop();
         _pauseWindow.Show();
     }
 
@@ -55,6 +79,7 @@ public class LevelState : IActivatable
     {
         _pauseButton.gameObject.SetActive(true);
         Time.timeScale = 1f;
+        _timer.Resume();
     }
 
     protected virtual void OnStationPlaceFreed(Ship ship)
@@ -74,6 +99,8 @@ public class LevelState : IActivatable
             _timer.Stop();
             _levelCompleteWindow.Show();
             _pauseButton.gameObject.SetActive(false);
+            _playerProgress.CompleteLevel(SceneManager.GetActiveScene().buildIndex);
+            _isShowingFullscreenAd = true;
         }
     }
 
@@ -82,5 +109,10 @@ public class LevelState : IActivatable
         IsGameOver = true;
         _loseWindow.Show();
         _pauseButton.gameObject.SetActive(false);
+
+        if (this is InfiniteLevelState)
+            _playerProgress.UpdateInfiniteGameRecord(_timer.SecondsPassed);
+
+        _isShowingFullscreenAd = true;
     }
 }
