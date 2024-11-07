@@ -20,6 +20,7 @@ public class Root : MonoBehaviour
     [SerializeField] private Button _pauseButton;
     [SerializeField] private TimerView _timerView;
     [SerializeField] private TankContainerShifter _tankContainerShifter;
+    [SerializeField] private GridChanger _gridChanger;
     
     private PresenterFactory _presenterFactory;
     private LevelState _levelState;
@@ -63,7 +64,7 @@ public class Root : MonoBehaviour
             Timer timer = new Timer(120);
             _timerView.Init(timer);
 
-            _levelState = new InfiniteLevelState(_levelCompleteWindow, _loseWindow, _pauseWindow, _pauseButton, tankContainer, _shipsWaitingPlace.position, _presenterFactory, _station, timer);
+            _levelState = new InfiniteLevelState(_levelCompleteWindow, _loseWindow, _pauseWindow, _pauseButton, tankContainer, _shipsWaitingPlace.position, _presenterFactory, _gridChanger, _station, timer);
         }
 
         _inputController.Init(_levelState);

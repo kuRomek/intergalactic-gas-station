@@ -17,12 +17,27 @@ public class PipeTemplateView : View
 
     private void Awake()
     {
+        _piecesRenderers = GetComponentsInChildren<Renderer>();
         _placedSound = (AudioClip)Resources.Load("Sounds/pipe");
         _outline = GetComponent<Outline>();
 
         _outline.OutlineWidth = 0f;
         _outline.OutlineColor = Color.white;
         _outline.enabled = false;
+    }
+
+    private void OnDisable()
+    {
+        if (_changingOutlineWidth != null)
+        {
+            StopCoroutine(_changingOutlineWidth);
+
+            _outline.enabled = false;
+            _outline.OutlineWidth = 0;
+
+            foreach (Renderer pieceRenderer in _piecesRenderers)
+                pieceRenderer.material.color = _color;
+        }
     }
 
     public void SetOutline()

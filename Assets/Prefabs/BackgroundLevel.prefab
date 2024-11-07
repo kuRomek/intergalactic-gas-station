@@ -222,7 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _backgroundImage: {fileID: 6288193153768698457}
   _smoothness: 5
-  _speed: 0.005
+  _speed: 0.001
 --- !u!1 &6139025361932907802
 GameObject:
   m_ObjectHideFlags: 0

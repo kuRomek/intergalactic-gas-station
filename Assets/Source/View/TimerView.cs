@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using YG;
 
 public class TimerView : MonoBehaviour
 {
@@ -10,19 +11,33 @@ public class TimerView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _minutesLeftUI;
     [SerializeField] private TextMeshProUGUI _secondsPassedUI;
     [SerializeField] private TextMeshProUGUI _minutesPassedUI;
+    [SerializeField] private TextMeshProUGUI _secondsRecordUI;
+    [SerializeField] private TextMeshProUGUI _minutesRecordUI;
     [SerializeField] private Image _timerWheel;
 
     private Timer _timer;
     private float _startSeconds;
 
-    private void Update()
+    private void OnEnable()
     {
-        _timer.Update(Time.deltaTime);
+        if (_timer != null)
+            _timer.TimeChanged += OnTimeChanged;
+
+        if (_secondsRecordUI != null && _minutesRecordUI != null)
+        {
+            _secondsRecordUI.text = ((int)(YandexGame.savesData.InfiniteGameRecord % SecondsInMinute)).ToString("00");
+            _minutesRecordUI.text = ((int)(YandexGame.savesData.InfiniteGameRecord / SecondsInMinute)).ToString();
+        }
     }
 
     private void OnDisable()
     {
         _timer.TimeChanged -= OnTimeChanged;
+    }
+
+    private void Update()
+    {
+        _timer.Update(Time.deltaTime);
     }
 
     public void Init(Timer timer)

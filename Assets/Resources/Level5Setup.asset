@@ -19,8 +19,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: af1033f50aa8b614db9e714726da17b4, type: 2}
   - {fileID: 11400000, guid: e03df94d546fb8544961cea51f9774a9, type: 2}
   - {fileID: 11400000, guid: f6283fe313c98e24f9d797247b37927b, type: 2}
-  - {fileID: 11400000, guid: 5aaaa9543e5dec44ab9f288544c0342f, type: 2}
   - {fileID: 11400000, guid: 277429ae3248536419420e2e556432d1, type: 2}
+  - {fileID: 11400000, guid: af1033f50aa8b614db9e714726da17b4, type: 2}
+  - {fileID: 11400000, guid: 1d2217f850c3b954aaaa850b6cff110d, type: 2}
   _tanks:
   - _size: 6
     _fuelType: 3

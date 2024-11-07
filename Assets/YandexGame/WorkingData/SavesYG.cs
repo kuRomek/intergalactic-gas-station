@@ -9,11 +9,6 @@
         public string language = "ru";
         public bool promptDone;
 
-        // Тестовые сохранения для демо сцены
-        // Можно удалить этот код, но тогда удалите и демо (папка Example)
-        public int money = 1;                       // Можно задать полям значения по умолчанию
-        public string newPlayerName = "Hello!";
-
         // Ваши сохранения
 
         public bool[] OpenLevels;
@@ -24,12 +19,10 @@
         public SavesYG()
         {
             OpenLevels = new bool[10];
+            OpenLevels[0] = true;
             
-            // Допустим, задать значения по умолчанию для отдельных элементов массива
-            for (int i = 0; i < OpenLevels.Length; i++)
-                OpenLevels[i] = true;
-
-            IsInfiniteGameUnlocked = true;
+            for (int i = 1; i < OpenLevels.Length; i++)
+                OpenLevels[i] = false;
         }
     }
 }

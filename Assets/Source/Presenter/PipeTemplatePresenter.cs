@@ -6,6 +6,8 @@ public class PipeTemplatePresenter : Presenter
 {
     [SerializeField] private Fuel _fuelType;
 
+    [Inject] private IGrid _grid;
+
     public new PipeTemplate Model => base.Model as PipeTemplate;
     public new PipeTemplateView View => base.View as PipeTemplateView;
 
@@ -24,17 +26,21 @@ public class PipeTemplatePresenter : Presenter
         Model.PlacedOnGrid += View.PlaySoundOnPlaced;
         Model.ProvidingFuel += View.SetOutline;
         Model.ProvidingStopped += View.RemoveOutline;
+
+        _grid.Place(Model);
     }
 
     private void OnDisable()
     {
+        _grid.RemoveTemplate(Model);
+
         Model.PlacedOnGrid -= View.PlaySoundOnPlaced;
         Model.ProvidingFuel -= View.SetOutline;
         Model.ProvidingStopped -= View.RemoveOutline;
     }
 
     [Inject]
-    private void Construct(IGrid grid)
+    private void Construct()
     {
         PipePiecePresenter[] pipePiecePresenters = GetComponentsInChildren<PipePiecePresenter>();
 
@@ -51,7 +57,5 @@ public class PipeTemplatePresenter : Presenter
         }
 
         Init(new PipeTemplate(pipePieces, _fuelType));
-
-        grid.Place(Model);
     }
 }

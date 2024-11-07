@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa29e6aab07a55e47a98e6b3422c29ed, type: 3}
+  m_Name: Level10Setup
+  m_EditorClassIdentifier: 
+  _ships:
+  - {fileID: 11400000, guid: 694fd2fe0e106144586d9b49e526591d, type: 2}
+  - {fileID: 11400000, guid: 694fd2fe0e106144586d9b49e526591d, type: 2}
+  - {fileID: 11400000, guid: 694fd2fe0e106144586d9b49e526591d, type: 2}
+  - {fileID: 11400000, guid: 694fd2fe0e106144586d9b49e526591d, type: 2}
+  - {fileID: 11400000, guid: 694fd2fe0e106144586d9b49e526591d, type: 2}
+  - {fileID: 11400000, guid: 69a1e13ae2045dd45a0468c9edf9fc8d, type: 2}
+  - {fileID: 11400000, guid: 11e460cdf9128b44b8b8c4be90a47abe, type: 2}
+  _tanks:
+  - _size: 6
+    _fuelType: 1
+  - _size: 3
+    _fuelType: 1
+  - _size: 2
+    _fuelType: 1
+  - _size: 2
+    _fuelType: 1
+  - _size: 6
+    _fuelType: 2
+  - _size: 3
+    _fuelType: 2
+  - _size: 2
+    _fuelType: 2
+  - _size: 2
+    _fuelType: 2
+  - _size: 6
+    _fuelType: 3
+  - _size: 6
+    _fuelType: 3
+  _timeInSeconds: 420

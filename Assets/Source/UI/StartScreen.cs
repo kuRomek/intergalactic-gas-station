@@ -9,24 +9,23 @@ public class StartScreen : UIMenu
     [SerializeField] private Button _playButton;
     [SerializeField] private Button _infiniteGameButton;
     [SerializeField] private Button _settingButton;
+    [SerializeField] private Image _lockInfiniteGame;
     [SerializeField] private UIMenu _levelSelection;
     [SerializeField] private UIMenu _settings;
 
-    private Color _lockedButtonColor = new Color(58f / 256f, 13f / 256f, 13f / 256f);
-
     private void Awake()
     {
-        TextMeshProUGUI buttonText = _infiniteGameButton.GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI buttonText = _infiniteGameButton.GetComponentInChildren<TextMeshProUGUI>(true);
 
         if (YandexGame.savesData.IsInfiniteGameUnlocked)
         {
-            buttonText.color = Color.white;
-            buttonText.text = "Infinite\nGame";
+            buttonText.gameObject.SetActive(true);
+            _lockInfiniteGame.gameObject.SetActive(false);
         }
         else
         {
-            buttonText.color = _lockedButtonColor;
-            buttonText.text = "Locked";
+            buttonText.gameObject.SetActive(false);
+            _lockInfiniteGame.gameObject.SetActive(true);
         }
 
         Time.timeScale = 1f;

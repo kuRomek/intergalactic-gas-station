@@ -9,4 +9,6 @@ public interface IGrid
     int[] CalculateGridPosition(Vector3 worldPosition);
 
     void Place(PipeTemplate pipeTemplate);
+
+    void RemoveTemplate(PipeTemplate pipeTemplate);
 }

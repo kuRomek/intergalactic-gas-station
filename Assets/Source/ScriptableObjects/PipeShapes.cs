@@ -28,7 +28,7 @@ public class PipeShapes : ScriptableObject
 
             int noConnectionIndex = Array.IndexOf(entries, false);
 
-            rotation = (entries.Length - 1f - noConnectionIndex) * 90f;
+            rotation = 180f + (entries.Length - 1f - noConnectionIndex) * 90f;
         }
 
         if (entriesCount == 2)
@@ -39,7 +39,7 @@ public class PipeShapes : ScriptableObject
                 {
                     mesh = _shapes[1];
 
-                    rotation = 90f - 90f * i;
+                    rotation = 180f - 90f * i;
                 }
             }
 
@@ -47,7 +47,7 @@ public class PipeShapes : ScriptableObject
             {
                 mesh = _shapes[1];
 
-                rotation = 180;
+                rotation = -90f;
             }
         }
 
