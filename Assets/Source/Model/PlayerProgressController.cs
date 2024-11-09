@@ -1,8 +1,13 @@
 using YG;
 
-public class PlayerProgress
+public static class PlayerProgressController
 {
-    public void CompleteLevel(int levelNumber)
+    public static void RemoveTutorialOnLevel(int levelNumber)
+    {
+        YandexGame.savesData.ShownTutorials[levelNumber - 1] = true;
+    }
+
+    public static void CompleteLevel(int levelNumber)
     {
         int levelIndex = levelNumber - 1;
 
@@ -16,7 +21,7 @@ public class PlayerProgress
         YandexGame.SaveProgress();
     }
 
-    public void UpdateInfiniteGameRecord(float recordTime)
+    public static void UpdateInfiniteGameRecord(float recordTime)
     {
         if (YandexGame.savesData.InfiniteGameRecord > recordTime)
             return;

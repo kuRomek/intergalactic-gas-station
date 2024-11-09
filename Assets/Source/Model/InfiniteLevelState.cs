@@ -26,12 +26,14 @@ public class InfiniteLevelState : LevelState
         LetShipOnStation();
         LetShipOnStation();
         LetShipOnStation();
+
+        _gridChanger.Change();
     }
 
     protected override void OnStationPlaceFreed(Ship ship)
     {
         AddShipToQueue();
-        LetShipOnStation();
+        base.OnStationPlaceFreed(ship);
 
         if (ship.Tanks.Count == 1)
             Timer.AddTime(10f);
@@ -48,7 +50,7 @@ public class InfiniteLevelState : LevelState
         if (_randomShipGenerator.GeneratedShips % ShipCountForNewTanks == 0)
             _randomTankGenerator.GenerateTanks();
 
-        if (_randomShipGenerator.GeneratedShips % ShipCountForNewGrid == 0)
+        if ((RefueledShipCount + 1) % ShipCountForNewGrid == 0)
             _gridChanger.Change();
     }
 }

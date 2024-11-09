@@ -696,6 +696,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pipeDividers: {fileID: 1520506961}
+--- !u!114 &217282990 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1759850821280185031, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+  m_PrefabInstance: {fileID: 405165836}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744e3ac32d443f94fbf8d57f1769d57f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &252747719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1277,14 +1288,6 @@ PrefabInstance:
     - target: {fileID: 321631887456608417, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
       propertyPath: m_Name
       value: LevelCanvasUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 2271998871720277654, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 3924009996357700822, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-      propertyPath: m_text
-      value: Level 6
       objectReference: {fileID: 0}
     - target: {fileID: 9188771171205885952, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
       propertyPath: m_Pivot.x
@@ -4018,6 +4021,7 @@ MonoBehaviour:
   _pauseWindow: {fileID: 405165839}
   _pauseButton: {fileID: 405165838}
   _timerView: {fileID: 405165837}
+  _shipCounter: {fileID: 217282990}
   _tankContainerShifter: {fileID: 332542096}
   _gridChanger: {fileID: 0}
 --- !u!4 &1083754571

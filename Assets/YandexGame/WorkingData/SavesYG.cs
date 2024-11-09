@@ -12,12 +12,18 @@
         // Ваши сохранения
 
         public bool[] OpenLevels;
+        public bool[] ShownTutorials;
         public bool IsInfiniteGameUnlocked = false;
         public float InfiniteGameRecord = 0f;
 
         // Вы можете выполнить какие то действия при загрузке сохранений
         public SavesYG()
         {
+            ShownTutorials = new bool[10];
+
+            for (int i = 1; i < ShownTutorials.Length; i++)
+                ShownTutorials[i] = false;
+
             OpenLevels = new bool[10];
             OpenLevels[0] = true;
             

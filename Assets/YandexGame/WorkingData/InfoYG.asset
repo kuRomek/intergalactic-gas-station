@@ -246,6 +246,37 @@ MonoBehaviour:
     it: []
     de: []
     hi: []
+  fontsTMP:
+    defaultFont:
+    - {fileID: 11400000, guid: 213db201ac525814091129e1be3b1487, type: 2}
+    ru:
+    - {fileID: 11400000, guid: 9e42fce3fe146044483d91a466f3f58f, type: 2}
+    en: []
+    tr: []
+    az: []
+    be: []
+    he: []
+    hy: []
+    ka: []
+    et: []
+    fr: []
+    kk: []
+    ky: []
+    lt: []
+    lv: []
+    ro: []
+    tg: []
+    tk: []
+    uk: []
+    uz: []
+    es: []
+    pt: []
+    ar: []
+    id: []
+    ja: []
+    it: []
+    de: []
+    hi: []
   fontsSizeCorrect:
     ru: 
     en: 

@@ -767,6 +767,7 @@ MonoBehaviour:
   _pauseWindow: {fileID: 730710020}
   _pauseButton: {fileID: 730710019}
   _timerView: {fileID: 730710018}
+  _shipCounter: {fileID: 321676935}
   _tankContainerShifter: {fileID: 332542096}
   _gridChanger: {fileID: 0}
 --- !u!4 &285272638
@@ -916,6 +917,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 317556852}
   m_Mesh: {fileID: -6934093411374482582, guid: c6dcb6f996151434bbf766bd4d0096c2, type: 3}
+--- !u!114 &321676935 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1759850821280185031, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+  m_PrefabInstance: {fileID: 730710017}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744e3ac32d443f94fbf8d57f1769d57f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &332542094
 GameObject:
   m_ObjectHideFlags: 0
@@ -2235,9 +2247,33 @@ PrefabInstance:
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+      propertyPath: en
+      value: Level 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+      propertyPath: ru
+      value: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 4"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+      propertyPath: tr
+      value: Seviye 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+      propertyPath: text
+      value: Level 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+      propertyPath: processTranslateLabel
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3924009996357700822, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
       propertyPath: m_text
       value: Level 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8855112712825022956, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+      propertyPath: m_text
+      value: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 4"
       objectReference: {fileID: 0}
     - target: {fileID: 9188771171205885952, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
       propertyPath: m_Pivot.x

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,10 +15,9 @@ public class LevelState : IActivatable, IUpdatable
     private List<Ship> _shipsQueue;
     private Station _station;
     private Timer _timer;
-    private PlayerProgress _playerProgress;
     private bool _isShowingFullscreenAd = false;
     private float _secondsBeforeAd = 1f;
-    private float _remainingSecondsBeforeAd = 1f;
+    private float _remainingSecondsBeforeAd = 1.0f;
 
     public LevelState(UIMenu levelCompleteWindow, UIMenu loseWindow, UIMenu pauseWindow, Button pauseButton, Station station, List<Ship> shipsQueue, Timer timer)
     {
@@ -28,8 +28,11 @@ public class LevelState : IActivatable, IUpdatable
         _station = station;
         _shipsQueue = shipsQueue;
         _timer = timer;
-        _playerProgress = new PlayerProgress();
+
+        ShipCountOnLevel = _shipsQueue.Count;
     }
+
+    public event Action ShipRefueled;
 
     public void Enable()
     {
@@ -62,6 +65,8 @@ public class LevelState : IActivatable, IUpdatable
         }
     }
 
+    public int ShipCountOnLevel { get; private set; }
+    public int RefueledShipCount { get; private set; } = 0;
     public bool IsGameOver { get; private set; } = false;
     public bool IsPaused { get; private set; } = Time.timeScale == 0f;
     protected List<Ship> ShipsQueue => _shipsQueue;
@@ -84,7 +89,9 @@ public class LevelState : IActivatable, IUpdatable
 
     protected virtual void OnStationPlaceFreed(Ship ship)
     {
+        RefueledShipCount++;
         LetShipOnStation();
+        ShipRefueled?.Invoke();
     }
 
     protected void LetShipOnStation()
@@ -94,12 +101,12 @@ public class LevelState : IActivatable, IUpdatable
             _station.Arrive(_shipsQueue[0]);
             _shipsQueue.RemoveAt(0);
         }
-        else if (_station.ActiveShipCount == 0)
+        else if (RefueledShipCount == ShipCountOnLevel)
         {
             _timer.Stop();
             _levelCompleteWindow.Show();
             _pauseButton.gameObject.SetActive(false);
-            _playerProgress.CompleteLevel(SceneManager.GetActiveScene().buildIndex);
+            PlayerProgressController.CompleteLevel(SceneManager.GetActiveScene().buildIndex);
             _isShowingFullscreenAd = true;
         }
     }
@@ -111,7 +118,7 @@ public class LevelState : IActivatable, IUpdatable
         _pauseButton.gameObject.SetActive(false);
 
         if (this is InfiniteLevelState)
-            _playerProgress.UpdateInfiniteGameRecord(_timer.SecondsPassed);
+            PlayerProgressController.UpdateInfiniteGameRecord(_timer.SecondsPassed);
 
         _isShowingFullscreenAd = true;
     }

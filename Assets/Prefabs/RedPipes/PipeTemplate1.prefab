@@ -298,6 +298,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5229943130314846082}
     m_Modifications:
+    - target: {fileID: 561403532670066728, guid: 964514638a0f5d843a4a1a97b4cf2a7d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7addbf1b956eec24e821b75fb51df055, type: 2}
     - target: {fileID: 1693825517338041159, guid: 964514638a0f5d843a4a1a97b4cf2a7d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -360,6 +364,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5229943130314846082}
     m_Modifications:
+    - target: {fileID: 3187469928584079469, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7addbf1b956eec24e821b75fb51df055, type: 2}
     - target: {fileID: 3980293060412164536, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
       propertyPath: m_Name
       value: PipeStraight (2)
@@ -422,6 +430,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5229943130314846082}
     m_Modifications:
+    - target: {fileID: 3187469928584079469, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7addbf1b956eec24e821b75fb51df055, type: 2}
     - target: {fileID: 3980293060412164536, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
       propertyPath: m_Name
       value: PipeStraight (1)
@@ -484,6 +496,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5229943130314846082}
     m_Modifications:
+    - target: {fileID: 3187469928584079469, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7addbf1b956eec24e821b75fb51df055, type: 2}
     - target: {fileID: 3980293060412164536, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
       propertyPath: m_Name
       value: PipeStraight

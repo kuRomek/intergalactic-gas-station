@@ -62,19 +62,22 @@ public class FuelProvider : IActivatable
 
     public void StopRefueling()
     {
-        if (_path != null)
+        if (_isRefueling == true)
         {
-            foreach (PipeTemplate pipeTemplate in _path)
-                pipeTemplate.OnProvidingStopped();
+            if (_path != null)
+            {
+                foreach (PipeTemplate pipeTemplate in _path)
+                    pipeTemplate.OnProvidingStopped();
+            }
+
+            _path = null;
+
+            _softlockHandler.RemoveSoftlock();
+
+            _isRefueling = false;
+
+            TryRefuel();
         }
-
-        _path = null;
-
-        _softlockHandler.RemoveSoftlock();
-
-        _isRefueling = false;
-
-        TryRefuel();
     }
 
     private bool TryRefuel(Ship ship)

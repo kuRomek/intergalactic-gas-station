@@ -15,6 +15,10 @@ public class StartScreen : UIMenu
 
     private void Awake()
     {
+#if UNITY_EDITOR
+        YandexGame.SwitchLanguage(YandexGame.savesData.language);
+#endif
+
         TextMeshProUGUI buttonText = _infiniteGameButton.GetComponentInChildren<TextMeshProUGUI>(true);
 
         if (YandexGame.savesData.IsInfiniteGameUnlocked)

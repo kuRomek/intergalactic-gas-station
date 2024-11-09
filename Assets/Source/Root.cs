@@ -19,6 +19,7 @@ public class Root : MonoBehaviour
     [SerializeField] private UIMenu _pauseWindow;
     [SerializeField] private Button _pauseButton;
     [SerializeField] private TimerView _timerView;
+    [SerializeField] private ShipCounter _shipCounter;
     [SerializeField] private TankContainerShifter _tankContainerShifter;
     [SerializeField] private GridChanger _gridChanger;
     
@@ -57,15 +58,34 @@ public class Root : MonoBehaviour
             Timer timer = new Timer(_levelSetup.TimeInSeconds);
             _timerView.Init(timer);
 
-            _levelState = new NonInfiniteLevelState(_levelCompleteWindow, _loseWindow, _pauseWindow, _pauseButton, _station, shipsQueue, timer);
+            _levelState = new NonInfiniteLevelState(
+                _levelCompleteWindow, 
+                _loseWindow, 
+                _pauseWindow, 
+                _pauseButton, 
+                _station, 
+                shipsQueue, 
+                timer);
         }
         else
         {
             Timer timer = new Timer(120);
             _timerView.Init(timer);
 
-            _levelState = new InfiniteLevelState(_levelCompleteWindow, _loseWindow, _pauseWindow, _pauseButton, tankContainer, _shipsWaitingPlace.position, _presenterFactory, _gridChanger, _station, timer);
+            _levelState = new InfiniteLevelState(
+                _levelCompleteWindow, 
+                _loseWindow, 
+                _pauseWindow, 
+                _pauseButton, 
+                tankContainer, 
+                _shipsWaitingPlace.position, 
+                _presenterFactory, 
+                _gridChanger, 
+                _station, 
+                timer);
         }
+
+        _shipCounter.Init(_levelState);
 
         _inputController.Init(_levelState);
         _inputController.enabled = true;

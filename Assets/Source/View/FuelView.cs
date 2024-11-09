@@ -24,7 +24,11 @@ public class FuelView : View
         _fuelIndicator.minValue = 0;
         _fuelIndicator.maxValue = _tank.Capacity;
         _fuelIndicator.value = _tank.CurrentAmount;
-        _backgroundImage.color = _fuelCollors.GetMaterialOf(_tank.FuelType).color;
+
+        if (_tank is ShipTank)
+            _backgroundImage.color = _fuelCollors.GetMaterialOf(_tank.FuelType).color * 2f;
+        else
+            _backgroundImage.color = _fuelCollors.GetMaterialOf(_tank.FuelType).color;
 
         RectTransform sliderRect = _fuelIndicator.GetComponent<RectTransform>();
 

@@ -1261,6 +1261,7 @@ MonoBehaviour:
   _pauseWindow: {fileID: 1671625892750235882}
   _pauseButton: {fileID: 1671625892750235881}
   _timerView: {fileID: 1671625892750235880}
+  _shipCounter: {fileID: 1862720209}
   _tankContainerShifter: {fileID: 332542096}
   _gridChanger: {fileID: 1949390183}
 --- !u!4 &393779332
@@ -5935,6 +5936,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860866780}
   m_Mesh: {fileID: -6934093411374482582, guid: c6dcb6f996151434bbf766bd4d0096c2, type: 3}
+--- !u!114 &1862720209 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2502164358445175553, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
+  m_PrefabInstance: {fileID: 1671625892750235879}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744e3ac32d443f94fbf8d57f1769d57f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1949390182
 GameObject:
   m_ObjectHideFlags: 0
@@ -6682,6 +6694,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1491783252947106383, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1491783252947106383, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1491783252947106383, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -40
+      objectReference: {fileID: 0}
     - target: {fileID: 2689358346152615760, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
@@ -6771,7 +6795,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4474644468428483433, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
+    - {fileID: 9120994619016658803, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
