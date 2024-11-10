@@ -10,7 +10,7 @@ public class PipePiece : Transformable, IGridMember
     }
 
     public event Action<bool[]> ConnectionIsEstablishing;
-    public event Action OriginalViewRecovering;
+    public event Action RemovedFromGrid;
 
     public void PlaceOnGrid(IGrid grid)
     {
@@ -21,13 +21,13 @@ public class PipePiece : Transformable, IGridMember
     public Vector3 LocalPosition { get; private set; }
     public int[] GridPosition { get; private set; }
 
-    public void EstablishVisualConnection(bool[] connections)
+    public void EstablishConnection(bool[] connections)
     {
         ConnectionIsEstablishing?.Invoke(connections);
     }
 
-    public void RecoverOriginalView()
+    public void RemoveFromGrid()
     {
-        OriginalViewRecovering?.Invoke();
+        RemovedFromGrid?.Invoke();
     }
 }

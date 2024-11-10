@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using YG;
 
 public class Tutorial : MonoBehaviour
 {
@@ -11,10 +12,8 @@ public class Tutorial : MonoBehaviour
     {
         _levelNumber = SceneManager.GetActiveScene().buildIndex;
 
-#if UNITY_EDITOR == false
         if (YandexGame.savesData.ShownTutorials[_levelNumber - 1] == true)
             gameObject.SetActive(false);
-#endif
     }
 
     private void OnEnable()

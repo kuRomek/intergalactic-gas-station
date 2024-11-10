@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public class FuelProvider : IActivatable
 {
     private Grid _grid;
+    private Pathfinder _pathfinder;
     private Station _station;
     private TankContainer _tanks;
     private SoftlockHandler _softlockHandler;
@@ -14,6 +14,7 @@ public class FuelProvider : IActivatable
     public FuelProvider(Grid grid, Station station, TankContainer tankContainer)
     {
         _grid = grid;
+        _pathfinder = new Pathfinder(grid);
         _station = station;
         _tanks = tankContainer;
         _softlockHandler = new SoftlockHandler(_tanks, _station);
@@ -46,7 +47,7 @@ public class FuelProvider : IActivatable
                 if (_station.Ships[i].Position != _station.RefuelingPoints[i].position)
                     continue;
 
-                if (DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType))
+                if (_pathfinder.DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType, out _path))
                 {
                     if (TryRefuel(_station.Ships[i]) == true)
                         break;
@@ -97,89 +98,5 @@ public class FuelProvider : IActivatable
             pipe.OnProvidingFuel();
 
         return true;
-    }
-
-    private bool DFSToFuelSource(IGridMember gridCell, Fuel fuel)
-    {
-        if (gridCell == null) 
-            return false;
-
-        PipeTemplate pipeTemplate = gridCell as PipeTemplate;
-
-        if (pipeTemplate.ConnectedTemplates.Count == 0 || 
-            (pipeTemplate.FuelType != fuel && pipeTemplate.FuelType != Fuel.Default))
-            return false;
-
-        _path = new List<PipeTemplate>();
-        List<PipeTemplate> checkedTemplates = new List<PipeTemplate>();
-        Stack<PipeTemplate> templatesToCheck = new Stack<PipeTemplate>();
-
-        templatesToCheck.Push(pipeTemplate);
-        _path.Add(pipeTemplate);
-
-        PipeTemplate checkingTemplate;
-
-        do
-        {
-            checkingTemplate = templatesToCheck.Pop();
-            _path.Add(checkingTemplate);
-
-            checkedTemplates.Add(checkingTemplate);
-
-            foreach (PipeTemplate connectedTemplate in checkingTemplate.ConnectedTemplates)
-            {
-                if (templatesToCheck.Contains(connectedTemplate) == false &&
-                    checkedTemplates.Contains(connectedTemplate) == false && 
-                    (connectedTemplate.FuelType == fuel || connectedTemplate.FuelType == Fuel.Default))
-                {
-                    templatesToCheck.Push(connectedTemplate);
-
-                    if (connectedTemplate == _grid.FuelSourcePoint)
-                    {
-                        checkingTemplate = templatesToCheck.Pop();
-                        _path.Add(checkingTemplate);
-                        FormPath(pipeTemplate, templatesToCheck);
-                        return true;
-                    }
-                }
-            }
-        }
-        while (templatesToCheck.Count > 0);
-
-        _path = null;
-
-        return false;
-    }
-
-    private List<PipeTemplate> FormPath(PipeTemplate refuelingPoint, Stack<PipeTemplate> templatesToCheck)
-    {
-        int removedInIteration;
-        List<PipeTemplate> removedTemplates = new List<PipeTemplate>(templatesToCheck);
-        List<PipeTemplate> newPath = _path.Except(removedTemplates).ToList();
-        _path = new List<PipeTemplate>(newPath);
-
-        do
-        {
-            removedInIteration = 0;
-
-            foreach (PipeTemplate template in _path)
-            {
-                if (template != _grid.FuelSourcePoint &&
-                    template != refuelingPoint)
-                {
-                    if (template.ConnectedTemplates.Except(removedTemplates).Count() == 1)
-                    {
-                        removedTemplates.Add(template);
-                        newPath.Remove(template);
-                        removedInIteration++;
-                    }
-                }
-            }
-
-            _path = new List<PipeTemplate>(newPath);
-        }
-        while (removedInIteration != 0);
-
-        return _path;
     }
 }

@@ -5,6 +5,7 @@ public static class PlayerProgressController
     public static void RemoveTutorialOnLevel(int levelNumber)
     {
         YandexGame.savesData.ShownTutorials[levelNumber - 1] = true;
+        YandexGame.SaveProgress();
     }
 
     public static void CompleteLevel(int levelNumber)

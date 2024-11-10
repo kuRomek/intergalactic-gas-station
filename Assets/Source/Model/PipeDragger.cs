@@ -31,18 +31,12 @@ public class PipeDragger : IActivatable
     {
         _draggingPipeTemplate = pipeTemplate;
 
-        _grid.RemoveTemplate(pipeTemplate);
-        pipeTemplate.RecoverOriginalView();
+        _grid.Remove(pipeTemplate);
 
-        List<PipeTemplate> connectedTemplates = new List<PipeTemplate>();
-
-        connectedTemplates.AddRange(pipeTemplate.ConnectedTemplates);
+        List<PipeTemplate> connectedTemplates = new List<PipeTemplate>(pipeTemplate.ConnectedTemplates);
 
         foreach (PipeTemplate connectedTemplate in connectedTemplates)
-        {
             pipeTemplate.Disconnect(connectedTemplate);
-            _grid.CheckConnections(connectedTemplate);
-        }
 
         _draggingPipeTemplate.MoveTo(_draggingPipeTemplate.Position - Vector3.forward);
 

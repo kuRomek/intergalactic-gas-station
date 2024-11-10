@@ -9,12 +9,12 @@ public class PipePiecePresenter : Presenter, IActivatable
     public void Enable()
     {
         Model.ConnectionIsEstablishing += View.ChangeView;
-        Model.OriginalViewRecovering += View.ChengeToOriginalView;
+        Model.RemovedFromGrid += View.ChengeToOriginalView;
     }
 
     public void Disable()
     {
         Model.ConnectionIsEstablishing -= View.ChangeView;
-        Model.OriginalViewRecovering -= View.ChengeToOriginalView;
+        Model.RemovedFromGrid -= View.ChengeToOriginalView;
     }
 }

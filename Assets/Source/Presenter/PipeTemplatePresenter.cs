@@ -32,7 +32,7 @@ public class PipeTemplatePresenter : Presenter
 
     private void OnDisable()
     {
-        _grid.RemoveTemplate(Model);
+        _grid.Remove(Model);
 
         Model.PlacedOnGrid -= View.PlaySoundOnPlaced;
         Model.ProvidingFuel -= View.SetOutline;
