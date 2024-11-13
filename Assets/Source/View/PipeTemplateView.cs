@@ -56,8 +56,6 @@ public class PipeTemplateView : View
             StopCoroutine(_changingOutlineWidth);
 
         _changingOutlineWidth = StartCoroutine(ChangeOutlineWidth(0f));
-
-        _outline.enabled = false;
     }
 
     public void SetColor(Fuel fuel)
@@ -101,5 +99,8 @@ public class PipeTemplateView : View
 
         foreach (Renderer pieceRenderer in _piecesRenderers)
             pieceRenderer.material.color = endColor;
+
+        if (endWidth == 0f)
+            _outline.enabled = false;
     }
 }

@@ -42,7 +42,8 @@ public class Pathfinder
             foreach (PipeTemplate connectedTemplate in checkingTemplate.ConnectedTemplates)
             {
                 if (templatesToCheck.Contains(connectedTemplate) == false &&
-                    checkedTemplates.Contains(connectedTemplate) == false)
+                    checkedTemplates.Contains(connectedTemplate) == false &&
+                    (connectedTemplate.FuelType == Fuel.Default || connectedTemplate.FuelType == fuel))
                 {
                     templatesToCheck.Push(connectedTemplate);
 

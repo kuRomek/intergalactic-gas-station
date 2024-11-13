@@ -40,6 +40,7 @@ public class LevelState : IActivatable, IUpdatable
         _pauseButton.onClick.AddListener(Pause);
         _timer.Expired += OnTimerExpired;
         _station.PlaceFreed += OnStationPlaceFreed;
+        YandexGame.onHideWindowGame += Pause;
     }
 
     public void Disable()
@@ -48,6 +49,7 @@ public class LevelState : IActivatable, IUpdatable
         _pauseButton.onClick.RemoveListener(Pause);
         _timer.Expired -= OnTimerExpired;
         _station.PlaceFreed -= OnStationPlaceFreed;
+        YandexGame.onHideWindowGame -= Pause;
     }
 
     public void Update(float deltaTime)

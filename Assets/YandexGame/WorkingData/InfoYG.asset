@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: InfoYG
   m_EditorClassIdentifier: 
   scopes: 1
-  playerPhotoSize: 0
+  playerPhotoSize: 1
   autoGameReadyAPI: 1
   playerInfoSimulation:
     authorized: 1
     isMobile: 0
     language: ru
-    name: Player this
+    name: default
     uniqueID: 000
     photo: https://justplaygames.ru/public/icon_player.png
     payingStatus: paying

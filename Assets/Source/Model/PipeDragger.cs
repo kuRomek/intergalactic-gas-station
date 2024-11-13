@@ -1,16 +1,19 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PipeDragger : IActivatable
 {
     private PlayerInputController _input;
     private Grid _grid;
+    private FuelProvider _fuelProvider;
     private PipeTemplate _draggingPipeTemplate = null;
 
-    public PipeDragger(PlayerInputController playerInputController, Grid grid) 
+    public PipeDragger(PlayerInputController playerInputController, Grid grid, FuelProvider fuelProvider) 
     {
         _input = playerInputController;
         _grid = grid;
+        _fuelProvider = fuelProvider;
     }
 
     public void Enable()
@@ -29,19 +32,23 @@ public class PipeDragger : IActivatable
 
     private void OnDragStarted(PipeTemplate pipeTemplate)
     {
-        _draggingPipeTemplate = pipeTemplate;
+        if (_draggingPipeTemplate == null && 
+            (_fuelProvider.Path == null || _fuelProvider.Path.Contains(pipeTemplate) == false))
+        {
+            _draggingPipeTemplate = pipeTemplate;
 
-        _grid.Remove(pipeTemplate);
+            _grid.Remove(pipeTemplate);
 
-        List<PipeTemplate> connectedTemplates = new List<PipeTemplate>(pipeTemplate.ConnectedTemplates);
+            List<PipeTemplate> connectedTemplates = new List<PipeTemplate>(pipeTemplate.ConnectedTemplates);
 
-        foreach (PipeTemplate connectedTemplate in connectedTemplates)
-            pipeTemplate.Disconnect(connectedTemplate);
+            foreach (PipeTemplate connectedTemplate in connectedTemplates)
+                pipeTemplate.Disconnect(connectedTemplate);
 
-        _draggingPipeTemplate.MoveTo(_draggingPipeTemplate.Position - Vector3.forward);
+            _draggingPipeTemplate.MoveTo(_draggingPipeTemplate.Position - Vector3.forward);
 
-        foreach (PipePiece pipe in _draggingPipeTemplate.PipePieces)
-            pipe.MoveTo(pipe.Position - Vector3.forward);
+            foreach (PipePiece pipe in _draggingPipeTemplate.PipePieces)
+                pipe.MoveTo(pipe.Position - Vector3.forward);
+        }
     }
 
     private void OnDragging(Vector3 delta)

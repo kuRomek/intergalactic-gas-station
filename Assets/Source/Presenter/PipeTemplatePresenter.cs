@@ -24,7 +24,7 @@ public class PipeTemplatePresenter : Presenter
     private void OnEnable()
     {
         Model.PlacedOnGrid += View.PlaySoundOnPlaced;
-        Model.ProvidingFuel += View.SetOutline;
+        Model.Providing += View.SetOutline;
         Model.ProvidingStopped += View.RemoveOutline;
 
         _grid.Place(Model);
@@ -35,7 +35,7 @@ public class PipeTemplatePresenter : Presenter
         _grid.Remove(Model);
 
         Model.PlacedOnGrid -= View.PlaySoundOnPlaced;
-        Model.ProvidingFuel -= View.SetOutline;
+        Model.Providing -= View.SetOutline;
         Model.ProvidingStopped -= View.RemoveOutline;
     }
 

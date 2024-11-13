@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -16,11 +15,26 @@ public class SettingsWindow : UIMenu
     [SerializeField] private Slider _soundVolumeSlider;
     [SerializeField] private Slider _musicVolumeSlider;
     [SerializeField] private Settings _settings;
+    [SerializeField] private RectTransform _athorizedView;
+    [SerializeField] private RectTransform _notAthorizedView;
 
     private void Awake()
     {
+        if (YandexGame.auth == true)
+        {
+            _athorizedView.gameObject.SetActive(true);
+            _notAthorizedView.gameObject.SetActive(false);
+        }
+        else
+        {
+            _athorizedView.gameObject.SetActive(false);
+            _notAthorizedView.gameObject.SetActive(true);
+        }
+
         _soundVolumeSlider.value = _settings.SoundVolume;
         _musicVolumeSlider.value = _settings.MusicVolume;
+
+        _language.text = _settings.AvailableLanguages[YandexGame.lang];
     }
 
     private void OnEnable()

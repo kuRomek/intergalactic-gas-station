@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 0
+  outlineMode: 1
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 2
   precomputeOutline: 1
@@ -388,6 +388,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9123460717902726647, guid: ac8ba0f4904e4854e9240037cda65592, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7ae3e96f835b73b4487205876f01afee, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -406,6 +410,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2512476354847366719}
     m_Modifications:
+    - target: {fileID: 3187469928584079469, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7ae3e96f835b73b4487205876f01afee, type: 2}
     - target: {fileID: 3980293060412164536, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
       propertyPath: m_Name
       value: PipeStraight
@@ -468,6 +476,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2512476354847366719}
     m_Modifications:
+    - target: {fileID: 3187469928584079469, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7ae3e96f835b73b4487205876f01afee, type: 2}
     - target: {fileID: 3980293060412164536, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
       propertyPath: m_Name
       value: PipeStraight (2)
@@ -530,6 +542,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2512476354847366719}
     m_Modifications:
+    - target: {fileID: 3187469928584079469, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7ae3e96f835b73b4487205876f01afee, type: 2}
     - target: {fileID: 3980293060412164536, guid: 51e47f9920541ea4192ecab74e0c4621, type: 3}
       propertyPath: m_Name
       value: PipeStraight (1)

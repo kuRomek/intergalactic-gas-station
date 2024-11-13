@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -37,7 +36,8 @@ public class Station : IActivatable
 
     public Ship[] Ships => _ships;
     public Transform[] RefuelingPoints => _refuelingPoints;
-    public int ActiveShipCount => _ships.Where(ship => ship != null).Count();
+    public FuelProvider FuelProvider => _fuelProvider;
+    public int ActiveShipCount { get; private set; } = 0;
 
     public void Arrive(Ship ship)
     {
@@ -57,6 +57,8 @@ public class Station : IActivatable
         _ships[randomSpot] = ship;
         ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
 
+        ActiveShipCount++;
+
         _fuelProvider.RemoveSoftlock();
 
         ship.TankRefueled += _fuelProvider.StopRefueling;
@@ -71,6 +73,8 @@ public class Station : IActivatable
         ship.StoppedAtRefuelingPoint -= _fuelProvider.TryRefuel;
 
         _ships[Array.IndexOf(_ships, ship)] = null;
+
+        ActiveShipCount--;
 
         PlaceFreed?.Invoke(ship);
     }

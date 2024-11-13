@@ -5938,6 +5938,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: GridLevel7
       objectReference: {fileID: 0}
+    - target: {fileID: 544656252423847098, guid: 382661ad1bd52de469d8e272017645aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197748720231113532, guid: 382661ad1bd52de469d8e272017645aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391043055673068390, guid: 382661ad1bd52de469d8e272017645aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3838083536563334373, guid: 382661ad1bd52de469d8e272017645aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932190645983443751, guid: 382661ad1bd52de469d8e272017645aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6712988955356344921, guid: 382661ad1bd52de469d8e272017645aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7388257112050053612, guid: 382661ad1bd52de469d8e272017645aa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

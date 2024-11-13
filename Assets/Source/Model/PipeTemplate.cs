@@ -16,7 +16,7 @@ public class PipeTemplate : Transformable, IGridMember
     }
 
     public event Action PlacedOnGrid;
-    public event Action ProvidingFuel;
+    public event Action Providing;
     public event Action ProvidingStopped;
 
     public IReadOnlyCollection<PipePiece> PipePieces => _pipePieces;
@@ -25,12 +25,12 @@ public class PipeTemplate : Transformable, IGridMember
     public Fuel FuelType { get; }
     public int[] GridPosition { get; private set; } = null;
 
-    public void OnProvidingFuel()
+    public void ProvideFuel()
     {
-        ProvidingFuel?.Invoke();
+        Providing?.Invoke();
     }
 
-    public void OnProvidingStopped()
+    public void StopProvidingFuel()
     {
         ProvidingStopped?.Invoke();
     }

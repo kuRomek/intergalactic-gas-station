@@ -1,4 +1,5 @@
 using UnityEngine;
+using YG;
 
 public class Audio : MonoBehaviour
 {
@@ -16,12 +17,16 @@ public class Audio : MonoBehaviour
     {
         _settings.SoundVolumeChanged += SetSoundVolume;
         _settings.MusicVolumeChanged += SetMusicVolume;
+        YandexGame.onHideWindowGame += Mute;
+        YandexGame.onShowWindowGame += Unmute;
     }
 
     private void OnDisable()
     {
         _settings.SoundVolumeChanged -= SetSoundVolume;
         _settings.MusicVolumeChanged -= SetMusicVolume;
+        YandexGame.onHideWindowGame -= Mute;
+        YandexGame.onShowWindowGame -= Unmute;
     }
 
     public void PlaySound(AudioClip audioClip)
@@ -38,5 +43,17 @@ public class Audio : MonoBehaviour
     private void SetMusicVolume()
     {
         _musicAudioSource.volume = _settings.MusicVolume;
+    }
+
+    private void Mute()
+    {
+        _soundAudioSource.mute = true;
+        _musicAudioSource.mute = true;
+    }
+
+    private void Unmute()
+    {
+        _soundAudioSource.mute = false;
+        _musicAudioSource.mute = false;
     }
 }

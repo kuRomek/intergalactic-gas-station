@@ -90,7 +90,7 @@ public class Root : MonoBehaviour
         _inputController.Init(_levelState);
         _inputController.enabled = true;
 
-        _pipeDragger = new PipeDragger(_inputController, _grid);
+        _pipeDragger = new PipeDragger(_inputController, _grid, _station.FuelProvider);
     }
 
     private void OnEnable()

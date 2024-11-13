@@ -32,6 +32,8 @@ public class FuelProvider : IActivatable
         _tanks.StoppedShifting -= TryRefuel;
     }
 
+    public IReadOnlyList<PipeTemplate> Path => _path;
+
     public void TryRefuel()
     {
         if (_isRefueling)
@@ -50,7 +52,14 @@ public class FuelProvider : IActivatable
                 if (_pathfinder.DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType, out _path))
                 {
                     if (TryRefuel(_station.Ships[i]) == true)
+                    {
                         break;
+                    }
+                    else
+                    {
+                        _path = null;
+                        _softlockHandler.RemoveSoftlock();
+                    }
                 }
             }
             catch (Exception exception) when (exception is InvalidOperationException || exception is ArgumentException || exception is NullReferenceException)
@@ -65,17 +74,13 @@ public class FuelProvider : IActivatable
     {
         if (_isRefueling == true)
         {
-            if (_path != null)
-            {
-                foreach (PipeTemplate pipeTemplate in _path)
-                    pipeTemplate.OnProvidingStopped();
-            }
+            foreach (PipeTemplate pipeTemplate in _path)
+                pipeTemplate.StopProvidingFuel();
 
             _path = null;
 
-            _softlockHandler.RemoveSoftlock();
-
             _isRefueling = false;
+            _softlockHandler.RemoveSoftlock();
 
             TryRefuel();
         }
@@ -89,13 +94,13 @@ public class FuelProvider : IActivatable
         if (requestedAmount == 0)
             return false;
 
+        _isRefueling = true;
+
         _tanks.Peek().TakeFuel(requestedAmount, out float resultAmount);
         ship.Refuel(resultAmount, requestedFuel);
 
-        _isRefueling = true;
-
         foreach (PipeTemplate pipe in _path)
-            pipe.OnProvidingFuel();
+            pipe.ProvideFuel();
 
         return true;
     }

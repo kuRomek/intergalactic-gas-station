@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using YG;
 
 [CreateAssetMenu(fileName="Settings", menuName="Settings", order=56)]
 public class Settings : ScriptableObject
