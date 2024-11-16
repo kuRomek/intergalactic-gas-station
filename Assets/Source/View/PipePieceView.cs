@@ -19,13 +19,13 @@ public class PipePieceView : View
         _originalRotation = transform.rotation;
     }
 
-    public void ChengeToOriginalView()
+    public void ChangeToOriginalView()
     {
         _meshFilter.mesh = _originalMesh;
         transform.rotation = _originalRotation;
     }
 
-    public void ChangeView(bool[] connections)
+    public void ChangeShape(bool[] connections)
     {
         Mesh mesh = _pipeShapes.GetShape(connections, out float rotation);
 

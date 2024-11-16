@@ -20,7 +20,7 @@ public class Pathfinder
         PipeTemplate pipeTemplate = gridCell as PipeTemplate;
 
         if (pipeTemplate.ConnectedTemplates.Count == 0 ||
-            (pipeTemplate.FuelType != fuel && pipeTemplate.FuelType != Fuel.Default))
+            (pipeTemplate.FuelType != fuel && pipeTemplate.FuelType != Fuel.Any))
             return false;
 
         path = new List<PipeTemplate>();
@@ -43,7 +43,7 @@ public class Pathfinder
             {
                 if (templatesToCheck.Contains(connectedTemplate) == false &&
                     checkedTemplates.Contains(connectedTemplate) == false &&
-                    (connectedTemplate.FuelType == Fuel.Default || connectedTemplate.FuelType == fuel))
+                    (connectedTemplate.FuelType == Fuel.Any || connectedTemplate.FuelType == fuel))
                 {
                     templatesToCheck.Push(connectedTemplate);
 

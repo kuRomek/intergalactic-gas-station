@@ -35,17 +35,6 @@ public class LevelButton : MonoBehaviour
         _button.onClick.RemoveAllListeners();
     }
 
-    public void OnAuthorized()
-    {
-        bool isLevelUnlocked = YandexGame.savesData.OpenLevels[_levelNumber - 1] == true;
-
-        _number.gameObject.SetActive(isLevelUnlocked);
-        _lockImage.gameObject.SetActive(isLevelUnlocked == false);
-
-        if (YandexGame.savesData.OpenLevels[_levelNumber - 1] == true)
-            _button.onClick.AddListener(OnClicked);
-    }
-
     private void OnClicked()
     {
         Clicked?.Invoke(_levelNumber);

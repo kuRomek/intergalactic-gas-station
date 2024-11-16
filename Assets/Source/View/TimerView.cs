@@ -13,6 +13,9 @@ public class TimerView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _minutesPassedUI;
     [SerializeField] private TextMeshProUGUI _secondsRecordUI;
     [SerializeField] private TextMeshProUGUI _minutesRecordUI;
+    [SerializeField] private TimeAdding _adding10Seconds;
+    [SerializeField] private TimeAdding _adding20Seconds;
+    [SerializeField] private TimeAdding _adding30Seconds;
     [SerializeField] private Image _timerWheel;
 
     private Timer _timer;
@@ -21,7 +24,10 @@ public class TimerView : MonoBehaviour
     private void OnEnable()
     {
         if (_timer != null)
+        {
             _timer.TimeChanged += OnTimeChanged;
+            _timer.TimeAdded += OnTimeAdded;
+        }
 
         if (_secondsRecordUI != null && _minutesRecordUI != null)
         {
@@ -33,6 +39,7 @@ public class TimerView : MonoBehaviour
     private void OnDisable()
     {
         _timer.TimeChanged -= OnTimeChanged;
+        _timer.TimeAdded -= OnTimeAdded;
     }
 
     private void Update()
@@ -46,6 +53,16 @@ public class TimerView : MonoBehaviour
         _startSeconds = _timer.SecondsLeft;
 
         _timer.TimeChanged += OnTimeChanged;
+    }
+
+    private void OnTimeAdded(float seconds)
+    {
+        if (Mathf.Approximately(seconds, 10f))
+            _adding10Seconds.Show();
+        else if (Mathf.Approximately(seconds, 20f))
+            _adding20Seconds.Show();
+        else if (Mathf.Approximately(seconds, 30f))
+            _adding30Seconds.Show();
     }
 
     private void OnTimeChanged()

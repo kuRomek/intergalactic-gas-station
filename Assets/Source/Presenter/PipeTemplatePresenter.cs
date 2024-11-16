@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Zenject;
 
@@ -27,7 +28,7 @@ public class PipeTemplatePresenter : Presenter
         Model.Providing += View.SetOutline;
         Model.ProvidingStopped += View.RemoveOutline;
 
-        _grid.Place(Model);
+        StartCoroutine(WaitForOtherTemplates());
     }
 
     private void OnDisable()
@@ -37,6 +38,12 @@ public class PipeTemplatePresenter : Presenter
         Model.PlacedOnGrid -= View.PlaySoundOnPlaced;
         Model.Providing -= View.SetOutline;
         Model.ProvidingStopped -= View.RemoveOutline;
+    }
+
+    private IEnumerator WaitForOtherTemplates()
+    {
+        yield return new WaitForEndOfFrame();
+        _grid.Place(Model);
     }
 
     [Inject]

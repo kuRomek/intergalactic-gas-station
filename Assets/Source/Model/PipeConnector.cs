@@ -46,7 +46,7 @@ public class PipeConnector
                     {
                         if (checkingCell != pipeTemplate && checkingCell is PipeTemplate nearbyTemplate)
                         {
-                            if (pipeTemplate.FuelType == Fuel.Default || nearbyTemplate.FuelType == Fuel.Default ||
+                            if (pipeTemplate.FuelType == Fuel.Any || nearbyTemplate.FuelType == Fuel.Any ||
                                 nearbyTemplate.FuelType == pipeTemplate.FuelType)
                             {
                                 pipeTemplate.Connect(nearbyTemplate);

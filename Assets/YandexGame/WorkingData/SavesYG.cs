@@ -19,7 +19,7 @@
         // Вы можете выполнить какие то действия при загрузке сохранений
         public SavesYG()
         {
-            ShownTutorials = new bool[10];
+            ShownTutorials = new bool[11];
 
             for (int i = 1; i < ShownTutorials.Length; i++)
                 ShownTutorials[i] = false;

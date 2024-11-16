@@ -12,8 +12,10 @@ public class Tutorial : MonoBehaviour
     {
         _levelNumber = SceneManager.GetActiveScene().buildIndex;
 
+#if !UNITY_EDITOR
         if (YandexGame.savesData.ShownTutorials[_levelNumber - 1] == true)
             gameObject.SetActive(false);
+#endif
     }
 
     private void OnEnable()

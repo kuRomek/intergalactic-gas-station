@@ -19,14 +19,13 @@ public class ShipPresenter : Presenter, IActivatable
     {
         _tanksViewChangings = new Action[Model.Tanks.Count];
 
-        //for (int i = 0; i < _tanksViewChangings.Length; i++)
-        //{
-        //    _tanksViewChangings[i] = () => View.ChangeView(Model.Tanks[i]);
-        //    Model.Tanks[i].FuelAmountChanged += _tanksViewChangings[i];
-        //}
+        int j = 0;
 
-        foreach (ShipTank shipTank in Model.Tanks)
-            shipTank.FuelAmountChanged += () => View.ChangeView(shipTank);
+        foreach(ShipTank shipTank in Model.Tanks)
+        {
+            _tanksViewChangings[j] = () => View.ChangeFuelAmount(shipTank);
+            shipTank.FuelAmountChanged += _tanksViewChangings[j++];
+        }
 
         View.ViewChangingStopped += Model.OnViewChangingStopped;
         Model.ArrivingAtStation += View.PlayArrivalSound;
@@ -38,11 +37,10 @@ public class ShipPresenter : Presenter, IActivatable
 
     public void Disable()
     {
-        //for (int i = 0; i < _tanksViewChangings.Length; i++)
-        //    Model.Tanks[i].FuelAmountChanged -= _tanksViewChangings[i];
+        int j = 0;
 
         foreach (ShipTank shipTank in Model.Tanks)
-            shipTank.FuelAmountChanged += () => View.ChangeView(shipTank);
+            shipTank.FuelAmountChanged -= _tanksViewChangings[j++];
 
         View.ViewChangingStopped -= Model.OnViewChangingStopped;
         Model.ArrivingAtStation -= View.PlayArrivalSound;

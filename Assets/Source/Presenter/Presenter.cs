@@ -20,7 +20,6 @@ public class Presenter : MonoBehaviour
         _model.Moved += OnMoved;
         _model.Rotated += OnRotated;
         _model.Destroying += OnDestroying;
-        _model.ExceptionCaught += WriteExceptionMessage;
 
         _activatable?.Enable();
 
@@ -33,7 +32,6 @@ public class Presenter : MonoBehaviour
         _model.Moved -= OnMoved;
         _model.Rotated -= OnRotated;
         _model.Destroying -= OnDestroying;
-        _model.ExceptionCaught -= WriteExceptionMessage;
 
         _activatable?.Disable();
 
@@ -54,14 +52,12 @@ public class Presenter : MonoBehaviour
 
         enabled = true;
 
+        if (_view != null)
+            _view.enabled = true;
+
         OnMoved();
         OnRotated();
         OnScaled();
-    }
-
-    private void WriteExceptionMessage(string message)
-    {
-        Debug.Log(message);
     }
 
     private void OnMoved()

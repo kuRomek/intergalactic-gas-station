@@ -38,6 +38,6 @@ public class TankView : View
 
     public void ChangeView()
     {
-        _fuelView.ChangeView();
+        _fuelView.ChangeAmount();
     }
 }

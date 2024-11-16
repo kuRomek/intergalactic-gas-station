@@ -29,7 +29,7 @@ public class RandomTankGenerator
 
             foreach (Fuel fuel in _fuels)
             {
-                if (fuel == Fuel.Default)
+                if (fuel == Fuel.Any)
                     continue;
 
                 if (_tanks.GetCount(fuel) < MinFuelAmount)

@@ -35,9 +35,9 @@ public class ShipView : View
         }
     }
 
-    public void ChangeView(ITank tank)
+    public void ChangeFuelAmount(ITank tank)
     {
-        _fuelViews.FirstOrDefault(view => view.Tank == tank).ChangeView();
+        _fuelViews.FirstOrDefault(view => view.Tank == tank).ChangeAmount();
     }
 
     public void CreateFuelViews(IReadOnlyList<ShipTank> shipTanks)

@@ -1,6 +1,6 @@
 public enum Fuel
 {
-    Default,
+    Any,
     Red,
     Green,
     Blue

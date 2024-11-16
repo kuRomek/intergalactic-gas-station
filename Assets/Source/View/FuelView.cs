@@ -37,7 +37,7 @@ public class FuelView : View
         sliderRect.sizeDelta = new Vector2(sliderRect.sizeDelta.x, originalHeight * (_tank.Capacity / ITank.MaximumSize));
     }
 
-    public void ChangeView()
+    public void ChangeAmount()
     {
         if (_changingView != null)
             StopCoroutine(_changingView);

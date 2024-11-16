@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,6 +29,13 @@ public class LevelState : IActivatable, IUpdatable
         _timer = timer;
 
         ShipCountOnLevel = _shipsQueue.Count;
+
+        if (SceneManager.GetActiveScene().buildIndex == 4 && YandexGame.savesData.ShownTutorials[3] == false)
+        {
+            Ship shipWithTwoTanks = _shipsQueue.Find(ship => ship.Tanks.Count > 1);
+            _shipsQueue.Remove(shipWithTwoTanks);
+            _shipsQueue.Insert(0, shipWithTwoTanks);
+        }
     }
 
     public event Action ShipRefueled;
@@ -40,7 +46,9 @@ public class LevelState : IActivatable, IUpdatable
         _pauseButton.onClick.AddListener(Pause);
         _timer.Expired += OnTimerExpired;
         _station.PlaceFreed += OnStationPlaceFreed;
+#if !UNITY_EDITOR
         YandexGame.onHideWindowGame += Pause;
+#endif
     }
 
     public void Disable()
@@ -49,7 +57,9 @@ public class LevelState : IActivatable, IUpdatable
         _pauseButton.onClick.RemoveListener(Pause);
         _timer.Expired -= OnTimerExpired;
         _station.PlaceFreed -= OnStationPlaceFreed;
+#if !UNITY_EDITOR
         YandexGame.onHideWindowGame -= Pause;
+#endif
     }
 
     public void Update(float deltaTime)

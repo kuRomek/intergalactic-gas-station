@@ -12,6 +12,7 @@ public class Timer : IUpdatable
 
     public event Action Expired;
     public event Action TimeChanged;
+    public event Action<float> TimeAdded;
 
     public void Update(float deltaTime)
     {
@@ -48,5 +49,6 @@ public class Timer : IUpdatable
     public void AddTime(float seconds)
     {
         SecondsLeft += seconds;
+        TimeAdded?.Invoke(seconds);
     }
 }

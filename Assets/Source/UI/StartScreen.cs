@@ -1,4 +1,3 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +14,6 @@ public class StartScreen : UIMenu
     [SerializeField] private UIMenu _settings;
 
     private TextMeshProUGUI _infiniteGameButtonText;
-    private bool _isFirstLoad = true;
 
     private void Awake()
     {
@@ -33,8 +31,6 @@ public class StartScreen : UIMenu
         }
 
         Time.timeScale = 1f;
-
-        _isFirstLoad = false;
     }
 
     private void OnEnable()
@@ -44,8 +40,6 @@ public class StartScreen : UIMenu
 
         if (YandexGame.savesData.IsInfiniteGameUnlocked)
             _infiniteGameButton.onClick.AddListener(OnInfiniteGameButtonClicked);
-
-        YandexGame.GetDataEvent += OnAuthorized;
     }
 
     private void OnDisable()
@@ -55,28 +49,6 @@ public class StartScreen : UIMenu
 
         if (YandexGame.savesData.IsInfiniteGameUnlocked)
             _infiniteGameButton.onClick.RemoveAllListeners();
-
-        YandexGame.GetDataEvent -= OnAuthorized;
-    }
-
-    private void OnAuthorized()
-    {
-        if (_isFirstLoad == false)
-        {
-            if (YandexGame.savesData.IsInfiniteGameUnlocked)
-            {
-                _infiniteGameButtonText.gameObject.SetActive(true);
-                _lockInfiniteGame.gameObject.SetActive(false);
-            }
-            else
-            {
-                _infiniteGameButtonText.gameObject.SetActive(false);
-                _lockInfiniteGame.gameObject.SetActive(true);
-            }
-
-            if (YandexGame.savesData.IsInfiniteGameUnlocked)
-                _infiniteGameButton.onClick.AddListener(OnInfiniteGameButtonClicked);
-        }
     }
 
     private void OnPlayButtonClicked()

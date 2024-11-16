@@ -1,32 +1,33 @@
 {
-  "idSave": 26,
-  "isFirstSession": false,
-  "language": "ru",
-  "promptDone": true,
-  "OpenLevels": [
-    true,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ],
-  "ShownTutorials": [
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ],
-  "IsInfiniteGameUnlocked": true,
-  "InfiniteGameRecord": 0.0
+    "idSave": 42,
+    "isFirstSession": false,
+    "language": "ru",
+    "promptDone": true,
+    "OpenLevels": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+    ],
+    "ShownTutorials": [
+        true,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+    ],
+    "IsInfiniteGameUnlocked": true,
+    "InfiniteGameRecord": 0.0
 }
