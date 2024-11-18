@@ -46,6 +46,8 @@ public class LevelState : IActivatable, IUpdatable
         _pauseButton.onClick.AddListener(Pause);
         _timer.Expired += OnTimerExpired;
         _station.PlaceFreed += OnStationPlaceFreed;
+        _timer.Enable();
+        YandexGame.RewardVideoEvent += OnRewardedVideoWatched;
 #if !UNITY_EDITOR
         YandexGame.onHideWindowGame += Pause;
 #endif
@@ -57,6 +59,8 @@ public class LevelState : IActivatable, IUpdatable
         _pauseButton.onClick.RemoveListener(Pause);
         _timer.Expired -= OnTimerExpired;
         _station.PlaceFreed -= OnStationPlaceFreed;
+        _timer.Disable();
+        YandexGame.RewardVideoEvent -= OnRewardedVideoWatched;
 #if !UNITY_EDITOR
         YandexGame.onHideWindowGame -= Pause;
 #endif
@@ -125,13 +129,23 @@ public class LevelState : IActivatable, IUpdatable
 
     private void OnTimerExpired()
     {
+        Time.timeScale = 0f;
         IsGameOver = true;
         _loseWindow.Show();
         _pauseButton.gameObject.SetActive(false);
 
         if (this is InfiniteLevelState)
             PlayerProgressController.UpdateInfiniteGameRecord(_timer.SecondsPassed);
+    }
 
-        _isShowingFullscreenAd = true;
+    private void OnRewardedVideoWatched(int id)
+    {
+        if (id == 1)
+        {
+            Time.timeScale = 1f;
+            IsGameOver = false;
+            _loseWindow.Hide();
+            _pauseButton.gameObject.SetActive(true);
+        }
     }
 }

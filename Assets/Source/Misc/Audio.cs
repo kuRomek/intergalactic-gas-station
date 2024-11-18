@@ -49,11 +49,13 @@ public class Audio : MonoBehaviour
     {
         _soundAudioSource.mute = true;
         _musicAudioSource.mute = true;
+        AudioListener.pause = true;
     }
 
     private void Unmute()
     {
         _soundAudioSource.mute = false;
         _musicAudioSource.mute = false;
+        AudioListener.pause = false;
     }
 }

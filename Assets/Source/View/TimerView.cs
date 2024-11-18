@@ -57,12 +57,15 @@ public class TimerView : MonoBehaviour
 
     private void OnTimeAdded(float seconds)
     {
-        if (Mathf.Approximately(seconds, 10f))
-            _adding10Seconds.Show();
-        else if (Mathf.Approximately(seconds, 20f))
-            _adding20Seconds.Show();
-        else if (Mathf.Approximately(seconds, 30f))
-            _adding30Seconds.Show();
+        if (_adding10Seconds != null && _adding20Seconds != null && _adding30Seconds != null)
+        {
+            if (Mathf.Approximately(seconds, 10f))
+                _adding10Seconds.Show();
+            else if (Mathf.Approximately(seconds, 20f))
+                _adding20Seconds.Show();
+            else if (Mathf.Approximately(seconds, 30f))
+                _adding30Seconds.Show();
+        }
     }
 
     private void OnTimeChanged()

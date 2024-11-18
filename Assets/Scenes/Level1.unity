@@ -6261,30 +6261,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelCanvasUI
       objectReference: {fileID: 0}
-    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-      propertyPath: en
-      value: Level 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-      propertyPath: ru
-      value: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 1"
-      objectReference: {fileID: 0}
-    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-      propertyPath: tr
-      value: Seviye 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-      propertyPath: text
-      value: Level 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3503124824678296828, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-      propertyPath: processTranslateLabel
-      value: 3/3 completed
-      objectReference: {fileID: 0}
-    - target: {fileID: 8855112712825022956, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-      propertyPath: m_text
-      value: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 1"
-      objectReference: {fileID: 0}
     - target: {fileID: 9188771171205885952, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
       propertyPath: m_Pivot.x
       value: 0

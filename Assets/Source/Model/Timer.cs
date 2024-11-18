@@ -1,7 +1,7 @@
 using System;
 using YG;
 
-public class Timer : IUpdatable
+public class Timer : IUpdatable, IActivatable
 {
     public Timer(float seconds)
     {
@@ -30,6 +30,16 @@ public class Timer : IUpdatable
         }
     }
 
+    public void Enable()
+    {
+        YandexGame.RewardVideoEvent += OnRewardedVideoWatched;
+    }
+
+    public void Disable()
+    {
+        YandexGame.RewardVideoEvent += OnRewardedVideoWatched;
+    }
+
     public float SecondsLeft { get; private set; }
     public float SecondsPassed { get; private set; }
     public bool IsRunning { get; private set; }
@@ -50,5 +60,14 @@ public class Timer : IUpdatable
     {
         SecondsLeft += seconds;
         TimeAdded?.Invoke(seconds);
+    }
+
+    public void OnRewardedVideoWatched(int id)
+    {
+        if (id == 1)
+        {
+            AddTime(30f);
+            Resume();
+        }
     }
 }

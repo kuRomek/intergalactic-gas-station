@@ -10,6 +10,7 @@ public class MainMenuScroller : MonoBehaviour
     [SerializeField] private UIMenu _startScreen;
     [SerializeField] private UIMenu _levelSelectionScreen;
     [SerializeField] private UIMenu _settingsScreen;
+    [SerializeField] private UIMenu _leaderboardWindow;
     [SerializeField] private Camera _camera;
 
     private Coroutine _scrolling;
@@ -25,6 +26,7 @@ public class MainMenuScroller : MonoBehaviour
         _startScreen.Showed += ScrollToStartScreen;
         _levelSelectionScreen.Showed += ScrollToLevelSelectionScreen;
         _settingsScreen.Showed += ScrollToSettingsScreen;
+        _leaderboardWindow.Showed += ScrollToLeaderboardScreen;
     }
 
     private void OnDisable()
@@ -32,6 +34,7 @@ public class MainMenuScroller : MonoBehaviour
         _startScreen.Showed -= ScrollToStartScreen;
         _levelSelectionScreen.Showed -= ScrollToLevelSelectionScreen;
         _settingsScreen.Showed -= ScrollToSettingsScreen;
+        _leaderboardWindow.Showed += ScrollToLeaderboardScreen;
     }
 
     private void ScrollToStartScreen() =>
@@ -42,6 +45,9 @@ public class MainMenuScroller : MonoBehaviour
 
     private void ScrollToSettingsScreen() =>
         ScrollTo(new Vector3(0f, 3000f, 0f));
+
+    private void ScrollToLeaderboardScreen() =>
+        ScrollTo(new Vector3(0f, 6000f, 0f));
 
     private void ScrollTo(Vector3 position)
     {

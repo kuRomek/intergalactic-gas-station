@@ -8,9 +8,11 @@ using YG;
 public class SettingsWindow : UIMenu
 {
     [SerializeField] private UIMenu _startScreen;
+    [SerializeField] private UIMenu _leaderboardWindow;
     [SerializeField] private Button _backButton;
     [SerializeField] private Button _languageButtonForward;
     [SerializeField] private Button _languageButtonBackwardward;
+    [SerializeField] private Button _authorizationButton;
     [SerializeField] private TextMeshProUGUI _language;
     [SerializeField] private Slider _soundVolumeSlider;
     [SerializeField] private Slider _musicVolumeSlider;
@@ -43,6 +45,9 @@ public class SettingsWindow : UIMenu
         _languageButtonForward.onClick.AddListener(() => OnLanguageButtonClicked(true));
         _languageButtonBackwardward.onClick.AddListener(() => OnLanguageButtonClicked(false));
 
+        if (YandexGame.auth == true)
+            _authorizationButton.onClick.AddListener(_leaderboardWindow.Show);
+
         _soundVolumeSlider.onValueChanged.AddListener((_) => _settings.SetSoundVolume(_soundVolumeSlider.value));
         _musicVolumeSlider.onValueChanged.AddListener((_) => _settings.SetMusicVolume(_musicVolumeSlider.value));
     }
@@ -52,6 +57,8 @@ public class SettingsWindow : UIMenu
         _backButton.onClick.RemoveAllListeners();
         _languageButtonForward.onClick.RemoveAllListeners();
         _languageButtonBackwardward.onClick.RemoveAllListeners();
+
+        _authorizationButton.onClick.RemoveAllListeners();
 
         _soundVolumeSlider.onValueChanged.RemoveAllListeners();
         _musicVolumeSlider.onValueChanged.RemoveAllListeners();
