@@ -14,15 +14,11 @@ public class LoseWindow : UIMenu
     private void OnEnable()
     {
         if (_hasWatchedRewardedVideo == false)
-        {
             _rewardedAdButton.onClick.AddListener(OnRewardedVideoButtonClicked);
-            _tryAgainButton.onClick.AddListener(OnTryAgainButtonClicked);
-        }
         else
-        {
             _rewardedAdButton.gameObject.SetActive(false);
-        }
 
+        _tryAgainButton.onClick.AddListener(OnTryAgainButtonClicked);
         _levelSelectionButton.onClick.AddListener(OnLevelSelectionButtonClicked);
     }
 
@@ -35,12 +31,15 @@ public class LoseWindow : UIMenu
 
     private void OnRewardedVideoButtonClicked()
     {
+        _rewardedAdButton.onClick.RemoveAllListeners();
+        _rewardedAdButton.gameObject.SetActive(false);
         YandexGame.RewVideoShow(1);
         _hasWatchedRewardedVideo = true;
     }
 
     private void OnTryAgainButtonClicked()
     {
+        Hide();
         SceneManager.LoadScene(SceneManager.GetActiveScene().path);
     }
 

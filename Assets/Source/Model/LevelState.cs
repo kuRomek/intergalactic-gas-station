@@ -43,27 +43,25 @@ public class LevelState : IActivatable, IUpdatable
     public void Enable()
     {
         _pauseWindow.Hid += UnPause;
+        _loseWindow.Hid += UnPause;
         _pauseButton.onClick.AddListener(Pause);
         _timer.Expired += OnTimerExpired;
         _station.PlaceFreed += OnStationPlaceFreed;
         _timer.Enable();
         YandexGame.RewardVideoEvent += OnRewardedVideoWatched;
-#if !UNITY_EDITOR
-        YandexGame.onHideWindowGame += Pause;
-#endif
+        Application.focusChanged += OnFocusChanged;
     }
 
     public void Disable()
     {
         _pauseWindow.Hid -= UnPause;
+        _loseWindow.Hid -= UnPause;
         _pauseButton.onClick.RemoveListener(Pause);
         _timer.Expired -= OnTimerExpired;
         _station.PlaceFreed -= OnStationPlaceFreed;
         _timer.Disable();
         YandexGame.RewardVideoEvent -= OnRewardedVideoWatched;
-#if !UNITY_EDITOR
-        YandexGame.onHideWindowGame -= Pause;
-#endif
+        Application.focusChanged -= OnFocusChanged;
     }
 
     public void Update(float deltaTime)
@@ -84,12 +82,15 @@ public class LevelState : IActivatable, IUpdatable
     public int ShipCountOnLevel { get; private set; }
     public int RefueledShipCount { get; private set; } = 0;
     public bool IsGameOver { get; private set; } = false;
-    public bool IsPaused { get; private set; } = Time.timeScale == 0f;
+    public bool IsPaused => Time.timeScale == 0f;
     protected List<Ship> ShipsQueue => _shipsQueue;
     protected Timer Timer => _timer;
 
     public void Pause()
     {
+        if (IsGameOver)
+            return;
+
         _pauseButton.gameObject.SetActive(false);
         Time.timeScale = 0f;
         _timer.Stop();
@@ -125,6 +126,12 @@ public class LevelState : IActivatable, IUpdatable
             PlayerProgressController.CompleteLevel(SceneManager.GetActiveScene().buildIndex);
             _isShowingFullscreenAd = true;
         }
+    }
+
+    private void OnFocusChanged(bool isVisible)
+    {
+        if (isVisible == false)
+            Pause();
     }
 
     private void OnTimerExpired()

@@ -3,6 +3,8 @@ using YG;
 
 public class Timer : IUpdatable, IActivatable
 {
+    private bool _isExpired = false;
+
     public Timer(float seconds)
     {
         SecondsLeft = seconds;
@@ -24,8 +26,12 @@ public class Timer : IUpdatable, IActivatable
             
             if (SecondsLeft == 0)
             {
-                Stop();
-                Expired?.Invoke();
+                if (_isExpired == false)
+                {
+                    Stop();
+                    Expired?.Invoke();
+                    _isExpired = true;
+                }
             }
         }
     }
@@ -68,6 +74,7 @@ public class Timer : IUpdatable, IActivatable
         {
             AddTime(30f);
             Resume();
+            _isExpired = false;
         }
     }
 }

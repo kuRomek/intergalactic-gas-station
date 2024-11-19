@@ -1,5 +1,5 @@
 {
-    "idSave": 47,
+    "idSave": 55,
     "isFirstSession": false,
     "language": "ru",
     "promptDone": true,
@@ -29,5 +29,5 @@
         true
     ],
     "IsInfiniteGameUnlocked": true,
-    "InfiniteGameRecord": 0.0
+    "InfiniteGameRecord": 130.00271606445313
 }
