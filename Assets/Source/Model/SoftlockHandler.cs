@@ -22,7 +22,7 @@ public class SoftlockHandler
 
     private bool CheckSoftLock()
     {
-        if (_tanks.Count <= 1 || _station.ActiveShipCount < 1)
+        if (_tanks.Count <= 1 || _station.ShipOnRefuelingPointsCount < 1)
             return false;
 
         foreach (Ship ship in _station.Ships)

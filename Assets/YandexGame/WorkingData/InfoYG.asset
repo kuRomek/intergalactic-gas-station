@@ -16,10 +16,10 @@ MonoBehaviour:
   playerPhotoSize: 1
   autoGameReadyAPI: 1
   playerInfoSimulation:
-    authorized: 1
+    authorized: 0
     isMobile: 0
     language: ru
-    name: default
+    name: anonymous
     uniqueID: 000
     photo: https://justplaygames.ru/public/icon_player.png
     payingStatus: paying

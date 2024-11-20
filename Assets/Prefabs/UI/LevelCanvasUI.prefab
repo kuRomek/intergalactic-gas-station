@@ -55,7 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rewardedAdButton: {fileID: 3403358979206335221}
   _tryAgainButton: {fileID: 6369218609499582162}
-  _levelSelectionButton: {fileID: 953468281013733268}
+  _mainMenuButton: {fileID: 953468281013733268}
 --- !u!1 &33636529977589778
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nextLevelButton: {fileID: 3539897628404202491}
-  _levelSelectionButton: {fileID: 3650926553317249924}
+  _mainMenuButton: {fileID: 3650926553317249924}
 --- !u!1 &184346153972496944
 GameObject:
   m_ObjectHideFlags: 0
@@ -3903,7 +3903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _resumeButton: {fileID: 6348026165547634253}
   _restartButton: {fileID: 7664481145058830221}
-  _levelSelectionButton: {fileID: 5143473359896082574}
+  _mainMenuButton: {fileID: 5143473359896082574}
 --- !u!1 &8665727582242084731
 GameObject:
   m_ObjectHideFlags: 0
@@ -4162,10 +4162,10 @@ MonoBehaviour:
   uniqueFontTMP: {fileID: 0}
   textLComponent: {fileID: 0}
   infoYG: {fileID: 11400000, guid: 162644796a8b0d044bce3d6fda0641e3, type: 2}
-  text: "+30 \u0441\u0435\u043A\u0443\u043D\u0434 \u0437\u0430 "
-  ru: "+30 \u0441\u0435\u043A\u0443\u043D\u0434 \u0434\u043B\u044F"
-  en: +30 seconds for
-  tr: +30 saniye
+  text: "+30 \u0441\u0435\u043A\u0443\u043D\u0434 \u0437\u0430"
+  ru: "+30 \u0441\u0435\u043A\u0443\u043D\u0434 \u0437\u0430"
+  en: +30 seconds per
+  tr: "ba\u015F\u0131na +30 saniye"
   az: 
   be: 
   he: 
@@ -4195,7 +4195,7 @@ MonoBehaviour:
   uniqueFont: {fileID: 0}
   additionalText: {fileID: 0}
   textHeight: 20
-  processTranslateLabel: 3/3 completed
+  processTranslateLabel: 
   componentTextField: 0
   countLang: 3
 --- !u!114 &4602348009449289655

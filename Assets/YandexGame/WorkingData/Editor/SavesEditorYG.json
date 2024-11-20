@@ -1,7 +1,7 @@
 {
-    "idSave": 55,
+    "idSave": 74,
     "isFirstSession": false,
-    "language": "ru",
+    "language": "tr",
     "promptDone": true,
     "OpenLevels": [
         true,
@@ -29,5 +29,5 @@
         true
     ],
     "IsInfiniteGameUnlocked": true,
-    "InfiniteGameRecord": 130.00271606445313
+    "InfiniteGameRecord": 460.0013427734375
 }

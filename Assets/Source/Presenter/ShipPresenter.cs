@@ -27,10 +27,10 @@ public class ShipPresenter : Presenter, IActivatable
             shipTank.FuelAmountChanged += _tanksViewChangings[j++];
         }
 
-        View.ViewChangingStopped += Model.OnViewChangingStopped;
+        View.ViewChangingStopped += Model.OnFuelProvidingStopped;
         Model.ArrivingAtStation += View.PlayArrivalSound;
         Model.ArrivingAtStation += View.PlayBurstingAnimation;
-        Model.StoppedAtRefuelingPoint += View.PlayIdleAnimation;
+        Model.ArrivedAtRefuelingPoint += View.PlayIdleAnimation;
         Model.LeavedStation += View.PlayFlyAwaySound;
         Model.LeavedStation += View.PlayBurstingAnimation;
     }
@@ -42,10 +42,10 @@ public class ShipPresenter : Presenter, IActivatable
         foreach (ShipTank shipTank in Model.Tanks)
             shipTank.FuelAmountChanged -= _tanksViewChangings[j++];
 
-        View.ViewChangingStopped -= Model.OnViewChangingStopped;
+        View.ViewChangingStopped -= Model.OnFuelProvidingStopped;
         Model.ArrivingAtStation -= View.PlayArrivalSound;
         Model.ArrivingAtStation -= View.PlayBurstingAnimation;
-        Model.StoppedAtRefuelingPoint -= View.PlayIdleAnimation;
+        Model.ArrivedAtRefuelingPoint -= View.PlayIdleAnimation;
         Model.LeavedStation -= View.PlayFlyAwaySound;
         Model.LeavedStation -= View.PlayBurstingAnimation;
     }

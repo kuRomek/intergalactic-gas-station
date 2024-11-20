@@ -49,26 +49,21 @@ public class FuelProvider : IActivatable
                 if (_station.Ships[i].Position != _station.RefuelingPoints[i].position)
                     continue;
 
+                if (_station.ShipOnRefuelingPointsCount == 3)
+                    _softlockHandler.RemoveSoftlock();
+
                 if (_pathfinder.DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType, out _path))
                 {
                     if (TryRefuel(_station.Ships[i]) == true)
-                    {
                         break;
-                    }
                     else
-                    {
                         _path = null;
-                        _softlockHandler.RemoveSoftlock();
-                    }
                 }
             }
             catch (Exception exception) when (exception is InvalidOperationException || exception is ArgumentException || exception is NullReferenceException)
             { }
         }
     }
-
-    public void RemoveSoftlock() =>
-        _softlockHandler.RemoveSoftlock();
 
     public void StopRefueling()
     {
@@ -80,7 +75,6 @@ public class FuelProvider : IActivatable
             _path = null;
 
             _isRefueling = false;
-            _softlockHandler.RemoveSoftlock();
 
             TryRefuel();
         }

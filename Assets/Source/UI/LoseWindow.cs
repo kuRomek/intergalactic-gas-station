@@ -7,29 +7,29 @@ public class LoseWindow : UIMenu
 {
     [SerializeField] private Button _rewardedAdButton;
     [SerializeField] private Button _tryAgainButton;
-    [SerializeField] private Button _levelSelectionButton;
+    [SerializeField] private Button _mainMenuButton;
 
     private bool _hasWatchedRewardedVideo = false;
 
     private void OnEnable()
     {
         if (_hasWatchedRewardedVideo == false)
-            _rewardedAdButton.onClick.AddListener(OnRewardedVideoButtonClicked);
+            _rewardedAdButton.onClick.AddListener(ShowRewardedVideoAd);
         else
             _rewardedAdButton.gameObject.SetActive(false);
 
-        _tryAgainButton.onClick.AddListener(OnTryAgainButtonClicked);
-        _levelSelectionButton.onClick.AddListener(OnLevelSelectionButtonClicked);
+        _tryAgainButton.onClick.AddListener(Restart);
+        _mainMenuButton.onClick.AddListener(LoadMainMenu);
     }
 
     private void OnDisable()
     {
         _rewardedAdButton.onClick.RemoveAllListeners();
         _tryAgainButton.onClick.RemoveAllListeners();
-        _levelSelectionButton.onClick.RemoveAllListeners();
+        _mainMenuButton.onClick.RemoveAllListeners();
     }
 
-    private void OnRewardedVideoButtonClicked()
+    private void ShowRewardedVideoAd()
     {
         _rewardedAdButton.onClick.RemoveAllListeners();
         _rewardedAdButton.gameObject.SetActive(false);
@@ -37,13 +37,14 @@ public class LoseWindow : UIMenu
         _hasWatchedRewardedVideo = true;
     }
 
-    private void OnTryAgainButtonClicked()
+    private void Restart()
     {
         Hide();
+        YandexGame.FullscreenShow();
         SceneManager.LoadScene(SceneManager.GetActiveScene().path);
     }
 
-    private void OnLevelSelectionButtonClicked()
+    private void LoadMainMenu()
     {
         SceneManager.LoadScene(0);
     }

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using YG;
 
-public class LevelState : IActivatable, IUpdatable
+public class LevelState : IActivatable
 {
     private UIMenu _levelCompleteWindow;
     private UIMenu _loseWindow;
@@ -14,9 +14,6 @@ public class LevelState : IActivatable, IUpdatable
     private List<Ship> _shipsQueue;
     private Station _station;
     private Timer _timer;
-    private bool _isShowingFullscreenAd = false;
-    private float _secondsBeforeAd = 1f;
-    private float _remainingSecondsBeforeAd = 1.0f;
 
     public LevelState(UIMenu levelCompleteWindow, UIMenu loseWindow, UIMenu pauseWindow, Button pauseButton, Station station, List<Ship> shipsQueue, Timer timer)
     {
@@ -64,21 +61,6 @@ public class LevelState : IActivatable, IUpdatable
         Application.focusChanged -= OnFocusChanged;
     }
 
-    public void Update(float deltaTime)
-    {
-        if (_isShowingFullscreenAd)
-        {
-            _remainingSecondsBeforeAd -= deltaTime;
-
-            if (_remainingSecondsBeforeAd <= 0)
-            {
-                _remainingSecondsBeforeAd = _secondsBeforeAd;
-                _isShowingFullscreenAd = false;
-                YandexGame.FullscreenShow();
-            }
-        }
-    }
-
     public int ShipCountOnLevel { get; private set; }
     public int RefueledShipCount { get; private set; } = 0;
     public bool IsGameOver { get; private set; } = false;
@@ -120,11 +102,11 @@ public class LevelState : IActivatable, IUpdatable
         }
         else if (RefueledShipCount == ShipCountOnLevel)
         {
+            IsGameOver = true;
             _timer.Stop();
             _levelCompleteWindow.Show();
             _pauseButton.gameObject.SetActive(false);
             PlayerProgressController.CompleteLevel(SceneManager.GetActiveScene().buildIndex);
-            _isShowingFullscreenAd = true;
         }
     }
 

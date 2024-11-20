@@ -37,7 +37,7 @@ public class Station : IActivatable
     public Ship[] Ships => _ships;
     public Transform[] RefuelingPoints => _refuelingPoints;
     public FuelProvider FuelProvider => _fuelProvider;
-    public int ActiveShipCount { get; private set; } = 0;
+    public int ShipOnRefuelingPointsCount { get; private set; } = 0;
 
     public void Arrive(Ship ship)
     {
@@ -57,25 +57,27 @@ public class Station : IActivatable
         _ships[randomSpot] = ship;
         ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
 
-        ActiveShipCount++;
-
-        _fuelProvider.RemoveSoftlock();
-
         ship.TankRefueled += _fuelProvider.StopRefueling;
         ship.LeavedStation += FreeRefuelingPoint;
-        ship.StoppedAtRefuelingPoint += _fuelProvider.TryRefuel;
+        ship.ArrivedAtRefuelingPoint += OnShipArrived;
     }
 
     private void FreeRefuelingPoint(Ship ship)
     {
         ship.TankRefueled -= _fuelProvider.StopRefueling;
         ship.LeavedStation -= FreeRefuelingPoint;
-        ship.StoppedAtRefuelingPoint -= _fuelProvider.TryRefuel;
+        ship.ArrivedAtRefuelingPoint -= OnShipArrived;
 
         _ships[Array.IndexOf(_ships, ship)] = null;
 
-        ActiveShipCount--;
+        ShipOnRefuelingPointsCount--;
 
         PlaceFreed?.Invoke(ship);
+    }
+
+    private void OnShipArrived()
+    {
+        ShipOnRefuelingPointsCount++;
+        _fuelProvider.TryRefuel();
     }
 }

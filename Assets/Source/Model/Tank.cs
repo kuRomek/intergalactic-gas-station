@@ -34,7 +34,7 @@ public class Tank : Transformable, ITank
         FuelDecreased?.Invoke(FuelType, resultAmount);
     }
 
-    public void OnViewChangingStopped()
+    public void OnFuelProvidingStopped()
     {
         if (_currentAmount == 0)
             Emptied?.Invoke(this);

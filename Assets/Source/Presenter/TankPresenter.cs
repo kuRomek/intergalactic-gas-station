@@ -9,12 +9,12 @@ public class TankPresenter : Presenter, IActivatable
     public void Enable()
     {
         Model.FuelAmountChanged += View.ChangeView;
-        View.ViewChangingStopped += Model.OnViewChangingStopped;
+        View.ViewChangingStopped += Model.OnFuelProvidingStopped;
     }
 
     public void Disable()
     {
         Model.FuelAmountChanged -= View.ChangeView;
-        View.ViewChangingStopped -= Model.OnViewChangingStopped;
+        View.ViewChangingStopped -= Model.OnFuelProvidingStopped;
     }
 }

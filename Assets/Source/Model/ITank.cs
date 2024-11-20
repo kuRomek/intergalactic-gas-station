@@ -17,5 +17,5 @@ public interface ITank
     float Capacity { get; }
     float CurrentAmount { get; }
 
-    void OnViewChangingStopped();
+    void OnFuelProvidingStopped();
 }

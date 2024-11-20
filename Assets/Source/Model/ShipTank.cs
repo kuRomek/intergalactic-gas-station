@@ -43,7 +43,7 @@ public class ShipTank : ITank
         FuelAmountChanged?.Invoke();
     }
 
-    public void OnViewChangingStopped()
+    public void OnFuelProvidingStopped()
     {
         if (_currentAmount == Capacity)
         {
