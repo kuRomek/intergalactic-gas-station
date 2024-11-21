@@ -14,6 +14,7 @@ public class PauseWindow : UIMenu
         _resumeButton.onClick.AddListener(Hide);
         _restartButton.onClick.AddListener(RestartLevel);
         _mainMenuButton.onClick.AddListener(LoadMainMenu);
+        YandexGame.CloseFullAdEvent += Hide;
     }
 
     private void OnDisable()
@@ -21,6 +22,7 @@ public class PauseWindow : UIMenu
         _resumeButton.onClick.RemoveListener(Hide);
         _restartButton.onClick.RemoveAllListeners();
         _mainMenuButton.onClick.RemoveAllListeners();
+        YandexGame.CloseFullAdEvent -= Hide;
     }
 
     private void RestartLevel()

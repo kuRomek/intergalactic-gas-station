@@ -72,6 +72,7 @@ public class PipeDragger : IActivatable
                 pipe.MoveTo(pipe.Position + Vector3.forward);
 
             _grid.Place(_draggingPipeTemplate);
+
             _draggingPipeTemplate = null;
         }
     }

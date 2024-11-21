@@ -24,23 +24,25 @@ public class PipeTemplatePresenter : Presenter
 
     private void OnEnable()
     {
+        Model.Enable();
         Model.PlacedOnGrid += View.PlaySoundOnPlaced;
         Model.Providing += View.SetOutline;
         Model.ProvidingStopped += View.RemoveOutline;
 
-        StartCoroutine(WaitForOtherTemplates());
+        StartCoroutine(WaitForOtherTemplatesToPlace());
     }
 
     private void OnDisable()
     {
-        _grid.Remove(Model);
-
+        Model.Disable();
         Model.PlacedOnGrid -= View.PlaySoundOnPlaced;
         Model.Providing -= View.SetOutline;
         Model.ProvidingStopped -= View.RemoveOutline;
+
+        _grid.Remove(Model);
     }
 
-    private IEnumerator WaitForOtherTemplates()
+    private IEnumerator WaitForOtherTemplatesToPlace()
     {
         yield return new WaitForEndOfFrame();
         _grid.Place(Model);

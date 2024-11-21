@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class PipeTemplate : Transformable, IGridMember
+public class PipeTemplate : Transformable, IGridMember, IActivatable
 {
     private PipePiece[] _pipePieces;
     private List<PipeTemplate> _connectedTemplates = new List<PipeTemplate>();
@@ -24,6 +24,17 @@ public class PipeTemplate : Transformable, IGridMember
     public PipePiece CenterPiece { get; private set; }
     public Fuel FuelType { get; }
     public int[] GridPosition { get; private set; } = null;
+    public bool IsActive { get; private set; } = false;
+
+    public void Enable()
+    {
+        IsActive = true;
+    }
+
+    public void Disable()
+    {
+        IsActive = false;
+    }
 
     public void ProvideFuel()
     {

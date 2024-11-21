@@ -62,12 +62,26 @@ public class Grid : IGrid
         try
         {
             templateOriginalPosition = CalculateWorldPosition(pipeTemplate.GridPosition);
-
             Remove(pipeTemplate);
         }
         catch (Exception exception) when (exception is ArgumentNullException)
         {
             templateOriginalPosition = default;
+        }
+
+        if (pipeTemplate.IsActive == false)
+        {
+            pipeTemplate.MoveTo(templateOriginalPosition);
+
+            foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
+                pipePiece.MoveTo(templateOriginalPosition + pipePiece.LocalPosition);
+
+            pipeTemplate.PlaceOnGrid(this);
+
+            foreach (PipePiece pipePiece in pipeTemplate.PipePieces)
+                _cells[pipePiece.GridPosition[0], pipePiece.GridPosition[1]] = pipeTemplate;
+
+            return;
         }
 
         try
