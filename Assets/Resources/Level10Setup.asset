@@ -33,9 +33,7 @@ MonoBehaviour:
     _fuelType: 2
   - _size: 3
     _fuelType: 2
-  - _size: 2
-    _fuelType: 2
-  - _size: 2
+  - _size: 3
     _fuelType: 2
   - _size: 6
     _fuelType: 3

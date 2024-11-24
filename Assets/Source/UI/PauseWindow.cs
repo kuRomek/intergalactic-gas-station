@@ -12,23 +12,37 @@ public class PauseWindow : UIMenu
     private void OnEnable()
     {
         _resumeButton.onClick.AddListener(Hide);
-        _restartButton.onClick.AddListener(RestartLevel);
+        _restartButton.onClick.AddListener(OnRestartButtonClicked);
         _mainMenuButton.onClick.AddListener(LoadMainMenu);
         YandexGame.CloseFullAdEvent += Hide;
     }
 
     private void OnDisable()
     {
-        _resumeButton.onClick.RemoveListener(Hide);
+        _resumeButton.onClick.RemoveAllListeners();
         _restartButton.onClick.RemoveAllListeners();
         _mainMenuButton.onClick.RemoveAllListeners();
         YandexGame.CloseFullAdEvent -= Hide;
     }
 
-    private void RestartLevel()
+    private void OnRestartButtonClicked()
     {
-        Hide();
         YandexGame.FullscreenShow();
+
+        if (YandexGame.timerShowAd <= 0)
+        {
+            YandexGame.CloseFullAdEvent += Restart;
+        }
+        else
+        {
+            Hide();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().path);
+        }
+    }
+
+    private void Restart()
+    {
+        YandexGame.CloseFullAdEvent -= Restart;
         SceneManager.LoadScene(SceneManager.GetActiveScene().path);
     }
 

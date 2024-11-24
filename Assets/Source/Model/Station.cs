@@ -73,11 +73,17 @@ public class Station : IActivatable
         ShipOnRefuelingPointsCount--;
 
         PlaceFreed?.Invoke(ship);
+
+        _fuelProvider.TryRefuel();
     }
 
     private void OnShipArrived()
     {
         ShipOnRefuelingPointsCount++;
+
+        if (ShipOnRefuelingPointsCount == 3)
+            _fuelProvider.RemoveSoftlock();
+
         _fuelProvider.TryRefuel();
     }
 }

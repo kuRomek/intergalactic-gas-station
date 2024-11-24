@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ public class LevelCompleteWindow : UIMenu
 
     private void OnEnable()
     {
-        _nextLevelButton.onClick.AddListener(LoadNextLevel);
+        _nextLevelButton.onClick.AddListener(OnNextLevelButtonClicked);
         _mainMenuButton.onClick.AddListener(LoadMainMenu);
     }
 
@@ -20,9 +21,24 @@ public class LevelCompleteWindow : UIMenu
         _mainMenuButton.onClick.RemoveAllListeners();
     }
 
-    private void LoadNextLevel()
+    private void OnNextLevelButtonClicked()
     {
         YandexGame.FullscreenShow();
+
+        if (YandexGame.timerShowAd <= 0)
+        {
+            YandexGame.CloseFullAdEvent += LoadNextLevel;
+        }
+        else
+        {
+            Hide();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+    }
+
+    private void LoadNextLevel()
+    {
+        YandexGame.CloseFullAdEvent -= LoadNextLevel;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

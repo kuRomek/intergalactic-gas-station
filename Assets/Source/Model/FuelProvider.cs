@@ -49,9 +49,6 @@ public class FuelProvider : IActivatable
                 if (_station.Ships[i].Position != _station.RefuelingPoints[i].position)
                     continue;
 
-                if (_station.ShipOnRefuelingPointsCount == 3)
-                    _softlockHandler.RemoveSoftlock();
-
                 if (_pathfinder.DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType, out _path))
                 {
                     if (TryRefuel(_station.Ships[i]) == true)
@@ -76,9 +73,13 @@ public class FuelProvider : IActivatable
 
             _isRefueling = false;
 
-            TryRefuel();
+            if (_station.ShipOnRefuelingPointsCount == 3)
+                _softlockHandler.RemoveSoftlock();
         }
     }
+
+    public void RemoveSoftlock() =>
+        _softlockHandler.RemoveSoftlock();
 
     private bool TryRefuel(Ship ship)
     {

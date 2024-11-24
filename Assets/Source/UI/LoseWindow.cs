@@ -18,7 +18,7 @@ public class LoseWindow : UIMenu
         else
             _rewardedAdButton.gameObject.SetActive(false);
 
-        _tryAgainButton.onClick.AddListener(Restart);
+        _tryAgainButton.onClick.AddListener(OnRestartButtonClicked);
         _mainMenuButton.onClick.AddListener(LoadMainMenu);
     }
 
@@ -37,10 +37,24 @@ public class LoseWindow : UIMenu
         _hasWatchedRewardedVideo = true;
     }
 
+    private void OnRestartButtonClicked()
+    {
+        YandexGame.FullscreenShow();
+
+        if (YandexGame.timerShowAd <= 0)
+        {
+            YandexGame.CloseFullAdEvent += Restart;
+        }
+        else
+        {
+            Hide();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().path);
+        }
+    }
+
     private void Restart()
     {
-        Hide();
-        YandexGame.FullscreenShow();
+        YandexGame.CloseFullAdEvent -= Restart;
         SceneManager.LoadScene(SceneManager.GetActiveScene().path);
     }
 
