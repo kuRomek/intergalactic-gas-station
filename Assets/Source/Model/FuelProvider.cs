@@ -73,8 +73,7 @@ public class FuelProvider : IActivatable
 
             _isRefueling = false;
 
-            if (_station.ShipOnRefuelingPointsCount == 3)
-                _softlockHandler.RemoveSoftlock();
+            _softlockHandler.RemoveSoftlock();
         }
     }
 
