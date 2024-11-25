@@ -42,6 +42,8 @@ public class FuelProvider : IActivatable
         if (_tanks.IsShifting)
             return;
 
+        _softlockHandler.RemoveSoftlock();
+
         for (int i = 0; i < _grid.RefuelingPoints.Length; i++)
         {
             try
@@ -72,8 +74,6 @@ public class FuelProvider : IActivatable
             _path = null;
 
             _isRefueling = false;
-
-            _softlockHandler.RemoveSoftlock();
         }
     }
 

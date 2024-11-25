@@ -25,7 +25,7 @@ public class RandomShipGenerator
         float chanceToSpawnMediumShip = (1 - (500 / (passedSeconds + 500))) * (1 - chanceToSpawnBigShip);
         float chanceToSpawnSmallShip = (1 - chanceToSpawnMediumShip - chanceToSpawnBigShip);
 
-        float randomChance = Random.Range(0f, 1f);
+        float randomChance = 0.99f;// Random.Range(0f, 1f);
         Ship randomShip;
 
         if (randomChance <= chanceToSpawnSmallShip)

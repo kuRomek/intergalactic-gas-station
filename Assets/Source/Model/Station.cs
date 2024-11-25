@@ -58,6 +58,7 @@ public class Station : IActivatable
         ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
 
         ship.TankRefueled += _fuelProvider.StopRefueling;
+        ship.TankRefueled += _fuelProvider.TryRefuel;
         ship.LeavedStation += FreeRefuelingPoint;
         ship.ArrivedAtRefuelingPoint += OnShipArrived;
     }
@@ -65,6 +66,7 @@ public class Station : IActivatable
     private void FreeRefuelingPoint(Ship ship)
     {
         ship.TankRefueled -= _fuelProvider.StopRefueling;
+        ship.TankRefueled -= _fuelProvider.TryRefuel;
         ship.LeavedStation -= FreeRefuelingPoint;
         ship.ArrivedAtRefuelingPoint -= OnShipArrived;
 
