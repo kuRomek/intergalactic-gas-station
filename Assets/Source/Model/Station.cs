@@ -22,6 +22,14 @@ public class Station : IActivatable
 
     public event Action<Ship> PlaceFreed;
 
+    public Ship[] Ships => _ships;
+
+    public Transform[] RefuelingPoints => _refuelingPoints;
+
+    public FuelProvider FuelProvider => _fuelProvider;
+
+    public int ShipOnRefuelingPointsCount { get; private set; } = 0;
+
     public void Enable()
     {
         _fuelProvider.Enable();
@@ -33,11 +41,6 @@ public class Station : IActivatable
         _fuelProvider.Disable();
         _grid.PipelineChanged -= _fuelProvider.TryRefuel;
     }
-
-    public Ship[] Ships => _ships;
-    public Transform[] RefuelingPoints => _refuelingPoints;
-    public FuelProvider FuelProvider => _fuelProvider;
-    public int ShipOnRefuelingPointsCount { get; private set; } = 0;
 
     public void Arrive(Ship ship)
     {

@@ -8,6 +8,7 @@ public class Presenter : MonoBehaviour
     private IActivatable _activatable = null;
 
     public Transformable Model => _model;
+
     public View View => _view;
 
     private void Update()

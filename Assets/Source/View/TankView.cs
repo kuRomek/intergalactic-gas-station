@@ -21,11 +21,6 @@ public class TankView : View
         _fuelView.ViewChangingStopped -= OnViewChangingStopped;
     }
 
-    private void OnViewChangingStopped(ITank tank)
-    {
-        ViewChangingStopped?.Invoke();
-    }
-
     public void CreateFuelView(ITank tank)
     {
         _color = _fuelTypes.GetMaterialOf(tank.FuelType).color;
@@ -39,5 +34,10 @@ public class TankView : View
     public void ChangeView()
     {
         _fuelView.ChangeAmount();
+    }
+
+    private void OnViewChangingStopped(ITank tank)
+    {
+        ViewChangingStopped?.Invoke();
     }
 }

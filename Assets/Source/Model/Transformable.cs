@@ -11,13 +11,19 @@ public abstract class Transformable
     }
 
     public event Action Moved;
+
     public event Action Rotated;
+
     public event Action Scaled;
+
     public event Action Destroying;
+
     public event Action<string> ExceptionCaught;
 
     public Vector3 Position { get; private set; }
+
     public Quaternion Rotation { get; private set; }
+
     public Vector3 Scale { get; private set; }
 
     public void MoveTo(Vector3 position)

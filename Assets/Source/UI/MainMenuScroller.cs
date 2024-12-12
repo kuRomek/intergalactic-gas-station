@@ -61,13 +61,15 @@ public class MainMenuScroller : MonoBehaviour
     {
         while (Vector3.SqrMagnitude(_rectTransform.localPosition - position) > DistanceTolerance)
         {
-            _rectTransform.localPosition = Vector3.Lerp(_rectTransform.localPosition, 
-                                                        position, 
-                                                        _scrollingSpeed * Time.deltaTime);
+            _rectTransform.localPosition = Vector3.Lerp(
+                _rectTransform.localPosition,
+                position,
+                _scrollingSpeed * Time.deltaTime);
 
-            _camera.transform.position = Vector3.Lerp(_camera.transform.position, 
-                                                      -position / 300f + Vector3.forward * _camera.transform.position.z, 
-                                                      _scrollingSpeed * Time.deltaTime);
+            _camera.transform.position = Vector3.Lerp(
+                _camera.transform.position,
+                (-position / 300f) + (Vector3.forward * _camera.transform.position.z),
+                _scrollingSpeed * Time.deltaTime);
 
             yield return null;
         }

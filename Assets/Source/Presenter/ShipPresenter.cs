@@ -4,10 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(ShipView))]
 public class ShipPresenter : Presenter, IActivatable
 {
-    public new Ship Model => base.Model as Ship;
-    public new ShipView View => base.View as ShipView;
-
     private Action[] _tanksViewChangings;
+
+    public new Ship Model => base.Model as Ship;
+
+    public new ShipView View => base.View as ShipView;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,7 +22,7 @@ public class ShipPresenter : Presenter, IActivatable
 
         int j = 0;
 
-        foreach(ShipTank shipTank in Model.Tanks)
+        foreach (ShipTank shipTank in Model.Tanks)
         {
             _tanksViewChangings[j] = () => View.ChangeFuelAmount(shipTank);
             shipTank.FuelAmountChanged += _tanksViewChangings[j++];

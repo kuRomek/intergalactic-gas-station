@@ -13,8 +13,16 @@ public class Timer : IUpdatable, IActivatable
     }
 
     public event Action Expired;
+
     public event Action TimeChanged;
+
     public event Action<float> TimeAdded;
+
+    public float SecondsLeft { get; private set; }
+
+    public float SecondsPassed { get; private set; }
+
+    public bool IsRunning { get; private set; }
 
     public void Update(float deltaTime)
     {
@@ -23,7 +31,7 @@ public class Timer : IUpdatable, IActivatable
             SecondsLeft = MathF.Max(0f, SecondsLeft - deltaTime);
             SecondsPassed += deltaTime;
             TimeChanged?.Invoke();
-            
+
             if (SecondsLeft == 0)
             {
                 if (_isExpired == false)
@@ -45,10 +53,6 @@ public class Timer : IUpdatable, IActivatable
     {
         YandexGame.RewardVideoEvent += OnRewardedVideoWatched;
     }
-
-    public float SecondsLeft { get; private set; }
-    public float SecondsPassed { get; private set; }
-    public bool IsRunning { get; private set; }
 
     public void Stop()
     {

@@ -15,7 +15,14 @@ public class LevelState : IActivatable
     private Station _station;
     private Timer _timer;
 
-    public LevelState(UIMenu levelCompleteWindow, UIMenu loseWindow, UIMenu pauseWindow, Button pauseButton, Station station, List<Ship> shipsQueue, Timer timer)
+    public LevelState(
+        UIMenu levelCompleteWindow,
+        UIMenu loseWindow,
+        UIMenu pauseWindow,
+        Button pauseButton,
+        Station station,
+        List<Ship> shipsQueue,
+        Timer timer)
     {
         _levelCompleteWindow = levelCompleteWindow;
         _loseWindow = loseWindow;
@@ -36,6 +43,18 @@ public class LevelState : IActivatable
     }
 
     public event Action ShipRefueled;
+
+    public int ShipCountOnLevel { get; private set; }
+
+    public int RefueledShipCount { get; private set; } = 0;
+
+    public bool IsGameOver { get; private set; } = false;
+
+    public bool IsPaused => Time.timeScale == 0f;
+
+    protected List<Ship> ShipsQueue => _shipsQueue;
+
+    protected Timer Timer => _timer;
 
     public void Enable()
     {
@@ -60,13 +79,6 @@ public class LevelState : IActivatable
         YandexGame.RewardVideoEvent -= OnRewardedVideoWatched;
         Application.focusChanged -= OnFocusChanged;
     }
-
-    public int ShipCountOnLevel { get; private set; }
-    public int RefueledShipCount { get; private set; } = 0;
-    public bool IsGameOver { get; private set; } = false;
-    public bool IsPaused => Time.timeScale == 0f;
-    protected List<Ship> ShipsQueue => _shipsQueue;
-    protected Timer Timer => _timer;
 
     public void Pause()
     {

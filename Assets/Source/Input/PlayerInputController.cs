@@ -11,7 +11,9 @@ public class PlayerInputController : MonoBehaviour
     private Vector2 _lastMousePosition;
 
     public event Action<PipeTemplate> DragStarted;
+
     public event Action<Vector3> Dragging;
+
     public event Action DragCanceled;
 
     private void Awake()

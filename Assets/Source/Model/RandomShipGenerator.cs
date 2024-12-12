@@ -23,9 +23,9 @@ public class RandomShipGenerator
     {
         float chanceToSpawnBigShip = 1 - (700 / (passedSeconds + 700));
         float chanceToSpawnMediumShip = (1 - (500 / (passedSeconds + 500))) * (1 - chanceToSpawnBigShip);
-        float chanceToSpawnSmallShip = (1 - chanceToSpawnMediumShip - chanceToSpawnBigShip);
+        float chanceToSpawnSmallShip = 1 - chanceToSpawnMediumShip - chanceToSpawnBigShip;
 
-        float randomChance = 0.99f;// Random.Range(0f, 1f);
+        float randomChance = Random.Range(0f, 1f);
         Ship randomShip;
 
         if (randomChance <= chanceToSpawnSmallShip)
@@ -34,7 +34,6 @@ public class RandomShipGenerator
             randomShip = new Ship(_shipsWaitingPlace, (ShipSetup)_mediumShips[Random.Range(0, _mediumShips.Length)]);
         else
             randomShip = new Ship(_shipsWaitingPlace, (ShipSetup)_bigShips[Random.Range(0, _bigShips.Length)]);
-
 
         GeneratedShips++;
         _presenterFactory.CreateShip(randomShip);

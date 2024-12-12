@@ -9,7 +9,7 @@ public class PipeDragger : IActivatable
     private FuelProvider _fuelProvider;
     private PipeTemplate _draggingPipeTemplate = null;
 
-    public PipeDragger(PlayerInputController playerInputController, Grid grid, FuelProvider fuelProvider) 
+    public PipeDragger(PlayerInputController playerInputController, Grid grid, FuelProvider fuelProvider)
     {
         _input = playerInputController;
         _grid = grid;
@@ -32,7 +32,7 @@ public class PipeDragger : IActivatable
 
     private void OnDragStarted(PipeTemplate pipeTemplate)
     {
-        if (_draggingPipeTemplate == null && 
+        if (_draggingPipeTemplate == null &&
             (_fuelProvider.Path == null || _fuelProvider.Path.Contains(pipeTemplate) == false))
         {
             _draggingPipeTemplate = pipeTemplate;

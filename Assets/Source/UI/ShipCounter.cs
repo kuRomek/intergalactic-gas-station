@@ -22,9 +22,9 @@ public class ShipCounter : MonoBehaviour
     {
         _levelState = levelState;
 
-        if (_needToRefuel != null ) 
+        if (_needToRefuel != null)
             _needToRefuel.text = _levelState.ShipCountOnLevel.ToString();
-        
+
         _refueled.text = "0";
 
         enabled = true;

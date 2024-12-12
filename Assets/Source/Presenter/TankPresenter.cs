@@ -4,6 +4,7 @@ using UnityEngine;
 public class TankPresenter : Presenter, IActivatable
 {
     public new Tank Model => base.Model as Tank;
+
     public new TankView View => base.View as TankView;
 
     public void Enable()

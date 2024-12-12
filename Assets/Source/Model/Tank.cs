@@ -8,7 +8,8 @@ public class Tank : Transformable, ITank
     private Fuel _fuelType;
     private float _currentAmount;
 
-    public Tank(Vector3 position, Size size, Fuel fuelType) : base(position, default)
+    public Tank(Vector3 position, Size size, Fuel fuelType)
+        : base(position, default)
     {
         _size = size;
         _currentAmount = (float)_size;
@@ -16,12 +17,17 @@ public class Tank : Transformable, ITank
     }
 
     public event Action<Tank> Emptied;
+
     public event Action FuelAmountChanged;
+
     public event Action<Fuel, float> FuelDecreased;
+
     public event Action<float> AmountChanging;
 
     public Fuel FuelType => _fuelType;
+
     public float Capacity => (float)_size;
+
     public float CurrentAmount => _currentAmount;
 
     public void TakeFuel(float requestedAmount, out float resultAmount)

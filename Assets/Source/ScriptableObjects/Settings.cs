@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using YG;
 
 [CreateAssetMenu(fileName="Settings", menuName="Settings", order=56)]
 public class Settings : ScriptableObject
@@ -13,14 +12,17 @@ public class Settings : ScriptableObject
     {
         { "en", "English" },
         { "ru", "Русский" },
-        { "tr", "Türk" }
+        { "tr", "Türk" },
     };
 
     public event Action SoundVolumeChanged;
+
     public event Action MusicVolumeChanged;
 
     public float SoundVolume => _soundVolume;
+
     public float MusicVolume => _musicVolume;
+
     public IReadOnlyDictionary<string, string> AvailableLanguages => _availableLanguages;
 
     public void SetSoundVolume(float volume)

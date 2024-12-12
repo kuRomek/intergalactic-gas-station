@@ -13,7 +13,8 @@ public class Ship : Transformable, IUpdatable
     private int _emptyTanks;
     private float _speed = 3f;
 
-    public Ship(Vector3 shipWaitingPlace, ShipSetup shipSetup) : base(shipWaitingPlace, default)
+    public Ship(Vector3 shipWaitingPlace, ShipSetup shipSetup)
+        : base(shipWaitingPlace, default)
     {
         Target = Position;
 
@@ -28,15 +29,25 @@ public class Ship : Transformable, IUpdatable
     }
 
     public event Action ArrivedAtRefuelingPoint;
+
     public event Action<Ship> ArrivingAtStation;
+
     public event Action<Ship> LeavedStation;
+
     public event Action TankRefueled;
+
+    public Vector3 Target { get; private set; }
+
+    public List<ShipTank> Tanks => _tanks;
+
+    public int EmptyTanks => _emptyTanks;
 
     public void Update(float deltaTime)
     {
         if (Position != Target)
         {
-            if (Vector3.SqrMagnitude(Target - Position) <= DistanceTolerance || Vector3.SqrMagnitude(Position - _lastTarget) <= DistanceTolerance)
+            if (Vector3.SqrMagnitude(Target - Position) <= DistanceTolerance ||
+                Vector3.SqrMagnitude(Position - _lastTarget) <= DistanceTolerance)
                 MoveTo(Vector3.MoveTowards(Position, Target, _speed / 3f * deltaTime));
             else
                 MoveTo(Vector3.Lerp(Position, Target, _speed * deltaTime));
@@ -45,10 +56,6 @@ public class Ship : Transformable, IUpdatable
                 ArrivedAtRefuelingPoint?.Invoke();
         }
     }
-
-    public Vector3 Target { get; private set; }
-    public List<ShipTank> Tanks => _tanks;
-    public int EmptyTanks => _emptyTanks;
 
     public void Refuel(float amount, Fuel fuelType)
     {

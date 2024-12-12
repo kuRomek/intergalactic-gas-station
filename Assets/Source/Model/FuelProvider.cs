@@ -20,6 +20,8 @@ public class FuelProvider : IActivatable
         _softlockHandler = new SoftlockHandler(_tanks, _station);
     }
 
+    public IReadOnlyList<PipeTemplate> Path => _path;
+
     public void Enable()
     {
         _tanks.TankEmptied += StopRefueling;
@@ -31,8 +33,6 @@ public class FuelProvider : IActivatable
         _tanks.TankEmptied -= StopRefueling;
         _tanks.StoppedShifting -= TryRefuel;
     }
-
-    public IReadOnlyList<PipeTemplate> Path => _path;
 
     public void TryRefuel()
     {
@@ -59,8 +59,10 @@ public class FuelProvider : IActivatable
                         _path = null;
                 }
             }
-            catch (Exception exception) when (exception is InvalidOperationException || exception is ArgumentException || exception is NullReferenceException)
-            { }
+            catch (Exception exception)
+            when (exception is InvalidOperationException || exception is ArgumentException || exception is NullReferenceException)
+            {
+            }
         }
     }
 

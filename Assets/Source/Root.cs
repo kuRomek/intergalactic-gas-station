@@ -22,7 +22,7 @@ public class Root : MonoBehaviour
     [SerializeField] private ShipCounter _shipCounter;
     [SerializeField] private TankContainerShifter _tankContainerShifter;
     [SerializeField] private GridChanger _gridChanger;
-    
+
     private PresenterFactory _presenterFactory;
     private LevelState _levelState;
     private PipeDragger _pipeDragger;
@@ -36,7 +36,11 @@ public class Root : MonoBehaviour
         TankContainer tankContainer = new TankContainer(_tanksPlace.position, _presenterFactory);
         _tankContainerShifter.Init(tankContainer);
 
-        _station = new Station(_refuelingPoints, _shipSpawningAreas.Select(area => area.position).ToArray(), _grid, tankContainer);
+        _station = new Station(
+            _refuelingPoints,
+            _shipSpawningAreas.Select(area => area.position).ToArray(),
+            _grid,
+            tankContainer);
 
         if (_levelSetup != null)
         {
@@ -59,12 +63,12 @@ public class Root : MonoBehaviour
             _timerView.Init(timer);
 
             _levelState = new NonInfiniteLevelState(
-                _levelCompleteWindow, 
-                _loseWindow, 
-                _pauseWindow, 
-                _pauseButton, 
-                _station, 
-                shipsQueue, 
+                _levelCompleteWindow,
+                _loseWindow,
+                _pauseWindow,
+                _pauseButton,
+                _station,
+                shipsQueue,
                 timer);
         }
         else
@@ -73,15 +77,15 @@ public class Root : MonoBehaviour
             _timerView.Init(timer);
 
             _levelState = new InfiniteLevelState(
-                _levelCompleteWindow, 
-                _loseWindow, 
-                _pauseWindow, 
-                _pauseButton, 
-                tankContainer, 
-                _shipsWaitingPlace.position, 
-                _presenterFactory, 
-                _gridChanger, 
-                _station, 
+                _levelCompleteWindow,
+                _loseWindow,
+                _pauseWindow,
+                _pauseButton,
+                tankContainer,
+                _shipsWaitingPlace.position,
+                _presenterFactory,
+                _gridChanger,
+                _station,
                 timer);
         }
 

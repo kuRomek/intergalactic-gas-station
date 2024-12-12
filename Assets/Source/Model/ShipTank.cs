@@ -14,12 +14,17 @@ public class ShipTank : ITank
     }
 
     public event Action FuelAmountChanged;
+
     public event Action<ShipTank> Refueled;
 
     public Fuel FuelType { get; }
+
     public bool IsFull { get; private set; } = false;
+
     public float CurrentAmount => _currentAmount;
+
     public Size Size => _size;
+
     public float Capacity => (float)_size;
 
     public void Refuel(float amount, out float residue)

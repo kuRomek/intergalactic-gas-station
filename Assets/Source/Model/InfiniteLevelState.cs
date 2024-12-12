@@ -12,9 +12,18 @@ public class InfiniteLevelState : LevelState
     private RandomTankGenerator _randomTankGenerator;
     private GridChanger _gridChanger;
 
-    public InfiniteLevelState(UIMenu levelCompleteWindow, UIMenu loseWindow, UIMenu pauseWindow, Button pauseButton, 
-        TankContainer tanks, Vector3 shipsWaitingPlace, PresenterFactory presenterFactory, GridChanger gridChanger, Station station, Timer timer) :
-        base(levelCompleteWindow, loseWindow, pauseWindow, pauseButton, station, new List<Ship>(ShipCountForNewTanks + 1), timer)
+    public InfiniteLevelState(
+        UIMenu levelCompleteWindow,
+        UIMenu loseWindow,
+        UIMenu pauseWindow,
+        Button pauseButton,
+        TankContainer tanks,
+        Vector3 shipsWaitingPlace,
+        PresenterFactory presenterFactory,
+        GridChanger gridChanger,
+        Station station,
+        Timer timer)
+        : base(levelCompleteWindow, loseWindow, pauseWindow, pauseButton, station, new List<Ship>(ShipCountForNewTanks + 1), timer)
     {
         _tanks = tanks;
         _randomShipGenerator = new RandomShipGenerator(presenterFactory, shipsWaitingPlace);

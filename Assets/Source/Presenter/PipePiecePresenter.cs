@@ -4,6 +4,7 @@ using UnityEngine;
 public class PipePiecePresenter : Presenter, IActivatable
 {
     public new PipePiece Model => base.Model as PipePiece;
+
     public new PipePieceView View => base.View as PipePieceView;
 
     public void Enable()

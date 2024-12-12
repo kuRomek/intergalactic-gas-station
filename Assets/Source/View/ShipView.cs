@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ShipView : View
 {
+    public readonly int IsBursting = Animator.StringToHash(nameof(IsBursting));
+
     [SerializeField] private FuelView _fuelViewPrefab;
     [SerializeField] private Transform _tanksViewPlace;
     [SerializeField] private Canvas _fuelViewPlace;
@@ -12,7 +14,6 @@ public class ShipView : View
     [SerializeField] private AudioClip _flyAwaySound;
     [SerializeField] private AudioClip _arrivalSound;
 
-    public readonly int IsBursting = Animator.StringToHash(nameof(IsBursting));
     private FuelView[] _fuelViews = null;
 
     public event Action<ITank> ViewChangingStopped;

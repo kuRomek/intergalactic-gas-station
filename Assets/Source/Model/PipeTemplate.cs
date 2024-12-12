@@ -7,7 +7,8 @@ public class PipeTemplate : Transformable, IGridMember, IActivatable
     private PipePiece[] _pipePieces;
     private List<PipeTemplate> _connectedTemplates = new List<PipeTemplate>();
 
-    public PipeTemplate(PipePiece[] pipePieces, Fuel fuelType) : base(pipePieces[pipePieces.Length / 2].Position, default)
+    public PipeTemplate(PipePiece[] pipePieces, Fuel fuelType)
+        : base(pipePieces[pipePieces.Length / 2].Position, default)
     {
         _pipePieces = pipePieces ?? throw new ArgumentNullException(nameof(pipePieces));
         CenterPiece = pipePieces[pipePieces.Length / 2];
@@ -16,14 +17,21 @@ public class PipeTemplate : Transformable, IGridMember, IActivatable
     }
 
     public event Action PlacedOnGrid;
+
     public event Action Providing;
+
     public event Action ProvidingStopped;
 
     public IReadOnlyCollection<PipePiece> PipePieces => _pipePieces;
+
     public IReadOnlyList<PipeTemplate> ConnectedTemplates => _connectedTemplates;
+
     public PipePiece CenterPiece { get; private set; }
+
     public Fuel FuelType { get; }
+
     public int[] GridPosition { get; private set; } = null;
+
     public bool IsActive { get; private set; } = false;
 
     public void Enable()

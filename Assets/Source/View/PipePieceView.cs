@@ -9,16 +9,6 @@ public class PipePieceView : View
     private Mesh _originalMesh;
     private Quaternion _originalRotation;
 
-    [Inject] 
-    private void Construct()
-    {
-        _pipeShapes = (PipeShapes)Resources.Load("Pipe Shapes");
-        _meshFilter = GetComponent<MeshFilter>();
-
-        _originalMesh = _meshFilter.mesh;
-        _originalRotation = transform.rotation;
-    }
-
     public void ChangeToOriginalView()
     {
         _meshFilter.mesh = _originalMesh;
@@ -31,5 +21,15 @@ public class PipePieceView : View
 
         _meshFilter.mesh = mesh;
         transform.localRotation = Quaternion.Euler(0f, rotation, 0f);
+    }
+
+    [Inject]
+    private void Construct()
+    {
+        _pipeShapes = (PipeShapes)Resources.Load("Pipe Shapes");
+        _meshFilter = GetComponent<MeshFilter>();
+
+        _originalMesh = _meshFilter.mesh;
+        _originalRotation = transform.rotation;
     }
 }

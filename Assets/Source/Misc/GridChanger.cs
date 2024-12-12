@@ -21,7 +21,7 @@ public class GridChanger : MonoBehaviour
         }
 
         _currentLayout = gridLayouts[Random.Range(0, gridLayouts.Length)];
-        
+
         _currentLayout.SetActive(true);
 
         foreach (Transform child in _currentLayout.transform)

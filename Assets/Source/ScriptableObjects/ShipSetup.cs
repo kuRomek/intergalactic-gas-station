@@ -7,9 +7,9 @@ public class ShipSetup : ScriptableObject
 {
     [SerializeField] private TankSetup[] _tanks;
 
-    public TankSetup[] Tanks => _tanks;
-
     private TankSetup[] _lastTanks;
+
+    public TankSetup[] Tanks => _tanks;
 
     private void OnValidate()
     {

@@ -4,6 +4,7 @@ using UnityEngine;
 public abstract class UIMenu : MonoBehaviour
 {
     public event Action Showed;
+
     public event Action Hid;
 
     public void Show()

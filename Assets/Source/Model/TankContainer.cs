@@ -19,8 +19,14 @@ public class TankContainer : IEnumerable<Tank>
     }
 
     public event Action<Vector3> FirstTankRemoved;
+
     public event Action TankEmptied;
+
     public event Action StoppedShifting;
+
+    public int Count => _tanks.Count;
+
+    public bool IsShifting { get; private set; } = false;
 
     public IEnumerator<Tank> GetEnumerator()
     {
@@ -31,9 +37,6 @@ public class TankContainer : IEnumerable<Tank>
     {
         return _tanks.GetEnumerator();
     }
-
-    public int Count => _tanks.Count;
-    public bool IsShifting { get; private set; } = false;
 
     public Tank Add(ITank.Size type, Fuel fuelType)
     {
@@ -66,7 +69,10 @@ public class TankContainer : IEnumerable<Tank>
 
         if (_tanks.Count > 0)
         {
-            Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / ITank.MaximumSize * Vector3.down) - _tanks.Peek().Position;
+            Vector3 elevation = _tanksPosition +
+                (_tanks.Peek().Capacity / ITank.MaximumSize * Vector3.down) -
+                _tanks.Peek().Position;
+
             IsShifting = true;
             FirstTankRemoved?.Invoke(elevation);
         }
@@ -89,7 +95,7 @@ public class TankContainer : IEnumerable<Tank>
         _tanks.Enqueue(tank);
         PutToEnd(tank);
 
-        Vector3 elevation = (_tanksPosition + _tanks.Peek().Capacity / ITank.MaximumSize * Vector3.down) - _tanks.Peek().Position;
+        Vector3 elevation = _tanksPosition + (_tanks.Peek().Capacity / ITank.MaximumSize * Vector3.down) - _tanks.Peek().Position;
         IsShifting = true;
         FirstTankRemoved?.Invoke(elevation);
     }
@@ -111,10 +117,16 @@ public class TankContainer : IEnumerable<Tank>
     private void PutToEnd(Tank tank)
     {
         if (_tanks.Count == 0)
-            tank.MoveTo(_tanksPosition + Vector3.down * tank.Capacity / ITank.MaximumSize);
+        {
+            tank.MoveTo(_tanksPosition + (Vector3.down * tank.Capacity / ITank.MaximumSize));
+        }
         else
-            tank.MoveTo(_lastTank.Position + 
-                        Vector3.down * (_lastTank.Capacity / ITank.MaximumSize + tank.Capacity / ITank.MaximumSize + _distanceBetweenTanks));
+        {
+            tank.MoveTo(_lastTank.Position +
+                        (Vector3.down * ((_lastTank.Capacity / ITank.MaximumSize) +
+                        (tank.Capacity / ITank.MaximumSize) +
+                        _distanceBetweenTanks)));
+        }
 
         _lastTank = tank;
     }

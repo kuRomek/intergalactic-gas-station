@@ -1,3 +1,5 @@
 using UnityEngine;
 
-public class Offscreen : MonoBehaviour { }
+public class Offscreen : MonoBehaviour 
+{
+}
