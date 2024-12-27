@@ -16,7 +16,6 @@ namespace IntergalacticGasStation
     {
         public class FuelProvider : IActivatable
         {
-            private const float DistanceTolerance = 0.0001f;
 
             private Grid _grid;
             private Pathfinder _pathfinder;
@@ -63,7 +62,7 @@ namespace IntergalacticGasStation
                 {
                     try
                     {
-                        if (Vector3.SqrMagnitude(_station.Ships[i].Position - _station.RefuelingPoints[i].position) > DistanceTolerance)
+                        if (_station.Ships[i].Position != _station.RefuelingPoints[i].position)
                             continue;
 
                         if (_pathfinder.DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType, out _path))
