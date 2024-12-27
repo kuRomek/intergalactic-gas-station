@@ -11,6 +11,8 @@ namespace IntergalacticGasStation
             [SerializeField, Min(0f)] private float _speed = 0.005f;
 
             private float _timer = 0f;
+            private float _perlinNoiseHorizontalStep = 0.01f;
+            private float _perlinNoiseVerticalStep = 0.01f;
             private Vector3 _offset;
 
             private void Update()
@@ -18,8 +20,8 @@ namespace IntergalacticGasStation
                 _timer += Time.deltaTime / _smoothness;
 
                 _offset = new Vector3(
-                    (Mathf.PerlinNoise(_timer, (int)_timer * 0.01f) - 0.5f) * _speed,
-                    (Mathf.PerlinNoise((int)_timer * 0.01f, _timer) - 0.5f) * _speed,
+                    (Mathf.PerlinNoise(_timer, (int)_timer * _perlinNoiseHorizontalStep) - 0.5f) * _speed,
+                    (Mathf.PerlinNoise((int)_timer * _perlinNoiseVerticalStep, _timer) - 0.5f) * _speed,
                     0f);
 
                 transform.position += _offset;

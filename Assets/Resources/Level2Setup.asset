@@ -44,3 +44,4 @@ MonoBehaviour:
     _fuelType: 3
   - _size: 2
     _fuelType: 1
+  _timeInSeconds: 180

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using IntergalacticGasStation.LevelControl;
 using IntergalacticGasStation.LevelGrid;
 using IntergalacticGasStation.Misc;
@@ -7,6 +8,7 @@ using IntergalacticGasStation.Pipes;
 using IntergalacticGasStation.Ships;
 using IntergalacticGasStation.StructureElements;
 using IntergalacticGasStation.Tanks;
+using Grid = IntergalacticGasStation.LevelGrid.Grid;
 
 namespace IntergalacticGasStation
 {
@@ -14,6 +16,8 @@ namespace IntergalacticGasStation
     {
         public class FuelProvider : IActivatable
         {
+            private const float DistanceTolerance = 0.0001f;
+
             private Grid _grid;
             private Pathfinder _pathfinder;
             private Station _station;
@@ -59,7 +63,7 @@ namespace IntergalacticGasStation
                 {
                     try
                     {
-                        if (_station.Ships[i].Position != _station.RefuelingPoints[i].position)
+                        if (Vector3.SqrMagnitude(_station.Ships[i].Position - _station.RefuelingPoints[i].position) > DistanceTolerance)
                             continue;
 
                         if (_pathfinder.DFSToFuelSource(_grid.RefuelingPoints[i], _tanks.Peek().FuelType, out _path))

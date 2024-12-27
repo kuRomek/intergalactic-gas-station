@@ -11,6 +11,9 @@ namespace IntergalacticGasStation
         public class TimerView : MonoBehaviour
         {
             private const float SecondsInMinute = 60f;
+            private const float TimeAddingType1 = 10f;
+            private const float TimeAddingType2 = 20f;
+            private const float TimeAddingType3 = 30f;
 
             [SerializeField] private TextMeshProUGUI _secondsLeftUI;
             [SerializeField] private TextMeshProUGUI _minutesLeftUI;
@@ -18,9 +21,9 @@ namespace IntergalacticGasStation
             [SerializeField] private TextMeshProUGUI _minutesPassedUI;
             [SerializeField] private TextMeshProUGUI _secondsRecordUI;
             [SerializeField] private TextMeshProUGUI _minutesRecordUI;
-            [SerializeField] private TimeAdding _adding10Seconds;
-            [SerializeField] private TimeAdding _adding20Seconds;
-            [SerializeField] private TimeAdding _adding30Seconds;
+            [SerializeField] private TimeAdding _addingSecondsType1;
+            [SerializeField] private TimeAdding _addingSecondsType2;
+            [SerializeField] private TimeAdding _addingSecondsType3;
             [SerializeField] private Image _timerWheel;
 
             private Timer _timer;
@@ -62,14 +65,14 @@ namespace IntergalacticGasStation
 
             private void OnTimeAdded(float seconds)
             {
-                if (_adding10Seconds != null && _adding20Seconds != null && _adding30Seconds != null)
+                if (_addingSecondsType1 != null && _addingSecondsType2 != null && _addingSecondsType3 != null)
                 {
-                    if (Mathf.Approximately(seconds, 10f))
-                        _adding10Seconds.Show();
-                    else if (Mathf.Approximately(seconds, 20f))
-                        _adding20Seconds.Show();
-                    else if (Mathf.Approximately(seconds, 30f))
-                        _adding30Seconds.Show();
+                    if (Mathf.Approximately(seconds, TimeAddingType1))
+                        _addingSecondsType1.Show();
+                    else if (Mathf.Approximately(seconds, TimeAddingType2))
+                        _addingSecondsType2.Show();
+                    else if (Mathf.Approximately(seconds, TimeAddingType3))
+                        _addingSecondsType3.Show();
                 }
             }
 

@@ -6,6 +6,8 @@ namespace IntergalacticGasStation
     {
         public static class PlayerProgressController
         {
+            private static long _milisecondsInOneSecond = 1000;
+
             public static void RemoveTutorialOnLevel(int levelNumber)
             {
                 YandexGame.savesData.ShownTutorials[levelNumber - 1] = true;
@@ -32,7 +34,7 @@ namespace IntergalacticGasStation
                     return;
 
                 YandexGame.savesData.InfiniteGameRecord = recordTime;
-                YandexGame.NewLeaderboardScores(nameLB: "Leaderboard", score: (long)recordTime * 1000);
+                YandexGame.NewLeaderboardScores(nameLB: "Leaderboard", score: (long)recordTime * _milisecondsInOneSecond);
                 YandexGame.SaveProgress();
             }
         }

@@ -11,7 +11,7 @@ namespace IntergalacticGasStation
         {
             [SerializeField] private ShipSetup[] _ships;
             [SerializeField] private TankSetup[] _tanks;
-            [SerializeField] private int _timeInSeconds = 180;
+            [SerializeField] private int _timeInSeconds;
 
             public ShipSetup[] Ships => _ships;
 

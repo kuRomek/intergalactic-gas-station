@@ -27,9 +27,10 @@ namespace IntergalacticGasStation
 
             public IGridMember[,] Cells => _cells;
 
-            public IGridMember[] RefuelingPoints => new IGridMember[3] { _cells[2, 0], _cells[0, 2], _cells[2, 4] };
+            public IGridMember[] RefuelingPoints => 
+                new IGridMember[3] { _cells[Size / 2, 0], _cells[0, Size / 2], _cells[Size / 2, Size - 1] };
 
-            public IGridMember FuelSourcePoint => _cells[4, 2];
+            public IGridMember FuelSourcePoint => _cells[Size - 1, Size / 2];
 
             public Vector3 CalculateWorldPosition(int[] gridPosition)
             {
@@ -39,13 +40,13 @@ namespace IntergalacticGasStation
                 if (gridPosition.Length != 2)
                     throw new ArgumentException("The grid is 2-dimensional.");
 
-                if (gridPosition[0] < 0 || gridPosition[0] > 4)
+                if (gridPosition[0] < 0 || gridPosition[0] >= Size)
                 {
                     throw new ArgumentException($"The size of the grid is {Size}x{Size}, " +
                         $"so x position must be in set {{0, ..., {Size - 1}}}, yours is {gridPosition[0]}");
                 }
 
-                if (gridPosition[1] < 0 || gridPosition[1] > 4)
+                if (gridPosition[1] < 0 || gridPosition[1] >= Size)
                 {
                     throw new ArgumentException($"The size of the grid is {Size}x{Size}, " +
                         $"so y position must be in set {{0, ..., {Size - 1}}}, yours is {gridPosition[1]}");
@@ -62,13 +63,13 @@ namespace IntergalacticGasStation
                     (int)(Mathf.Round(worldPosition.x) + WorldOffset),
                 };
 
-                if (gridPosition[0] < 0 || gridPosition[0] > 4)
+                if (gridPosition[0] < 0 || gridPosition[0] >= Size)
                 {
                     throw new ArgumentException($"The size of the grid is {Size}x{Size}, " +
                         $"so x position must be in set {{0, ..., {Size - 1}}}, yours is {gridPosition[0]}");
                 }
 
-                if (gridPosition[1] < 0 || gridPosition[1] > 4)
+                if (gridPosition[1] < 0 || gridPosition[1] >= Size)
                 {
                     throw new ArgumentException($"The size of the grid is {Size}x{Size}, " +
                         $"so y position must be in set {{0, ..., {Size - 1}}}, yours is {gridPosition[1]}");

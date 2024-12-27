@@ -10,6 +10,9 @@ namespace IntergalacticGasStation
             [SerializeField] private AudioSource _musicAudioSource;
             [SerializeField] private Settings _settings;
 
+            private float _minPitch = 0.8f;
+            private float _maxPitch = 1.2f;
+
             private void Awake()
             {
                 SetSoundVolume();
@@ -32,7 +35,7 @@ namespace IntergalacticGasStation
 
             public void PlaySound(AudioClip audioClip)
             {
-                _soundAudioSource.pitch = Random.Range(0.8f, 1.2f);
+                _soundAudioSource.pitch = Random.Range(_minPitch, _maxPitch);
                 _soundAudioSource.PlayOneShot(audioClip);
             }
 

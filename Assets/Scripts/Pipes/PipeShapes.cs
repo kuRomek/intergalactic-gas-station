@@ -10,6 +10,11 @@ namespace IntergalacticGasStation
         {
             [SerializeField] private Mesh[] _shapes;
 
+            private int _twoStraightEntriesIndex = 0;
+            private int _twoCurvedEntriesIndex = 1;
+            private int _threeEntriesIndex = 2;
+            private int _fourEntriesIndex = 3;
+
             public Mesh GetShape(bool[] entries, out float rotation)
             {
                 int entriesCount = 0;
@@ -24,11 +29,11 @@ namespace IntergalacticGasStation
                 }
 
                 if (entriesCount == 4)
-                    mesh = _shapes[_shapes.Length - 2];
+                    mesh = _shapes[_fourEntriesIndex];
 
                 if (entriesCount == 3)
                 {
-                    mesh = _shapes[_shapes.Length - 3];
+                    mesh = _shapes[_threeEntriesIndex];
 
                     int noConnectionIndex = Array.IndexOf(entries, false);
 
@@ -41,7 +46,7 @@ namespace IntergalacticGasStation
                     {
                         if (Convert.ToInt32(entries[i]) + Convert.ToInt32(entries[i + 1]) == 2)
                         {
-                            mesh = _shapes[1];
+                            mesh = _shapes[_twoCurvedEntriesIndex];
 
                             rotation = 180f - (90f * i);
                         }
@@ -49,7 +54,7 @@ namespace IntergalacticGasStation
 
                     if (Convert.ToInt32(entries[0]) + Convert.ToInt32(entries[entries.Length - 1]) == 2)
                     {
-                        mesh = _shapes[1];
+                        mesh = _shapes[_twoCurvedEntriesIndex];
 
                         rotation = -90f;
                     }
@@ -57,7 +62,7 @@ namespace IntergalacticGasStation
 
                 if (mesh == null)
                 {
-                    mesh = _shapes[0];
+                    mesh = _shapes[_twoStraightEntriesIndex];
 
                     if (entries[1] == true || entries[3] == true)
                         rotation = 90f;

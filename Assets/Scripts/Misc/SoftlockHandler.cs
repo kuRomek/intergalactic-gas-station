@@ -10,6 +10,7 @@ namespace IntergalacticGasStation
         {
             private TankContainer _tanks;
             private Station _station;
+            private float _maximumIterations = 100;
 
             public SoftlockHandler(TankContainer tanks, Station station)
             {
@@ -21,11 +22,11 @@ namespace IntergalacticGasStation
             {
                 int i = 0;
 
-                while (CheckSoftLock() && ++i < 100)
+                while (CheckSoftLock() && ++i < _maximumIterations)
                     _tanks.PutFirstToEnd();
 
-                if (i == 100)
-                    throw new System.Exception("Over 100 iterations on removing softlock");
+                if (i == _maximumIterations)
+                    throw new System.Exception($"Over {_maximumIterations} iterations on removing softlock");
             }
 
             private bool CheckSoftLock()

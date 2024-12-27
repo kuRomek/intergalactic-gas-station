@@ -45,7 +45,12 @@ namespace IntergalacticGasStation
 
             public void ChangeFuelAmount(ITank tank)
             {
-                _fuelViews.FirstOrDefault(view => view.Tank == tank).ChangeAmount();
+                FuelView fuelView = _fuelViews.FirstOrDefault(view => view.Tank == tank);
+
+                if (fuelView == null)
+                    throw new NullReferenceException("FuelView not found.");
+
+                fuelView.ChangeAmount();
             }
 
             public void CreateFuelViews(IReadOnlyList<ShipTank> shipTanks)

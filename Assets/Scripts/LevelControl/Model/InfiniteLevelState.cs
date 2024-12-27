@@ -54,12 +54,7 @@ namespace IntergalacticGasStation
                 AddShipToQueue();
                 base.OnStationPlaceFreed(ship);
 
-                if (ship.Tanks.Count == 1)
-                    Timer.AddTime(10f);
-                else if (ship.Tanks.Count == 2)
-                    Timer.AddTime(20f);
-                else if (ship.Tanks.Count == 3)
-                    Timer.AddTime(30f);
+                Timer.AddTime(ship.Tanks.Count * 10f);
             }
 
             private void AddShipToQueue()

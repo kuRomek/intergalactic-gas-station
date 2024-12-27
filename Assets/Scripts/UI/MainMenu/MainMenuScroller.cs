@@ -9,6 +9,7 @@ namespace IntergalacticGasStation
         public class MainMenuScroller : MonoBehaviour
         {
             private const float DistanceTolerance = 0.1f;
+            private const float CameraShiftDivider = 300f;
 
             [SerializeField] private float _scrollingSpeed = 5f;
             [SerializeField] private BackgroundWiggler _background;
@@ -20,6 +21,10 @@ namespace IntergalacticGasStation
 
             private Coroutine _scrolling;
             private RectTransform _rectTransform;
+            private Vector3 _startScreenLocation = Vector3.zero;
+            private Vector3 _levelSelectionScreenLocation = new Vector3(0f, -3000f, 0f);
+            private Vector3 _settingsScreenLocation = new Vector3(0f, 3000f, 0f);
+            private Vector3 _leaderboardScreenLocation = new Vector3(0f, 6000f, 0f);
 
             private void Awake()
             {
@@ -43,16 +48,16 @@ namespace IntergalacticGasStation
             }
 
             private void ScrollToStartScreen() =>
-                ScrollTo(new Vector3(0f, 0f, 0f));
+                ScrollTo(_startScreenLocation);
 
             private void ScrollToLevelSelectionScreen() =>
-                ScrollTo(new Vector3(0f, -3000f, 0f));
+                ScrollTo(_levelSelectionScreenLocation);
 
             private void ScrollToSettingsScreen() =>
-                ScrollTo(new Vector3(0f, 3000f, 0f));
+                ScrollTo(_settingsScreenLocation);
 
             private void ScrollToLeaderboardScreen() =>
-                ScrollTo(new Vector3(0f, 6000f, 0f));
+                ScrollTo(_leaderboardScreenLocation);
 
             private void ScrollTo(Vector3 position)
             {
@@ -73,7 +78,7 @@ namespace IntergalacticGasStation
 
                     _camera.transform.position = Vector3.Lerp(
                         _camera.transform.position,
-                        (-position / 300f) + (Vector3.forward * _camera.transform.position.z),
+                        (-position / CameraShiftDivider) + (Vector3.forward * _camera.transform.position.z),
                         _scrollingSpeed * Time.deltaTime);
 
                     yield return null;

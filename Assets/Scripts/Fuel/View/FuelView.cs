@@ -11,6 +11,8 @@ namespace IntergalacticGasStation
     {
         public class FuelView : View
         {
+            private const float AmountTolerance = 0.05f;
+
             [SerializeField] private Slider _fuelIndicator;
             [SerializeField] private Image _backgroundImage;
             [SerializeField] private FuelColors _fuelCollors;
@@ -18,6 +20,7 @@ namespace IntergalacticGasStation
 
             private ITank _tank;
             private Coroutine _changingView;
+            private float _changingSpeed = 4f;
 
             public event Action<ITank> ViewChangingStopped;
 
@@ -53,16 +56,16 @@ namespace IntergalacticGasStation
 
             private IEnumerator StartChangingView()
             {
-                float currentAmountView = _fuelIndicator.value;
+                float currentIndicatorAmount = _fuelIndicator.value;
 
                 if (_refuelingSound != null)
                     PlaySound(_refuelingSound);
 
-                while (Mathf.Abs(_tank.CurrentAmount - currentAmountView) < 0.05f == false)
+                while (Mathf.Abs(_tank.CurrentAmount - currentIndicatorAmount) < AmountTolerance == false)
                 {
-                    currentAmountView = Mathf.Lerp(currentAmountView, _tank.CurrentAmount, Time.deltaTime * 4f);
+                    currentIndicatorAmount = Mathf.Lerp(currentIndicatorAmount, _tank.CurrentAmount, Time.deltaTime * _changingSpeed);
 
-                    _fuelIndicator.value = currentAmountView;
+                    _fuelIndicator.value = currentIndicatorAmount;
                     yield return null;
                 }
 

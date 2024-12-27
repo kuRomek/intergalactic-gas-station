@@ -41,6 +41,7 @@ namespace IntergalacticGasStation
             private PipeDragger _pipeDragger;
             private Station _station;
             private Grid _grid;
+            private float _infiniteLevelStartTime = 120f;
 
             private void Awake()
             {
@@ -86,7 +87,7 @@ namespace IntergalacticGasStation
                 }
                 else
                 {
-                    Timer timer = new Timer(120);
+                    Timer timer = new Timer(_infiniteLevelStartTime);
                     _timerView.Init(timer);
 
                     _levelState = new InfiniteLevelState(

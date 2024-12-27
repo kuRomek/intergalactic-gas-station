@@ -12,6 +12,8 @@ namespace IntergalacticGasStation
             private Object[] _smallShips;
             private Object[] _mediumShips;
             private Object[] _bigShips;
+            private float _bigShipSpawnMultiplier = 700f;
+            private float _mediumShipSpawnMultiplier = 500f;
 
             public RandomShipGenerator(PresenterFactory presenterFactory, Vector3 shipsWaitingPlace)
             {
@@ -26,11 +28,12 @@ namespace IntergalacticGasStation
 
             public Ship Generate(float passedSeconds)
             {
-                float chanceToSpawnBigShip = 1 - (700 / (passedSeconds + 700));
-                float chanceToSpawnMediumShip = (1 - (500 / (passedSeconds + 500))) * (1 - chanceToSpawnBigShip);
+                float chanceToSpawnBigShip = 1 - (_bigShipSpawnMultiplier / (passedSeconds + _bigShipSpawnMultiplier));
+                float chanceToSpawnMediumShip = (1 - (_mediumShipSpawnMultiplier / (passedSeconds + _mediumShipSpawnMultiplier))) *
+                                                (1 - chanceToSpawnBigShip);
                 float chanceToSpawnSmallShip = 1 - chanceToSpawnMediumShip - chanceToSpawnBigShip;
 
-                float randomChance = Random.Range(0f, 1f);
+                float randomChance = Random.value;
                 Ship randomShip;
 
                 if (randomChance <= chanceToSpawnSmallShip)

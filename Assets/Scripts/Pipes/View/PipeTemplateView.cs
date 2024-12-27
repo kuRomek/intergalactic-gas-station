@@ -18,6 +18,8 @@ namespace IntergalacticGasStation
             private AudioClip _placedSound = null;
             private Renderer[] _piecesRenderers = null;
             private float _maxOutlineWidth = 8f;
+            private float _colorMultiplier = 1.8f;
+            private float _outlineThickeningSpeed = 10f;
             private Coroutine _changingOutlineWidth;
             private Color _color;
 
@@ -89,14 +91,14 @@ namespace IntergalacticGasStation
 
             private IEnumerator ChangeOutlineWidth(float endWidth)
             {
-                Color endColor = endWidth > 0f ? _color * 1.8f : _color;
+                Color endColor = endWidth > 0f ? _color * _colorMultiplier : _color;
 
                 while (Mathf.Abs(_outline.OutlineWidth - endWidth) > DistanceTolerance)
                 {
-                    _outline.OutlineWidth = Mathf.Lerp(_outline.OutlineWidth, endWidth, Time.deltaTime * 10f);
+                    _outline.OutlineWidth = Mathf.Lerp(_outline.OutlineWidth, endWidth, Time.deltaTime * _outlineThickeningSpeed);
 
                     foreach (Renderer pieceRenderer in _piecesRenderers)
-                        pieceRenderer.material.color = Color.Lerp(pieceRenderer.material.color, endColor, Time.deltaTime * 10f);
+                        pieceRenderer.material.color = Color.Lerp(pieceRenderer.material.color, endColor, Time.deltaTime * _outlineThickeningSpeed);
 
                     yield return null;
                 }

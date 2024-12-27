@@ -19,9 +19,8 @@ namespace IntergalacticGasStation
                 Timer timer)
                 : base(levelCompleteWindow, loseWindow, pauseWindow, pauseButton, station, shipsQueue, timer)
             {
-                LetShipOnStation();
-                LetShipOnStation();
-                LetShipOnStation();
+                for (int i = 0; i < station.Ships.Length; i++)
+                    LetShipOnStation();
             }
         }
     }

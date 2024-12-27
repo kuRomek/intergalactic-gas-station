@@ -88,19 +88,19 @@ namespace IntergalacticGasStation
                         }
                         catch (IndexOutOfRangeException)
                         {
-                            if (pipePiece.GridPosition[0] + offset[0] == 2 &&
+                            if (pipePiece.GridPosition[0] + offset[0] == _grid.Size / 2 &&
                                 (pipePiece.GridPosition[1] + offset[1] == -1 ||
                                 pipePiece.GridPosition[1] + offset[1] == _grid.Size))
                             {
                                 connections[Array.IndexOf(indexOffsets, offset)] = true;
                             }
                             else if (pipePiece.GridPosition[0] + offset[0] == -1 &&
-                                     pipePiece.GridPosition[1] + offset[1] == 2)
+                                     pipePiece.GridPosition[1] + offset[1] == _grid.Size / 2)
                             {
                                 connections[Array.IndexOf(indexOffsets, offset)] = true;
                             }
                             else if (pipePiece.GridPosition[0] + offset[0] == _grid.Size &&
-                                     pipePiece.GridPosition[1] + offset[1] == 2)
+                                     pipePiece.GridPosition[1] + offset[1] == _grid.Size / 2)
                             {
                                 connections[Array.IndexOf(indexOffsets, offset)] = true;
                             }

@@ -1,6 +1,7 @@
 using System;
 using IntergalacticGasStation.Fuel;
 using static IntergalacticGasStation.Tanks.ITank;
+using Mathf = UnityEngine.Mathf;
 
 namespace IntergalacticGasStation
 {
@@ -55,7 +56,7 @@ namespace IntergalacticGasStation
 
             public void OnFuelProvidingStopped()
             {
-                if (_currentAmount == Capacity)
+                if (Mathf.Approximately(_currentAmount, Capacity))
                 {
                     IsFull = true;
                     Refueled?.Invoke(this);

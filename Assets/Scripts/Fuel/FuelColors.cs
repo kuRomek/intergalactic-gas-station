@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -12,7 +13,12 @@ namespace IntergalacticGasStation
 
             public Material GetMaterialOf(FuelType fuel)
             {
-                return _fuelCells.FirstOrDefault(cell => cell.Fuel == fuel).Material;
+                FuelCellView fuelCell = _fuelCells.FirstOrDefault(cell => cell.Fuel == fuel);
+
+                if (fuelCell == null)
+                    throw new NullReferenceException("Material not found");
+                else
+                    return fuelCell.Material;
             }
         }
     }
