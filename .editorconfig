@@ -96,6 +96,8 @@ dotnet_diagnostic.SA1133.severity = none
 # SA1134: Attributes should not share line
 dotnet_diagnostic.SA1134.severity = none
 csharp_indent_labels = one_less_than_current
+dotnet_diagnostic.SA1403.severity = none
+dotnet_diagnostic.SA1200.severity = none
 
 [*.vb]
 #### Стили именования ####

@@ -2747,17 +2747,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881381226}
   m_Mesh: {fileID: -6934093411374482582, guid: c6dcb6f996151434bbf766bd4d0096c2, type: 3}
---- !u!114 &954211846 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1759850821280185031, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
-  m_PrefabInstance: {fileID: 405165836}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744e3ac32d443f94fbf8d57f1769d57f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -3364,7 +3353,7 @@ MonoBehaviour:
   _pauseWindow: {fileID: 405165839}
   _pauseButton: {fileID: 405165838}
   _timerView: {fileID: 405165837}
-  _shipCounter: {fileID: 954211846}
+  _shipCounter: {fileID: 2067903242}
   _tankContainerShifter: {fileID: 332542096}
   _gridChanger: {fileID: 0}
 --- !u!4 &1083754571
@@ -5828,6 +5817,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2067620087}
   m_Mesh: {fileID: -6934093411374482582, guid: c6dcb6f996151434bbf766bd4d0096c2, type: 3}
+--- !u!114 &2067903242 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8889707743217697980, guid: 3188604ba51a64141a7d515f7627d59f, type: 3}
+  m_PrefabInstance: {fileID: 405165836}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f68fbc7d135cf0e4f8b9c0667148fc1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2085915152
 GameObject:
   m_ObjectHideFlags: 0

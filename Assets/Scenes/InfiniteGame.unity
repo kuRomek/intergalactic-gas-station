@@ -1364,7 +1364,7 @@ MonoBehaviour:
   _pauseWindow: {fileID: 1671625892750235882}
   _pauseButton: {fileID: 1671625892750235881}
   _timerView: {fileID: 1671625892750235880}
-  _shipCounter: {fileID: 1862720209}
+  _shipCounter: {fileID: 1154617134}
   _tankContainerShifter: {fileID: 332542096}
   _gridChanger: {fileID: 1949390183}
 --- !u!4 &393779332
@@ -4506,6 +4506,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1105224914}
   m_Mesh: {fileID: -6934093411374482582, guid: c6dcb6f996151434bbf766bd4d0096c2, type: 3}
+--- !u!114 &1154617134 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4723099337613569402, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
+  m_PrefabInstance: {fileID: 1671625892750235879}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f68fbc7d135cf0e4f8b9c0667148fc1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1161270867
 GameObject:
   m_ObjectHideFlags: 0
@@ -6318,17 +6329,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860866780}
   m_Mesh: {fileID: -6934093411374482582, guid: c6dcb6f996151434bbf766bd4d0096c2, type: 3}
---- !u!114 &1862720209 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2502164358445175553, guid: 640a3d073c815eb42816a46b1804076f, type: 3}
-  m_PrefabInstance: {fileID: 1671625892750235879}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744e3ac32d443f94fbf8d57f1769d57f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1949390182
 GameObject:
   m_ObjectHideFlags: 0
