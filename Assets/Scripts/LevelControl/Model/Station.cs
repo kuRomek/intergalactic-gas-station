@@ -1,105 +1,102 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using IntergalacticGasStation.Fuel;
-using IntergalacticGasStation.Tanks;
-using IntergalacticGasStation.StructureElements;
-using IntergalacticGasStation.Ships;
+using Fuel;
+using Tanks;
+using StructureElements;
+using Ships;
 using Random = UnityEngine.Random;
-using Grid = IntergalacticGasStation.LevelGrid.Grid;
+using Grid = LevelGrid.Grid;
 
-namespace IntergalacticGasStation
+namespace LevelControl
 {
-    namespace LevelControl
+    public class Station : IActivatable
     {
-        public class Station : IActivatable
+        private FuelProvider _fuelProvider;
+        private Grid _grid;
+        private Ship[] _ships;
+        private Transform[] _refuelingPoints;
+        private Vector3[] _startPositions;
+
+        public Station(Transform[] refuelingPoints, Vector3[] startPositions, Grid grid, TankContainer tankContainer)
         {
-            private FuelProvider _fuelProvider;
-            private Grid _grid;
-            private Ship[] _ships;
-            private Transform[] _refuelingPoints;
-            private Vector3[] _startPositions;
+            _refuelingPoints = refuelingPoints;
+            _ships = new Ship[refuelingPoints.Length];
+            _startPositions = startPositions;
+            _grid = grid;
+            _fuelProvider = new FuelProvider(_grid, this, tankContainer);
+        }
 
-            public Station(Transform[] refuelingPoints, Vector3[] startPositions, Grid grid, TankContainer tankContainer)
+        public event Action<Ship> PlaceFreed;
+
+        public Ship[] Ships => _ships;
+
+        public Transform[] RefuelingPoints => _refuelingPoints;
+
+        public FuelProvider FuelProvider => _fuelProvider;
+
+        public int ShipOnRefuelingPointsCount { get; private set; } = 0;
+
+        public void Enable()
+        {
+            _fuelProvider.Enable();
+            _grid.PipelineChanged += _fuelProvider.TryRefuel;
+        }
+
+        public void Disable()
+        {
+            _fuelProvider.Disable();
+            _grid.PipelineChanged -= _fuelProvider.TryRefuel;
+        }
+
+        public void Arrive(Ship ship)
+        {
+            List<int> freeSpotsIndecies = new List<int>();
+
+            for (int i = 0; i < _ships.Length; i++)
             {
-                _refuelingPoints = refuelingPoints;
-                _ships = new Ship[refuelingPoints.Length];
-                _startPositions = startPositions;
-                _grid = grid;
-                _fuelProvider = new FuelProvider(_grid, this, tankContainer);
+                if (_ships[i] == null)
+                    freeSpotsIndecies.Add(i);
             }
 
-            public event Action<Ship> PlaceFreed;
+            if (freeSpotsIndecies.Count == 0)
+                throw new InvalidOperationException("All refueling places are taken.");
 
-            public Ship[] Ships => _ships;
+            int randomSpot = freeSpotsIndecies[Random.Range(0, freeSpotsIndecies.Count)];
 
-            public Transform[] RefuelingPoints => _refuelingPoints;
+            _ships[randomSpot] = ship;
+            ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
 
-            public FuelProvider FuelProvider => _fuelProvider;
+            ship.TankRefueled += _fuelProvider.StopRefueling;
+            ship.TankRefueled += _fuelProvider.TryRefuel;
+            ship.LeavedStation += FreeRefuelingPoint;
+            ship.ArrivedAtRefuelingPoint += OnShipArrived;
+        }
 
-            public int ShipOnRefuelingPointsCount { get; private set; } = 0;
+        private void FreeRefuelingPoint(Ship ship)
+        {
+            ship.TankRefueled -= _fuelProvider.StopRefueling;
+            ship.TankRefueled -= _fuelProvider.TryRefuel;
+            ship.LeavedStation -= FreeRefuelingPoint;
+            ship.ArrivedAtRefuelingPoint -= OnShipArrived;
 
-            public void Enable()
-            {
-                _fuelProvider.Enable();
-                _grid.PipelineChanged += _fuelProvider.TryRefuel;
-            }
+            _ships[Array.IndexOf(_ships, ship)] = null;
 
-            public void Disable()
-            {
-                _fuelProvider.Disable();
-                _grid.PipelineChanged -= _fuelProvider.TryRefuel;
-            }
+            ShipOnRefuelingPointsCount--;
 
-            public void Arrive(Ship ship)
-            {
-                List<int> freeSpotsIndecies = new List<int>();
+            PlaceFreed?.Invoke(ship);
 
-                for (int i = 0; i < _ships.Length; i++)
-                {
-                    if (_ships[i] == null)
-                        freeSpotsIndecies.Add(i);
-                }
+            _fuelProvider.TryRefuel();
+        }
 
-                if (freeSpotsIndecies.Count == 0)
-                    throw new InvalidOperationException("All refueling places are taken.");
+        private void OnShipArrived()
+        {
+            ShipOnRefuelingPointsCount++;
 
-                int randomSpot = freeSpotsIndecies[Random.Range(0, freeSpotsIndecies.Count)];
+            if (ShipOnRefuelingPointsCount == _ships.Length)
+                _fuelProvider.RemoveSoftlock();
 
-                _ships[randomSpot] = ship;
-                ship.ArriveAtStation(_startPositions[randomSpot], _refuelingPoints[randomSpot]);
-
-                ship.TankRefueled += _fuelProvider.StopRefueling;
-                ship.TankRefueled += _fuelProvider.TryRefuel;
-                ship.LeavedStation += FreeRefuelingPoint;
-                ship.ArrivedAtRefuelingPoint += OnShipArrived;
-            }
-
-            private void FreeRefuelingPoint(Ship ship)
-            {
-                ship.TankRefueled -= _fuelProvider.StopRefueling;
-                ship.TankRefueled -= _fuelProvider.TryRefuel;
-                ship.LeavedStation -= FreeRefuelingPoint;
-                ship.ArrivedAtRefuelingPoint -= OnShipArrived;
-
-                _ships[Array.IndexOf(_ships, ship)] = null;
-
-                ShipOnRefuelingPointsCount--;
-
-                PlaceFreed?.Invoke(ship);
-
-                _fuelProvider.TryRefuel();
-            }
-
-            private void OnShipArrived()
-            {
-                ShipOnRefuelingPointsCount++;
-
-                if (ShipOnRefuelingPointsCount == 3)
-                    _fuelProvider.RemoveSoftlock();
-
-                _fuelProvider.TryRefuel();
-            }
+            _fuelProvider.TryRefuel();
         }
     }
 }

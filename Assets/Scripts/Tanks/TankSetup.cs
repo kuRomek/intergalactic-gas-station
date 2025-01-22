@@ -1,20 +1,17 @@
 ﻿using System;
 using UnityEngine;
-using IntergalacticGasStation.Fuel;
+using Fuel;
 
-namespace IntergalacticGasStation
+namespace Tanks
 {
-    namespace Tanks
+    [Serializable]
+    public struct TankSetup
     {
-        [Serializable]
-        public struct TankSetup
-        {
-            [SerializeField] private ITank.Size _size;
-            [SerializeField] private FuelType _fuelType;
+        [SerializeField] private Size _size;
+        [SerializeField] private FuelType _fuelType;
 
-            public ITank.Size Size => _size;
+        public Size Size => _size;
 
-            public FuelType FuelType => _fuelType;
-        }
+        public FuelType FuelType => _fuelType;
     }
 }

@@ -1,13 +1,10 @@
-namespace IntergalacticGasStation
+namespace Fuel
 {
-    namespace Fuel
+    public enum FuelType
     {
-        public enum FuelType
-        {
-            Any,
-            Red,
-            Green,
-            Blue,
-        }
+        Any,
+        Red,
+        Green,
+        Blue,
     }
 }

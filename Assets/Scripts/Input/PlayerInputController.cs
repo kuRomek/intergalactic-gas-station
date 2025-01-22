@@ -1,90 +1,87 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using IntergalacticGasStation.LevelControl;
-using IntergalacticGasStation.Pipes;
+using LevelControl;
+using Pipes;
 
-namespace IntergalacticGasStation
+namespace Input
 {
-    namespace Input
+    public class PlayerInputController : MonoBehaviour
     {
-        public class PlayerInputController : MonoBehaviour
+        [SerializeField] private Camera _camera;
+
+        private LevelState _levelState;
+        private PlayerInput _input;
+        private Vector2 _lastMousePosition;
+
+        public event Action<PipeTemplate> DragStarted;
+
+        public event Action<Vector3> Dragging;
+
+        public event Action DragCanceled;
+
+        private void Awake()
         {
-            [SerializeField] private Camera _camera;
+            _input = new PlayerInput();
+        }
 
-            private LevelState _levelState;
-            private PlayerInput _input;
-            private Vector2 _lastMousePosition;
+        private void OnEnable()
+        {
+            _input.Enable();
 
-            public event Action<PipeTemplate> DragStarted;
+            _input.Player.Press.performed += OnButtonPressed;
+            _input.Player.Drag.performed += OnDragging;
+            _input.Player.Press.canceled += OnDragCanceld;
+        }
 
-            public event Action<Vector3> Dragging;
+        private void OnDisable()
+        {
+            _input.Disable();
 
-            public event Action DragCanceled;
+            _input.Player.Press.performed -= OnButtonPressed;
+            _input.Player.Drag.performed -= OnDragging;
+            _input.Player.Press.canceled -= OnDragCanceld;
+        }
 
-            private void Awake()
+        public void Init(LevelState levelState)
+        {
+            _levelState = levelState;
+        }
+
+        private void OnButtonPressed(InputAction.CallbackContext context)
+        {
+            if (_levelState.IsGameOver || _levelState.IsPaused)
+                return;
+
+            Ray ray = _camera.ScreenPointToRay(UnityEngine.Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity))
             {
-                _input = new PlayerInput();
+                PipeTemplatePresenter pipeTemplate = hit.collider.GetComponentInParent<PipeTemplatePresenter>();
+
+                if (pipeTemplate != null)
+                    DragStarted?.Invoke(pipeTemplate.Model);
+
+                _lastMousePosition = _camera.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
             }
+        }
 
-            private void OnEnable()
-            {
-                _input.Enable();
+        private void OnDragging(InputAction.CallbackContext context)
+        {
+            if (_levelState.IsGameOver || _levelState.IsPaused)
+                return;
 
-                _input.Player.Press.performed += OnButtonPressed;
-                _input.Player.Drag.performed += OnDragging;
-                _input.Player.Press.canceled += OnDragCanceld;
-            }
+            Vector2 newMousePosition = _camera.ScreenToWorldPoint(context.action.ReadValue<Vector2>());
+            Dragging?.Invoke(newMousePosition - _lastMousePosition);
+            _lastMousePosition = newMousePosition;
+        }
 
-            private void OnDisable()
-            {
-                _input.Disable();
+        private void OnDragCanceld(InputAction.CallbackContext context)
+        {
+            if (_levelState.IsGameOver || _levelState.IsPaused)
+                return;
 
-                _input.Player.Press.performed -= OnButtonPressed;
-                _input.Player.Drag.performed -= OnDragging;
-                _input.Player.Press.canceled -= OnDragCanceld;
-            }
-
-            public void Init(LevelState levelState)
-            {
-                _levelState = levelState;
-            }
-
-            private void OnButtonPressed(InputAction.CallbackContext context)
-            {
-                if (_levelState.IsGameOver || _levelState.IsPaused)
-                    return;
-
-                Ray ray = _camera.ScreenPointToRay(UnityEngine.Input.mousePosition);
-
-                if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity))
-                {
-                    PipeTemplatePresenter pipeTemplate = hit.collider.GetComponentInParent<PipeTemplatePresenter>();
-
-                    if (pipeTemplate != null)
-                        DragStarted?.Invoke(pipeTemplate.Model);
-
-                    _lastMousePosition = _camera.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
-                }
-            }
-
-            private void OnDragging(InputAction.CallbackContext context)
-            {
-                if (_levelState.IsGameOver || _levelState.IsPaused)
-                    return;
-
-                Vector2 newMousePosition = _camera.ScreenToWorldPoint(context.action.ReadValue<Vector2>());
-                Dragging?.Invoke(newMousePosition - _lastMousePosition);
-                _lastMousePosition = newMousePosition;
-            }
-
-            private void OnDragCanceld(InputAction.CallbackContext context)
-            {
-                if (_levelState.IsGameOver || _levelState.IsPaused)
-                    return;
-
-                DragCanceled?.Invoke();
-            }
+            DragCanceled?.Invoke();
         }
     }
 }

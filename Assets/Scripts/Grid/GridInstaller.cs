@@ -1,22 +1,19 @@
 using UnityEngine;
 using Zenject;
-using IntergalacticGasStation.Misc;
+using Misc;
 
-namespace IntergalacticGasStation
+namespace LevelGrid
 {
-    namespace LevelGrid
+    public class GridInstaller : MonoInstaller
     {
-        public class GridInstaller : MonoInstaller
-        {
-            [SerializeField] private Transform _pipeDividers;
+        [SerializeField] private Transform _pipeDividers;
 
-            public override void InstallBindings()
-            {
-                Container.BindInterfacesAndSelfTo<Grid>().
-                    AsSingle().
-                    WithArguments(_pipeDividers.GetComponentsInChildren<PipeDivider>(true)).
-                    NonLazy();
-            }
+        public override void InstallBindings()
+        {
+            Container.BindInterfacesAndSelfTo<Grid>().
+                AsSingle().
+                WithArguments(_pipeDividers.GetComponentsInChildren<PipeDivider>(true)).
+                NonLazy();
         }
     }
 }

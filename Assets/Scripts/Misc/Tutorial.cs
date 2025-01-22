@@ -1,43 +1,40 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using YG;
-using IntergalacticGasStation.Input;
-using IntergalacticGasStation.Pipes;
-using IntergalacticGasStation.PlayerProgress;
+using Input;
+using Pipes;
+using PlayerProgress;
 
-namespace IntergalacticGasStation
+namespace Misc
 {
-    namespace Misc
+    public class Tutorial : MonoBehaviour
     {
-        public class Tutorial : MonoBehaviour
+        [SerializeField] private PlayerInputController _playerInputController;
+
+        private int _levelNumber;
+
+        private void Awake()
         {
-            [SerializeField] private PlayerInputController _playerInputController;
+            _levelNumber = SceneManager.GetActiveScene().buildIndex;
 
-            private int _levelNumber;
-
-            private void Awake()
-            {
-                _levelNumber = SceneManager.GetActiveScene().buildIndex;
-
-                if (YandexGame.savesData.ShownTutorials[_levelNumber - 1] == true)
-                    gameObject.SetActive(false);
-            }
-
-            private void OnEnable()
-            {
-                _playerInputController.DragStarted += Hide;
-            }
-
-            private void OnDisable()
-            {
-                _playerInputController.DragStarted -= Hide;
-            }
-
-            private void Hide(PipeTemplate _)
-            {
-                PlayerProgressController.RemoveTutorialOnLevel(_levelNumber);
+            if (YandexGame.savesData.ShownTutorials[_levelNumber - 1] == true)
                 gameObject.SetActive(false);
-            }
+        }
+
+        private void OnEnable()
+        {
+            _playerInputController.DragStarted += Hide;
+        }
+
+        private void OnDisable()
+        {
+            _playerInputController.DragStarted -= Hide;
+        }
+
+        private void Hide(PipeTemplate _)
+        {
+            PlayerProgressController.RemoveTutorialOnLevel(_levelNumber);
+            gameObject.SetActive(false);
         }
     }
 }

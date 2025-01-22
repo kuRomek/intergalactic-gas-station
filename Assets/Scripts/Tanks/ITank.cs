@@ -1,30 +1,18 @@
 using System;
-using IntergalacticGasStation.Fuel;
+using Fuel;
 
-namespace IntergalacticGasStation
+namespace Tanks
 {
-    namespace Tanks
+    public interface ITank
     {
-        public interface ITank
-        {
-            const int MaximumSize = 6;
+        event Action FuelAmountChanged;
 
-            event Action FuelAmountChanged;
+        FuelType FuelType { get; }
 
-            public enum Size
-            {
-                Big = MaximumSize,
-                Medium = MaximumSize / 2,
-                Small = MaximumSize / 3,
-            }
+        float Capacity { get; }
 
-            FuelType FuelType { get; }
+        float CurrentAmount { get; }
 
-            float Capacity { get; }
-
-            float CurrentAmount { get; }
-
-            void OnFuelProvidingStopped();
-        }
+        void OnFuelProvidingStopped();
     }
 }

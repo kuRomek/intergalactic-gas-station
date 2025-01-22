@@ -1,12 +1,9 @@
-namespace IntergalacticGasStation
+namespace LevelGrid
 {
-    namespace LevelGrid
+    public interface IGridMember
     {
-        public interface IGridMember
-        {
-            int[] GridPosition { get; }
+        int[] GridPosition { get; }
 
-            void PlaceOnGrid(IGrid grid);
-        }
+        void PlaceOnGrid(IGrid grid);
     }
 }

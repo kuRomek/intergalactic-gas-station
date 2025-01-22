@@ -3,133 +3,130 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
-using IntergalacticGasStation.Input;
-using IntergalacticGasStation.LevelGrid;
-using IntergalacticGasStation.Pipes;
-using IntergalacticGasStation.Ships;
-using IntergalacticGasStation.StructureElements;
-using IntergalacticGasStation.Tanks;
-using IntergalacticGasStation.UI;
-using IntergalacticGasStation.Utils;
-using Grid = IntergalacticGasStation.LevelGrid.Grid;
+using Input;
+using LevelGrid;
+using Pipes;
+using Ships;
+using StructureElements;
+using Tanks;
+using UI;
+using Utils;
+using Grid = LevelGrid.Grid;
 
-namespace IntergalacticGasStation
+namespace LevelControl
 {
-    namespace LevelControl
+    [RequireComponent(typeof(PresenterFactory))]
+    public class LevelRoot : MonoBehaviour
     {
-        [RequireComponent(typeof(PresenterFactory))]
-        public class LevelRoot : MonoBehaviour
+        [SerializeField] private PlayerInputController _inputController;
+        [SerializeField] private Transform _gridTransform;
+        [SerializeField] private Transform[] _shipSpawningAreas;
+        [SerializeField] private Transform[] _refuelingPoints;
+        [SerializeField] private Transform _tanksPlace;
+        [SerializeField] private Transform _shipsWaitingPlace;
+        [SerializeField] private LevelSetup _levelSetup;
+        [SerializeField] private UIMenu _levelCompleteWindow;
+        [SerializeField] private UIMenu _loseWindow;
+        [SerializeField] private UIMenu _pauseWindow;
+        [SerializeField] private Button _pauseButton;
+        [SerializeField] private TimerView _timerView;
+        [SerializeField] private ShipCounter _shipCounter;
+        [SerializeField] private TankContainerShifter _tankContainerShifter;
+        [SerializeField] private GridChanger _gridChanger;
+
+        private PresenterFactory _presenterFactory;
+        private LevelState _levelState;
+        private PipeDragger _pipeDragger;
+        private Station _station;
+        private Grid _grid;
+        private float _infiniteLevelStartTime = 120f;
+
+        private void Awake()
         {
-            [SerializeField] private PlayerInputController _inputController;
-            [SerializeField] private Transform _gridTransform;
-            [SerializeField] private Transform[] _shipSpawningAreas;
-            [SerializeField] private Transform[] _refuelingPoints;
-            [SerializeField] private Transform _tanksPlace;
-            [SerializeField] private Transform _shipsWaitingPlace;
-            [SerializeField] private LevelSetup _levelSetup;
-            [SerializeField] private UIMenu _levelCompleteWindow;
-            [SerializeField] private UIMenu _loseWindow;
-            [SerializeField] private UIMenu _pauseWindow;
-            [SerializeField] private Button _pauseButton;
-            [SerializeField] private TimerView _timerView;
-            [SerializeField] private ShipCounter _shipCounter;
-            [SerializeField] private TankContainerShifter _tankContainerShifter;
-            [SerializeField] private GridChanger _gridChanger;
+            _presenterFactory = GetComponent<PresenterFactory>();
 
-            private PresenterFactory _presenterFactory;
-            private LevelState _levelState;
-            private PipeDragger _pipeDragger;
-            private Station _station;
-            private Grid _grid;
-            private float _infiniteLevelStartTime = 120f;
+            TankContainer tankContainer = new TankContainer(_tanksPlace.position, _presenterFactory);
+            _tankContainerShifter.Init(tankContainer);
 
-            private void Awake()
+            _station = new Station(
+                _refuelingPoints,
+                _shipSpawningAreas.Select(area => area.position).ToArray(),
+                _grid,
+                tankContainer);
+
+            if (_levelSetup != null)
             {
-                _presenterFactory = GetComponent<PresenterFactory>();
+                ArrayShuffler.Shuffle(_levelSetup.Tanks);
+                ArrayShuffler.Shuffle(_levelSetup.Ships);
 
-                TankContainer tankContainer = new TankContainer(_tanksPlace.position, _presenterFactory);
-                _tankContainerShifter.Init(tankContainer);
+                foreach (TankSetup tank in _levelSetup.Tanks)
+                    tankContainer.Add(tank.Size, tank.FuelType);
 
-                _station = new Station(
-                    _refuelingPoints,
-                    _shipSpawningAreas.Select(area => area.position).ToArray(),
-                    _grid,
-                    tankContainer);
+                List<Ship> shipsQueue = new List<Ship>();
 
-                if (_levelSetup != null)
+                for (int i = 0; i < _levelSetup.Ships.Length; i++)
                 {
-                    ArrayShuffler.Shuffle(_levelSetup.Tanks);
-                    ArrayShuffler.Shuffle(_levelSetup.Ships);
-
-                    foreach (TankSetup tank in _levelSetup.Tanks)
-                        tankContainer.Add(tank.Size, tank.FuelType);
-
-                    List<Ship> shipsQueue = new List<Ship>();
-
-                    for (int i = 0; i < _levelSetup.Ships.Length; i++)
-                    {
-                        Ship newShip = new Ship(_shipsWaitingPlace.position, _levelSetup.Ships[i]);
-                        shipsQueue.Add(newShip);
-                        _presenterFactory.CreateShip(newShip);
-                    }
-
-                    Timer timer = new Timer(_levelSetup.TimeInSeconds);
-                    _timerView.Init(timer);
-
-                    _levelState = new NonInfiniteLevelState(
-                        _levelCompleteWindow,
-                        _loseWindow,
-                        _pauseWindow,
-                        _pauseButton,
-                        _station,
-                        shipsQueue,
-                        timer);
-                }
-                else
-                {
-                    Timer timer = new Timer(_infiniteLevelStartTime);
-                    _timerView.Init(timer);
-
-                    _levelState = new InfiniteLevelState(
-                        _levelCompleteWindow,
-                        _loseWindow,
-                        _pauseWindow,
-                        _pauseButton,
-                        tankContainer,
-                        _shipsWaitingPlace.position,
-                        _presenterFactory,
-                        _gridChanger,
-                        _station,
-                        timer);
+                    Ship newShip = new Ship(_shipsWaitingPlace.position, _levelSetup.Ships[i]);
+                    shipsQueue.Add(newShip);
+                    _presenterFactory.CreateShip(newShip);
                 }
 
-                _shipCounter.Init(_levelState);
+                Timer timer = new Timer(_levelSetup.TimeInSeconds);
+                _timerView.Init(timer);
 
-                _inputController.Init(_levelState);
-                _inputController.enabled = true;
-
-                _pipeDragger = new PipeDragger(_inputController, _grid, _station.FuelProvider);
+                _levelState = new NonInfiniteLevelState(
+                    _levelCompleteWindow,
+                    _loseWindow,
+                    _pauseWindow,
+                    _pauseButton,
+                    _station,
+                    shipsQueue,
+                    timer);
             }
-
-            private void OnEnable()
+            else
             {
-                _station.Enable();
-                _levelState.Enable();
-                _pipeDragger.Enable();
+                Timer timer = new Timer(_infiniteLevelStartTime);
+                _timerView.Init(timer);
+
+                _levelState = new InfiniteLevelState(
+                    _levelCompleteWindow,
+                    _loseWindow,
+                    _pauseWindow,
+                    _pauseButton,
+                    tankContainer,
+                    _shipsWaitingPlace.position,
+                    _presenterFactory,
+                    _gridChanger,
+                    _station,
+                    timer);
             }
 
-            private void OnDisable()
-            {
-                _station.Disable();
-                _levelState.Disable();
-                _pipeDragger.Disable();
-            }
+            _shipCounter.Init(_levelState);
 
-            [Inject]
-            private void Construct(Grid grid)
-            {
-                _grid = grid;
-            }
+            _inputController.Init(_levelState);
+            _inputController.enabled = true;
+
+            _pipeDragger = new PipeDragger(_inputController, _grid, _station.FuelProvider);
+        }
+
+        private void OnEnable()
+        {
+            _station.Enable();
+            _levelState.Enable();
+            _pipeDragger.Enable();
+        }
+
+        private void OnDisable()
+        {
+            _station.Disable();
+            _levelState.Disable();
+            _pipeDragger.Disable();
+        }
+
+        [Inject]
+        private void Construct(Grid grid)
+        {
+            _grid = grid;
         }
     }
 }

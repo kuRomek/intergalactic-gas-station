@@ -1,19 +1,16 @@
 ﻿using System;
 using UnityEngine;
 
-namespace IntergalacticGasStation
+namespace Fuel
 {
-    namespace Fuel
+    [Serializable]
+    public class FuelCellView
     {
-        [Serializable]
-        public class FuelCellView
-        {
-            [SerializeField] private FuelType _fuel;
-            [SerializeField] private Material _material;
+        [SerializeField] private FuelType _fuel;
+        [SerializeField] private Material _material;
 
-            public FuelType Fuel => _fuel;
+        public FuelType Fuel => _fuel;
 
-            public Material Material => _material;
-        }
+        public Material Material => _material;
     }
 }

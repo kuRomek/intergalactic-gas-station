@@ -1,75 +1,73 @@
 using System;
 using UnityEngine;
 
-namespace IntergalacticGasStation
+namespace Pipes
 {
-    namespace Pipes
+    [CreateAssetMenu(fileName = "Pipe Shapes", menuName = "Pipes", order = 55)]
+    public class PipeShapes : ScriptableObject
     {
-        [CreateAssetMenu(fileName = "Pipe Shapes", menuName = "Pipes", order = 55)]
-        public class PipeShapes : ScriptableObject
+        [SerializeField] private Mesh[] _shapes;
+
+        private int _twoStraightEntriesIndex = 0;
+        private int _twoCurvedEntriesIndex = 1;
+        private int _threeEntriesIndex = 2;
+        private int _fourEntriesIndex = 3;
+        private float _straightAngle = 90f;
+
+        public Mesh GetShape(bool[] entries, out float rotation)
         {
-            [SerializeField] private Mesh[] _shapes;
+            int entriesCount = 0;
 
-            private int _twoStraightEntriesIndex = 0;
-            private int _twoCurvedEntriesIndex = 1;
-            private int _threeEntriesIndex = 2;
-            private int _fourEntriesIndex = 3;
+            Mesh mesh = null;
+            rotation = 0f;
 
-            public Mesh GetShape(bool[] entries, out float rotation)
+            foreach (bool entry in entries)
             {
-                int entriesCount = 0;
+                if (entry == true)
+                    entriesCount++;
+            }
 
-                Mesh mesh = null;
-                rotation = 0f;
+            if (entriesCount == 4)
+                mesh = _shapes[_fourEntriesIndex];
 
-                foreach (bool entry in entries)
+            if (entriesCount == 3)
+            {
+                mesh = _shapes[_threeEntriesIndex];
+
+                int noConnectionIndex = Array.IndexOf(entries, false);
+
+                rotation = 180f + ((entries.Length - 1f - noConnectionIndex) * _straightAngle);
+            }
+
+            if (entriesCount == 2)
+            {
+                for (int i = 0; i < entries.Length - 1; i++)
                 {
-                    if (entry == true)
-                        entriesCount++;
-                }
-
-                if (entriesCount == 4)
-                    mesh = _shapes[_fourEntriesIndex];
-
-                if (entriesCount == 3)
-                {
-                    mesh = _shapes[_threeEntriesIndex];
-
-                    int noConnectionIndex = Array.IndexOf(entries, false);
-
-                    rotation = 180f + ((entries.Length - 1f - noConnectionIndex) * 90f);
-                }
-
-                if (entriesCount == 2)
-                {
-                    for (int i = 0; i < entries.Length - 1; i++)
-                    {
-                        if (Convert.ToInt32(entries[i]) + Convert.ToInt32(entries[i + 1]) == 2)
-                        {
-                            mesh = _shapes[_twoCurvedEntriesIndex];
-
-                            rotation = 180f - (90f * i);
-                        }
-                    }
-
-                    if (Convert.ToInt32(entries[0]) + Convert.ToInt32(entries[entries.Length - 1]) == 2)
+                    if (Convert.ToInt32(entries[i]) + Convert.ToInt32(entries[i + 1]) == 2)
                     {
                         mesh = _shapes[_twoCurvedEntriesIndex];
 
-                        rotation = -90f;
+                        rotation = 180f - (_straightAngle * i);
                     }
                 }
 
-                if (mesh == null)
+                if (Convert.ToInt32(entries[0]) + Convert.ToInt32(entries[entries.Length - 1]) == 2)
                 {
-                    mesh = _shapes[_twoStraightEntriesIndex];
+                    mesh = _shapes[_twoCurvedEntriesIndex];
 
-                    if (entries[1] == true || entries[3] == true)
-                        rotation = 90f;
+                    rotation = -_straightAngle;
                 }
-
-                return mesh;
             }
+
+            if (mesh == null)
+            {
+                mesh = _shapes[_twoStraightEntriesIndex];
+
+                if (entries[1] == true || entries[3] == true)
+                    rotation = _straightAngle;
+            }
+
+            return mesh;
         }
     }
 }

@@ -1,25 +1,22 @@
 using UnityEngine;
-using IntergalacticGasStation.Audio;
+using Audio;
 
-namespace IntergalacticGasStation
+namespace StructureElements
 {
-    namespace StructureElements
+    public class View : MonoBehaviour
     {
-        public class View : MonoBehaviour
-        {
-            private AudioController _audio = null;
+        private AudioController _audio = null;
 
-            public void PlaySound(AudioClip clip)
+        public void PlaySound(AudioClip clip)
+        {
+            if (_audio != null)
             {
-                if (_audio != null)
-                {
-                    _audio.PlaySound(clip);
-                }
-                else
-                {
-                    _audio = FindAnyObjectByType<AudioController>();
-                    _audio.PlaySound(clip);
-                }
+                _audio.PlaySound(clip);
+            }
+            else
+            {
+                _audio = FindAnyObjectByType<AudioController>();
+                _audio.PlaySound(clip);
             }
         }
     }

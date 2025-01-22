@@ -1,12 +1,9 @@
-namespace IntergalacticGasStation
+namespace StructureElements
 {
-    namespace StructureElements
+    public interface IActivatable
     {
-        public interface IActivatable
-        {
-            void Enable();
+        void Enable();
 
-            void Disable();
-        }
+        void Disable();
     }
 }

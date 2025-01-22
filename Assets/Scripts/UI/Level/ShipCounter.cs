@@ -1,44 +1,41 @@
 using UnityEngine;
 using TMPro;
-using IntergalacticGasStation.LevelControl;
+using LevelControl;
 
-namespace IntergalacticGasStation
+namespace UI
 {
-    namespace UI
+    public class ShipCounter : MonoBehaviour
     {
-        public class ShipCounter : MonoBehaviour
+        [SerializeField] private TextMeshProUGUI _refueled;
+        [SerializeField] private TextMeshProUGUI _needToRefuel;
+
+        private LevelState _levelState;
+
+        private void OnEnable()
         {
-            [SerializeField] private TextMeshProUGUI _refueled;
-            [SerializeField] private TextMeshProUGUI _needToRefuel;
+            _levelState.ShipRefueled += OnShipRefueled;
+        }
 
-            private LevelState _levelState;
+        private void OnDisable()
+        {
+            _levelState.ShipRefueled -= OnShipRefueled;
+        }
 
-            private void OnEnable()
-            {
-                _levelState.ShipRefueled += OnShipRefueled;
-            }
+        public void Init(LevelState levelState)
+        {
+            _levelState = levelState;
 
-            private void OnDisable()
-            {
-                _levelState.ShipRefueled -= OnShipRefueled;
-            }
+            if (_needToRefuel != null)
+                _needToRefuel.text = _levelState.ShipCountOnLevel.ToString();
 
-            public void Init(LevelState levelState)
-            {
-                _levelState = levelState;
+            _refueled.text = "0";
 
-                if (_needToRefuel != null)
-                    _needToRefuel.text = _levelState.ShipCountOnLevel.ToString();
+            enabled = true;
+        }
 
-                _refueled.text = "0";
-
-                enabled = true;
-            }
-
-            private void OnShipRefueled()
-            {
-                _refueled.text = _levelState.RefueledShipCount.ToString();
-            }
+        private void OnShipRefueled()
+        {
+            _refueled.text = _levelState.RefueledShipCount.ToString();
         }
     }
 }

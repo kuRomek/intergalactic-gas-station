@@ -1,89 +1,86 @@
 using UnityEngine;
 
-namespace IntergalacticGasStation
+namespace StructureElements
 {
-    namespace StructureElements
+    public class Presenter : MonoBehaviour
     {
-        public class Presenter : MonoBehaviour
+        private Transformable _model;
+        private View _view;
+        private IUpdatable _updatable = null;
+        private IActivatable _activatable = null;
+
+        public Transformable Model => _model;
+
+        public View View => _view;
+
+        private void Update()
         {
-            private Transformable _model;
-            private View _view;
-            private IUpdatable _updatable = null;
-            private IActivatable _activatable = null;
+            _updatable?.Update(Time.deltaTime);
+        }
 
-            public Transformable Model => _model;
+        private void OnEnable()
+        {
+            _model.Moved += OnMoved;
+            _model.Rotated += OnRotated;
+            _model.Destroying += OnDestroying;
 
-            public View View => _view;
+            _activatable?.Enable();
 
-            private void Update()
-            {
-                _updatable?.Update(Time.deltaTime);
-            }
+            if (this is IActivatable activatable)
+                activatable.Enable();
+        }
 
-            private void OnEnable()
-            {
-                _model.Moved += OnMoved;
-                _model.Rotated += OnRotated;
-                _model.Destroying += OnDestroying;
+        private void OnDisable()
+        {
+            _model.Moved -= OnMoved;
+            _model.Rotated -= OnRotated;
+            _model.Destroying -= OnDestroying;
 
-                _activatable?.Enable();
+            _activatable?.Disable();
 
-                if (this is IActivatable activatable)
-                    activatable.Enable();
-            }
+            if (this is IActivatable activatable)
+                activatable.Disable();
+        }
 
-            private void OnDisable()
-            {
-                _model.Moved -= OnMoved;
-                _model.Rotated -= OnRotated;
-                _model.Destroying -= OnDestroying;
+        public void Init(Transformable model)
+        {
+            _model = model;
+            _view = GetComponent<View>();
 
-                _activatable?.Disable();
+            if (_model is IUpdatable updatable)
+                _updatable = updatable;
 
-                if (this is IActivatable activatable)
-                    activatable.Disable();
-            }
+            if (_model is IActivatable activatable)
+                _activatable = activatable;
 
-            public void Init(Transformable model)
-            {
-                _model = model;
-                _view = GetComponent<View>();
+            enabled = true;
 
-                if (_model is IUpdatable updatable)
-                    _updatable = updatable;
+            if (_view != null)
+                _view.enabled = true;
 
-                if (_model is IActivatable activatable)
-                    _activatable = activatable;
+            OnMoved();
+            OnRotated();
+            OnScaled();
+        }
 
-                enabled = true;
+        private void OnMoved()
+        {
+            transform.position = _model.Position;
+        }
 
-                if (_view != null)
-                    _view.enabled = true;
+        private void OnRotated()
+        {
+            transform.rotation = _model.Rotation;
+        }
 
-                OnMoved();
-                OnRotated();
-                OnScaled();
-            }
+        private void OnScaled()
+        {
+            transform.localScale = _model.Scale;
+        }
 
-            private void OnMoved()
-            {
-                transform.position = _model.Position;
-            }
-
-            private void OnRotated()
-            {
-                transform.rotation = _model.Rotation;
-            }
-
-            private void OnScaled()
-            {
-                transform.localScale = _model.Scale;
-            }
-
-            private void OnDestroying()
-            {
-                Destroy(gameObject);
-            }
+        private void OnDestroying()
+        {
+            Destroy(gameObject);
         }
     }
 }

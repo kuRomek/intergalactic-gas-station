@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace IntergalacticGasStation
+namespace Settings
 {
     [CreateAssetMenu(fileName = "Settings", menuName = "Settings", order = 56)]
-    public class Settings : ScriptableObject
+    public class GameRuntimeSettings : ScriptableObject
     {
         [SerializeField, Range(0f, 1f)] private float _soundVolume;
         [SerializeField, Range(0f, 1f)] private float _musicVolume;

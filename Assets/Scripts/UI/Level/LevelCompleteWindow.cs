@@ -3,52 +3,49 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using YG;
 
-namespace IntergalacticGasStation
+namespace UI
 {
-    namespace UI
+    public class LevelCompleteWindow : UIMenu
     {
-        public class LevelCompleteWindow : UIMenu
+        [SerializeField] private Button _nextLevelButton;
+        [SerializeField] private Button _mainMenuButton;
+
+        private void OnEnable()
         {
-            [SerializeField] private Button _nextLevelButton;
-            [SerializeField] private Button _mainMenuButton;
+            _nextLevelButton.onClick.AddListener(OnNextLevelButtonClicked);
+            _mainMenuButton.onClick.AddListener(LoadMainMenu);
+        }
 
-            private void OnEnable()
+        private void OnDisable()
+        {
+            _nextLevelButton.onClick.RemoveAllListeners();
+            _mainMenuButton.onClick.RemoveAllListeners();
+        }
+
+        private void OnNextLevelButtonClicked()
+        {
+            YandexGame.FullscreenShow();
+
+            if (YandexGame.timerShowAd <= 0)
             {
-                _nextLevelButton.onClick.AddListener(OnNextLevelButtonClicked);
-                _mainMenuButton.onClick.AddListener(LoadMainMenu);
+                YandexGame.CloseFullAdEvent += LoadNextLevel;
             }
-
-            private void OnDisable()
+            else
             {
-                _nextLevelButton.onClick.RemoveAllListeners();
-                _mainMenuButton.onClick.RemoveAllListeners();
-            }
-
-            private void OnNextLevelButtonClicked()
-            {
-                YandexGame.FullscreenShow();
-
-                if (YandexGame.timerShowAd <= 0)
-                {
-                    YandexGame.CloseFullAdEvent += LoadNextLevel;
-                }
-                else
-                {
-                    Hide();
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                }
-            }
-
-            private void LoadNextLevel()
-            {
-                YandexGame.CloseFullAdEvent -= LoadNextLevel;
+                Hide();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
+        }
 
-            private void LoadMainMenu()
-            {
-                SceneManager.LoadScene(0);
-            }
+        private void LoadNextLevel()
+        {
+            YandexGame.CloseFullAdEvent -= LoadNextLevel;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
+        private void LoadMainMenu()
+        {
+            SceneManager.LoadScene(0);
         }
     }
 }

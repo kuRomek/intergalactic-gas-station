@@ -1,32 +1,29 @@
 using UnityEngine;
 
-namespace IntergalacticGasStation
+namespace VFX
 {
-    namespace VFX
+    [RequireComponent(typeof(Animator))]
+    public class TimeAdding : MonoBehaviour
     {
-        [RequireComponent(typeof(Animator))]
-        public class TimeAdding : MonoBehaviour
+        public readonly int ShipRefueled = Animator.StringToHash(nameof(ShipRefueled));
+        private bool _isFirstShow = true;
+        private Animator _animator;
+
+        private void Awake()
         {
-            public readonly int ShipRefueled = Animator.StringToHash(nameof(ShipRefueled));
-            private bool _isFirstShow = true;
-            private Animator _animator;
+            _animator = GetComponent<Animator>();
+            gameObject.SetActive(false);
+        }
 
-            private void Awake()
+        public void Show()
+        {
+            if (_isFirstShow)
             {
-                _animator = GetComponent<Animator>();
-                gameObject.SetActive(false);
+                gameObject.SetActive(true);
+                _isFirstShow = false;
             }
 
-            public void Show()
-            {
-                if (_isFirstShow)
-                {
-                    gameObject.SetActive(true);
-                    _isFirstShow = false;
-                }
-
-                _animator.SetTrigger(ShipRefueled);
-            }
+            _animator.SetTrigger(ShipRefueled);
         }
     }
 }

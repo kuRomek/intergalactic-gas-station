@@ -1,11 +1,8 @@
 using UnityEngine;
 
-namespace IntergalacticGasStation
+namespace Misc
 {
-    namespace Misc
+    public class Offscreen : MonoBehaviour
     {
-        public class Offscreen : MonoBehaviour
-        {
-        }
     }
 }

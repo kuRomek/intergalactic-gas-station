@@ -1,23 +1,20 @@
 using UnityEngine;
-using IntergalacticGasStation.Pipes;
+using Pipes;
 
-namespace IntergalacticGasStation
+namespace LevelGrid
 {
-    namespace LevelGrid
+    public interface IGrid
     {
-        public interface IGrid
-        {
-            public IGridMember[,] Cells { get; }
+        public IGridMember[,] Cells { get; }
 
-            public int Size { get; }
+        public int Size { get; }
 
-            Vector3 CalculateWorldPosition(int[] gridPosition);
+        Vector3 CalculateWorldPosition(int[] gridPosition);
 
-            int[] CalculateGridPosition(Vector3 worldPosition);
+        int[] CalculateGridPosition(Vector3 worldPosition);
 
-            void Place(PipeTemplate pipeTemplate);
+        void Place(PipeTemplate pipeTemplate);
 
-            void Remove(PipeTemplate pipeTemplate);
-        }
+        void Remove(PipeTemplate pipeTemplate);
     }
 }

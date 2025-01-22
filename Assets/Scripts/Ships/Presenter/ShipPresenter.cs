@@ -1,62 +1,59 @@
 using System;
 using UnityEngine;
-using IntergalacticGasStation.Misc;
-using IntergalacticGasStation.StructureElements;
-using IntergalacticGasStation.Tanks;
+using Misc;
+using StructureElements;
+using Tanks;
 
-namespace IntergalacticGasStation
+namespace Ships
 {
-    namespace Ships
+    [RequireComponent(typeof(ShipView))]
+    public class ShipPresenter : Presenter, IActivatable
     {
-        [RequireComponent(typeof(ShipView))]
-        public class ShipPresenter : Presenter, IActivatable
+        private Action[] _tanksViewChangings;
+
+        public new Ship Model => base.Model as Ship;
+
+        public new ShipView View => base.View as ShipView;
+
+        private void OnTriggerEnter(Collider other)
         {
-            private Action[] _tanksViewChangings;
+            if (other.TryGetComponent(out Offscreen _))
+                Model.Destroy();
+        }
 
-            public new Ship Model => base.Model as Ship;
+        public void Enable()
+        {
+            _tanksViewChangings = new Action[Model.Tanks.Count];
 
-            public new ShipView View => base.View as ShipView;
+            int j = 0;
 
-            private void OnTriggerEnter(Collider other)
+            foreach (ShipTank shipTank in Model.Tanks)
             {
-                if (other.TryGetComponent(out Offscreen _))
-                    Model.Destroy();
+                _tanksViewChangings[j] = () => View.ChangeFuelAmount(shipTank);
+                shipTank.FuelAmountChanged += _tanksViewChangings[j++];
             }
 
-            public void Enable()
-            {
-                _tanksViewChangings = new Action[Model.Tanks.Count];
+            View.ViewChangingStopped += Model.OnFuelProvidingStopped;
+            Model.ArrivingAtStation += View.PlayArrivalSound;
+            Model.ArrivingAtStation += View.PlayBurstingAnimation;
+            Model.ArrivedAtRefuelingPoint += View.PlayIdleAnimation;
+            Model.LeavedStation += View.PlayFlyAwaySound;
+            Model.LeavedStation += View.PlayBurstingAnimation;
+        }
 
-                int j = 0;
+        public void Disable()
+        {
+            int j = 0;
 
-                foreach (ShipTank shipTank in Model.Tanks)
-                {
-                    _tanksViewChangings[j] = () => View.ChangeFuelAmount(shipTank);
-                    shipTank.FuelAmountChanged += _tanksViewChangings[j++];
-                }
+            foreach (ShipTank shipTank in Model.Tanks)
+                shipTank.FuelAmountChanged -= _tanksViewChangings[j++];
 
-                View.ViewChangingStopped += Model.OnFuelProvidingStopped;
-                Model.ArrivingAtStation += View.PlayArrivalSound;
-                Model.ArrivingAtStation += View.PlayBurstingAnimation;
-                Model.ArrivedAtRefuelingPoint += View.PlayIdleAnimation;
-                Model.LeavedStation += View.PlayFlyAwaySound;
-                Model.LeavedStation += View.PlayBurstingAnimation;
-            }
-
-            public void Disable()
-            {
-                int j = 0;
-
-                foreach (ShipTank shipTank in Model.Tanks)
-                    shipTank.FuelAmountChanged -= _tanksViewChangings[j++];
-
-                View.ViewChangingStopped -= Model.OnFuelProvidingStopped;
-                Model.ArrivingAtStation -= View.PlayArrivalSound;
-                Model.ArrivingAtStation -= View.PlayBurstingAnimation;
-                Model.ArrivedAtRefuelingPoint -= View.PlayIdleAnimation;
-                Model.LeavedStation -= View.PlayFlyAwaySound;
-                Model.LeavedStation -= View.PlayBurstingAnimation;
-            }
+            View.ViewChangingStopped -= Model.OnFuelProvidingStopped;
+            Model.ArrivingAtStation -= View.PlayArrivalSound;
+            Model.ArrivingAtStation -= View.PlayBurstingAnimation;
+            Model.ArrivedAtRefuelingPoint -= View.PlayIdleAnimation;
+            Model.LeavedStation -= View.PlayFlyAwaySound;
+            Model.LeavedStation -= View.PlayBurstingAnimation;
         }
     }
 }

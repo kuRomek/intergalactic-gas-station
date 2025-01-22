@@ -1,10 +1,7 @@
-namespace IntergalacticGasStation
+namespace StructureElements
 {
-    namespace StructureElements
+    public interface IUpdatable
     {
-        public interface IUpdatable
-        {
-            void Update(float deltaTime);
-        }
+        void Update(float deltaTime);
     }
 }

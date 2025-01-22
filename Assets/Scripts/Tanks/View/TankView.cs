@@ -1,51 +1,48 @@
 using System;
 using UnityEngine;
-using IntergalacticGasStation.Fuel;
-using IntergalacticGasStation.StructureElements;
+using Fuel;
+using StructureElements;
 
-namespace IntergalacticGasStation
+namespace Tanks
 {
-    namespace Tanks
+    public class TankView : View
     {
-        public class TankView : View
+        [SerializeField] private FuelColors _fuelTypes;
+        [SerializeField] private FuelView _fuelView;
+        [SerializeField] private MeshRenderer _meshRenderer;
+
+        private Color _color;
+
+        public event Action ViewChangingStopped;
+
+        private void OnEnable()
         {
-            [SerializeField] private FuelColors _fuelTypes;
-            [SerializeField] private FuelView _fuelView;
-            [SerializeField] private MeshRenderer _meshRenderer;
+            _fuelView.ViewChangingStopped += OnViewChangingStopped;
+        }
 
-            private Color _color;
+        private void OnDisable()
+        {
+            _fuelView.ViewChangingStopped -= OnViewChangingStopped;
+        }
 
-            public event Action ViewChangingStopped;
+        public void CreateFuelView(ITank tank)
+        {
+            _color = _fuelTypes.GetMaterialOf(tank.FuelType).color;
+            _meshRenderer.material.color = _color;
 
-            private void OnEnable()
-            {
-                _fuelView.ViewChangingStopped += OnViewChangingStopped;
-            }
+            _meshRenderer.transform.localScale = new Vector3(1f, tank.Capacity / (int)Size.Big, 1f);
 
-            private void OnDisable()
-            {
-                _fuelView.ViewChangingStopped -= OnViewChangingStopped;
-            }
+            _fuelView.Init(tank);
+        }
 
-            public void CreateFuelView(ITank tank)
-            {
-                _color = _fuelTypes.GetMaterialOf(tank.FuelType).color;
-                _meshRenderer.material.color = _color;
+        public void ChangeView()
+        {
+            _fuelView.ChangeAmount();
+        }
 
-                _meshRenderer.transform.localScale = new Vector3(1f, tank.Capacity / ITank.MaximumSize, 1f);
-
-                _fuelView.Init(tank);
-            }
-
-            public void ChangeView()
-            {
-                _fuelView.ChangeAmount();
-            }
-
-            private void OnViewChangingStopped(ITank tank)
-            {
-                ViewChangingStopped?.Invoke();
-            }
+        private void OnViewChangingStopped(ITank tank)
+        {
+            ViewChangingStopped?.Invoke();
         }
     }
 }
